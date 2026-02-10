@@ -5,6 +5,8 @@ Simulates the scoring algorithm over historical data to validate
 whether higher scores actually predict better returns.
 """
 
+import json
+import os
 import time
 
 import pandas as pd
@@ -16,6 +18,8 @@ from pennystock.analysis.technical import analyze as tech_analyze
 from pennystock.data.finviz_client import get_penny_stocks, get_high_gainers
 from pennystock.data.yahoo_client import get_price_history
 from pennystock.config import BACKTEST_HOLD_DAYS, BACKTEST_WINNER_THRESHOLD, BACKTEST_LOSER_THRESHOLD
+
+BACKTEST_DIR = "backtest_reports"
 
 
 def run_backtest(
@@ -181,9 +185,42 @@ def run_backtest(
 
     report = "\n".join(report_lines)
 
+    # ── Save to permanent file ──────────────────────────────────────
+    _save_report_to_file(report, metrics_by_period, comparison, tickers, dataset)
+
     return {
         "dataset_size": len(dataset),
         "metrics_by_period": metrics_by_period,
         "strategy_comparison": comparison,
         "report": report,
     }
+
+
+def _save_report_to_file(report, metrics_by_period, comparison, tickers, dataset):
+    """Save backtest report as a permanent timestamped text file and JSON."""
+    os.makedirs(BACKTEST_DIR, exist_ok=True)
+    timestamp = time.strftime("%Y-%m-%d_%H%M%S")
+
+    # Human-readable text report
+    txt_path = os.path.join(BACKTEST_DIR, f"backtest_{timestamp}.txt")
+    with open(txt_path, "w") as f:
+        f.write(report)
+    logger.info(f"Report saved to {txt_path}")
+
+    # Machine-readable JSON with full data for future analysis
+    json_path = os.path.join(BACKTEST_DIR, f"backtest_{timestamp}.json")
+    json_data = {
+        "timestamp": timestamp,
+        "tickers_tested": tickers,
+        "dataset_size": len(dataset),
+        "metrics_by_period": metrics_by_period,
+        "strategy_comparison": comparison,
+        "config": {
+            "hold_days": BACKTEST_HOLD_DAYS,
+            "winner_threshold": BACKTEST_WINNER_THRESHOLD,
+            "loser_threshold": BACKTEST_LOSER_THRESHOLD,
+        },
+    }
+    with open(json_path, "w") as f:
+        json.dump(json_data, f, indent=2, default=str)
+    logger.info(f"Data saved to {json_path}")

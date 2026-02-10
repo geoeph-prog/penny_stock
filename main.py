@@ -137,6 +137,10 @@ def cmd_backtest(args):
         results.get("metrics_by_period", {}),
     )
 
+    print("\nResults saved to:")
+    print("  - pennystock.db (query with: python main.py history --backtests)")
+    print("  - backtest_reports/ folder (permanent .txt and .json files)")
+
 
 def cmd_history(args):
     """Show recent picks or backtest results."""
