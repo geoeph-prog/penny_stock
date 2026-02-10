@@ -136,3 +136,41 @@ class Database:
                 {"timestamp": row[0], "stats": json.loads(row[1]) if row[1] else {}}
                 for row in cursor.fetchall()
             ]
+
+    def get_backtest_history(self, n: int = 10) -> list:
+        """Get recent backtest results."""
+        with self._connect() as conn:
+            cursor = conn.execute(
+                "SELECT id, timestamp, report, metrics "
+                "FROM backtest_results ORDER BY timestamp DESC LIMIT ?",
+                (n,),
+            )
+            return [
+                {
+                    "id": row[0],
+                    "timestamp": row[1],
+                    "report": row[2] or "",
+                    "metrics": json.loads(row[3]) if row[3] else {},
+                }
+                for row in cursor.fetchall()
+            ]
+
+    def get_backtest_by_id(self, backtest_id: int) -> dict:
+        """Get a specific backtest result by ID."""
+        with self._connect() as conn:
+            cursor = conn.execute(
+                "SELECT id, timestamp, report, metrics "
+                "FROM backtest_results WHERE id = ?",
+                (backtest_id,),
+            )
+            row = cursor.fetchone()
+
+        if not row:
+            return {}
+
+        return {
+            "id": row[0],
+            "timestamp": row[1],
+            "report": row[2] or "",
+            "metrics": json.loads(row[3]) if row[3] else {},
+        }

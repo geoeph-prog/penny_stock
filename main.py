@@ -8,6 +8,7 @@ Usage:
     python main.py learn          # Learn patterns from winners vs losers
     python main.py backtest       # Backtest the scoring algorithm
     python main.py history        # Show recent picks from database
+    python main.py history --backtests  # View saved backtest results
 """
 
 import argparse
@@ -138,7 +139,15 @@ def cmd_backtest(args):
 
 
 def cmd_history(args):
-    """Show recent picks."""
+    """Show recent picks or backtest results."""
+    from pennystock.storage.db import Database
+
+    db = Database()
+
+    if args.backtests:
+        _show_backtest_history(db, args)
+        return
+
     from pennystock.pipeline.orchestrator import show_last_results
 
     picks = show_last_results(args.n)
@@ -155,6 +164,44 @@ def cmd_history(args):
               f"{pick['final_score']:>6.1f} ${pick['price']:>7.2f}")
 
 
+def _show_backtest_history(db, args):
+    """Show saved backtest results."""
+    if args.backtest_id:
+        # Show a specific backtest in full
+        result = db.get_backtest_by_id(args.backtest_id)
+        if not result:
+            print(f"\nNo backtest found with ID {args.backtest_id}")
+            return
+        print(f"\n  Backtest #{result['id']} - {result['timestamp'][:19]}")
+        print(result["report"])
+        return
+
+    # List recent backtests
+    backtests = db.get_backtest_history(args.n)
+
+    if not backtests:
+        print("\nNo backtest results in history. Run 'python main.py backtest' first.")
+        return
+
+    print(f"\n  Last {len(backtests)} backtest runs:")
+    print(f"  {'ID':>4}  {'Date':<20} {'Summary'}")
+    print("  " + "-" * 60)
+    for bt in backtests:
+        # Extract a one-line summary from the report
+        metrics = bt.get("metrics", {})
+        summary_parts = []
+        for period, m in metrics.items():
+            if isinstance(m, dict) and "avg_return_pct" in m:
+                summary_parts.append(
+                    f"{period}d: {m['avg_return_pct']:+.1f}% avg, "
+                    f"{m.get('win_rate', 0):.0f}% win"
+                )
+        summary = " | ".join(summary_parts) if summary_parts else "(no metrics)"
+        print(f"  {bt['id']:>4}  {bt['timestamp'][:19]:<20} {summary}")
+
+    print(f"\n  View full report: python main.py history --backtests --id <ID>")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Penny Stock Analyzer - Find winning penny stocks",
@@ -167,6 +214,8 @@ Examples:
   python main.py learn                # Learn from winners vs losers
   python main.py backtest             # Validate algorithm historically
   python main.py history              # View recent picks
+  python main.py history --backtests  # List saved backtest results
+  python main.py history --backtests --id 1  # View full backtest report
         """,
     )
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose debug output")
@@ -190,8 +239,10 @@ Examples:
     bt_parser.add_argument("-n", "--top-n", type=int, default=10, help="Top N picks to evaluate")
 
     # ── history command ─────────────────────────────────────────────
-    hist_parser = subparsers.add_parser("history", help="Show recent picks from database")
-    hist_parser.add_argument("-n", type=int, default=10, help="Number of recent picks to show")
+    hist_parser = subparsers.add_parser("history", help="Show recent picks or backtest results")
+    hist_parser.add_argument("-n", type=int, default=10, help="Number of recent entries to show")
+    hist_parser.add_argument("--backtests", action="store_true", help="Show backtest results instead of picks")
+    hist_parser.add_argument("--id", dest="backtest_id", type=int, default=None, help="Show full report for a specific backtest ID")
 
     args = parser.parse_args()
 
