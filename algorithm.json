@@ -1,0 +1,339 @@
+{
+  "version": "2.0",
+  "built_date": "2026-02-17 15:09:49",
+  "training_summary": {
+    "total_stocks": 331,
+    "winners": 63,
+    "losers": 268,
+    "winner_tickers": [
+      "AEHL",
+      "AGL",
+      "ALBT",
+      "AMOD",
+      "AMZE",
+      "AVX",
+      "AZI",
+      "BARK",
+      "CALC",
+      "CANG",
+      "CDLX",
+      "CISO",
+      "COOK",
+      "CUE",
+      "DXST",
+      "FBLG",
+      "GTEC",
+      "GUTS",
+      "HXHX",
+      "IVDA"
+    ],
+    "criteria": "2-week gain >= 15% AND 4-week gain >= 20%"
+  },
+  "category_weights": {
+    "technical": 0.527,
+    "fundamental": 0.32,
+    "sentiment": 0.153
+  },
+  "factors": [
+    {
+      "feature": "price_trend_20d",
+      "winner_mean": -37.0024,
+      "loser_mean": -25.581,
+      "winner_std": 29.2521,
+      "loser_std": 28.6116,
+      "separation": 0.3947,
+      "direction": "lower",
+      "category": "technical"
+    },
+    {
+      "feature": "rsi",
+      "winner_mean": 28.346,
+      "loser_mean": 32.3472,
+      "winner_std": 16.3906,
+      "loser_std": 14.4702,
+      "separation": 0.2588,
+      "direction": "lower",
+      "category": "technical"
+    },
+    {
+      "feature": "volume_spike",
+      "winner_mean": 0.4312,
+      "loser_mean": 1.4677,
+      "winner_std": 0.4472,
+      "loser_std": 5.8767,
+      "separation": 0.2487,
+      "direction": "lower",
+      "category": "technical"
+    },
+    {
+      "feature": "price_trend_60d",
+      "winner_mean": -36.2343,
+      "loser_mean": -43.8538,
+      "winner_std": 35.7337,
+      "loser_std": 28.9152,
+      "separation": 0.2344,
+      "direction": "higher",
+      "category": "technical"
+    },
+    {
+      "feature": "short_pct_float",
+      "winner_mean": 0.0798,
+      "loser_mean": 0.0504,
+      "winner_std": 0.1824,
+      "loser_std": 0.0628,
+      "separation": 0.2153,
+      "direction": "higher",
+      "category": "fundamental"
+    },
+    {
+      "feature": "total_debt",
+      "winner_mean": 273755274.3175,
+      "loser_mean": 61164543.8492,
+      "winner_std": 1417891384.0284,
+      "loser_std": 234557243.2458,
+      "separation": 0.2092,
+      "direction": "higher",
+      "category": "fundamental"
+    },
+    {
+      "feature": "short_ratio",
+      "winner_mean": 1.3829,
+      "loser_mean": 1.8199,
+      "winner_std": 1.9913,
+      "loser_std": 2.4817,
+      "separation": 0.1943,
+      "direction": "lower",
+      "category": "fundamental"
+    },
+    {
+      "feature": "institution_pct",
+      "winner_mean": 0.171,
+      "loser_mean": 0.133,
+      "winner_std": 0.2338,
+      "loser_std": 0.1694,
+      "separation": 0.186,
+      "direction": "higher",
+      "category": "fundamental"
+    },
+    {
+      "feature": "debt_to_equity",
+      "winner_mean": 166.9313,
+      "loser_mean": 79.937,
+      "winner_std": 743.9831,
+      "loser_std": 237.5194,
+      "separation": 0.1575,
+      "direction": "higher",
+      "category": "fundamental"
+    },
+    {
+      "feature": "avg_volume",
+      "winner_mean": 4822632.1378,
+      "loser_mean": 3469739.3657,
+      "winner_std": 9010700.3279,
+      "loser_std": 8185965.5615,
+      "separation": 0.1572,
+      "direction": "higher",
+      "category": "technical"
+    },
+    {
+      "feature": "revenue_growth",
+      "winner_mean": 1.6635,
+      "loser_mean": 0.6775,
+      "winner_std": 8.0591,
+      "loser_std": 3.7357,
+      "separation": 0.157,
+      "direction": "higher",
+      "category": "fundamental"
+    },
+    {
+      "feature": "buzz_score",
+      "winner_mean": 6.946,
+      "loser_mean": 4.9619,
+      "winner_std": 14.9174,
+      "loser_std": 13.9248,
+      "separation": 0.1375,
+      "direction": "higher",
+      "category": "sentiment"
+    },
+    {
+      "feature": "float_shares",
+      "winner_mean": 87899715.2063,
+      "loser_mean": 492298594.5873,
+      "winner_std": 230193656.2341,
+      "loser_std": 4278680774.5312,
+      "separation": 0.1335,
+      "direction": "lower",
+      "category": "fundamental"
+    },
+    {
+      "feature": "macd_histogram",
+      "winner_mean": -0.0245,
+      "loser_mean": 0.0349,
+      "winner_std": 0.0996,
+      "loser_std": 0.6326,
+      "separation": 0.1311,
+      "direction": "lower",
+      "category": "technical"
+    },
+    {
+      "feature": "total_cash",
+      "winner_mean": 26697411.127,
+      "loser_mean": 20454977.5476,
+      "winner_std": 61173282.6815,
+      "loser_std": 34864224.0666,
+      "separation": 0.1254,
+      "direction": "higher",
+      "category": "fundamental"
+    },
+    {
+      "feature": "current_ratio",
+      "winner_mean": 2.8133,
+      "loser_mean": 2.4178,
+      "winner_std": 6.3401,
+      "loser_std": 3.3199,
+      "separation": 0.0782,
+      "direction": "higher",
+      "category": "fundamental"
+    },
+    {
+      "feature": "reddit_mentions",
+      "winner_mean": 1.3651,
+      "loser_mean": 2.5317,
+      "winner_std": 4.9848,
+      "loser_std": 21.7898,
+      "separation": 0.0738,
+      "direction": "lower",
+      "category": "sentiment"
+    },
+    {
+      "feature": "insider_buys_90d",
+      "winner_mean": 0.0159,
+      "loser_mean": 0.0079,
+      "winner_std": 0.126,
+      "loser_std": 0.0891,
+      "separation": 0.0727,
+      "direction": "higher",
+      "category": "fundamental"
+    },
+    {
+      "feature": "insider_net_buys",
+      "winner_mean": 0.0159,
+      "loser_mean": 0.0079,
+      "winner_std": 0.126,
+      "loser_std": 0.0891,
+      "separation": 0.0727,
+      "direction": "higher",
+      "category": "fundamental"
+    },
+    {
+      "feature": "price",
+      "winner_mean": 0.5513,
+      "loser_mean": 0.5399,
+      "winner_std": 0.2438,
+      "loser_std": 0.2621,
+      "separation": 0.0451,
+      "direction": "higher",
+      "category": "technical"
+    },
+    {
+      "feature": "price_trend_5d",
+      "winner_mean": -10.2941,
+      "loser_mean": -9.3251,
+      "winner_std": 21.2553,
+      "loser_std": 21.7629,
+      "separation": 0.045,
+      "direction": "lower",
+      "category": "technical"
+    },
+    {
+      "feature": "profit_margins",
+      "winner_mean": -0.1736,
+      "loser_mean": -0.1316,
+      "winner_std": 0.3537,
+      "loser_std": 2.0768,
+      "separation": 0.0281,
+      "direction": "lower",
+      "category": "fundamental"
+    },
+    {
+      "feature": "reddit_sentiment",
+      "winner_mean": 0.0819,
+      "loser_mean": 0.0775,
+      "winner_std": 0.2371,
+      "loser_std": 0.2629,
+      "separation": 0.0177,
+      "direction": "higher",
+      "category": "sentiment"
+    },
+    {
+      "feature": "combined_sentiment",
+      "winner_mean": 0.0819,
+      "loser_mean": 0.0775,
+      "winner_std": 0.2371,
+      "loser_std": 0.2629,
+      "separation": 0.0177,
+      "direction": "higher",
+      "category": "sentiment"
+    },
+    {
+      "feature": "volatility_20d",
+      "winner_mean": 10.8071,
+      "loser_mean": 11.2813,
+      "winner_std": 10.1099,
+      "loser_std": 43.4541,
+      "separation": 0.015,
+      "direction": "lower",
+      "category": "technical"
+    },
+    {
+      "feature": "insider_pct",
+      "winner_mean": 0.2608,
+      "loser_mean": 0.2564,
+      "winner_std": 0.3049,
+      "loser_std": 0.3282,
+      "separation": 0.014,
+      "direction": "higher",
+      "category": "fundamental"
+    },
+    {
+      "feature": "sec_filings_90d",
+      "winner_mean": 7.4286,
+      "loser_mean": 7.4921,
+      "winner_std": 8.4809,
+      "loser_std": 9.0171,
+      "separation": 0.0073,
+      "direction": "lower",
+      "category": "fundamental"
+    },
+    {
+      "feature": "stocktwits_bullish_pct",
+      "winner_mean": 0.0,
+      "loser_mean": 0.0,
+      "winner_std": 0.0,
+      "loser_std": 0.0,
+      "separation": 0.0,
+      "direction": "lower",
+      "category": "sentiment"
+    },
+    {
+      "feature": "insider_sells_90d",
+      "winner_mean": 0.0,
+      "loser_mean": 0.0,
+      "winner_std": 0.0,
+      "loser_std": 0.0,
+      "separation": 0.0,
+      "direction": "lower",
+      "category": "fundamental"
+    },
+    {
+      "feature": "sec_8k_count",
+      "winner_mean": 0.0,
+      "loser_mean": 0.0,
+      "winner_std": 0.0,
+      "loser_std": 0.0,
+      "separation": 0.0,
+      "direction": "lower",
+      "category": "fundamental"
+    }
+  ]
+}
