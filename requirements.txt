@@ -16,8 +16,8 @@ vaderSentiment>=3.3.2
 # Logging
 loguru>=0.7.2
 
-# Database
-# sqlite3 is built-in to Python
+# GUI
+PyQt6>=6.6.0
 
 # Optional: Twitter scraping (requires throwaway account)
 # twikit>=2.0.0
