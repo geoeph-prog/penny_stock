@@ -155,18 +155,19 @@ def build_algorithm(progress_callback=None):
 
     for j, (ticker, group) in enumerate(analyze_tickers):
         try:
-            # Sentiment
+            # Sentiment (only include if there's actual data)
             sent = analyze_sentiment(ticker)
-            sentiment_features[group].append({
-                "reddit_mentions": sent.get("reddit", {}).get("mentions", 0),
-                "reddit_sentiment": sent.get("reddit", {}).get("avg_sentiment", 0),
-                "stocktwits_bullish_pct": (
-                    sent.get("stocktwits", {}).get("bullish", 0) /
-                    max(1, sent.get("stocktwits", {}).get("total", 1))
-                ),
-                "combined_sentiment": sent.get("combined_sentiment", 0),
-                "buzz_score": sent.get("buzz_score", 0),
-            })
+            if sent.get("has_data", False):
+                sentiment_features[group].append({
+                    "reddit_mentions": sent.get("reddit", {}).get("mentions", 0),
+                    "reddit_sentiment": sent.get("reddit", {}).get("avg_sentiment", 0),
+                    "stocktwits_bullish_pct": (
+                        sent.get("stocktwits", {}).get("bullish", 0) /
+                        max(1, sent.get("stocktwits", {}).get("total", 1))
+                    ),
+                    "combined_sentiment": sent.get("combined_sentiment", 0),
+                    "buzz_score": sent.get("buzz_score", 0),
+                })
 
             # Fundamentals
             fund = extract_fund_features(ticker)
@@ -368,6 +369,7 @@ def pick_stocks(top_n=5, progress_callback=None):
         try:
             # Sentiment
             sent = analyze_sentiment(ticker)
+            has_sentiment_data = sent.get("has_data", False)
             sent_features = {
                 "reddit_mentions": sent.get("reddit", {}).get("mentions", 0),
                 "reddit_sentiment": sent.get("reddit", {}).get("avg_sentiment", 0),
@@ -390,7 +392,11 @@ def pick_stocks(top_n=5, progress_callback=None):
 
             # Score each category
             tech_score = candidate["tech_score"]
-            sent_score = _score_features(sent_features, sent_factors) if sent_factors else 50
+            # No social media data = neutral score (don't score zeros as signal)
+            if has_sentiment_data and sent_factors:
+                sent_score = _score_features(sent_features, sent_factors)
+            else:
+                sent_score = 50.0
             fund_score = _score_features(fund_feat, fund_factors) if fund_factors else 50
             cat_score = cat_result.get("score", 50)
             mkt_score = mkt_result.get("score", 50)

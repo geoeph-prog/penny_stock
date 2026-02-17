@@ -176,6 +176,7 @@ def analyze(ticker: str) -> dict:
         "combined_sentiment": round(combined, 3),
         "total_mentions": total_mentions,
         "buzz_score": round(buzz, 1),
+        "has_data": total_mentions > 0,
         "reddit": {
             "mentions": reddit_data["total_mentions"],
             "avg_sentiment": round(reddit_sentiment["avg_sentiment"], 3),
