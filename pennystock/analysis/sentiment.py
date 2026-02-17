@@ -3,12 +3,25 @@ Sentiment analysis engine using VADER NLP.
 
 Aggregates text from Reddit, StockTwits, and optionally Twitter,
 then scores sentiment using VADER with financial term adjustments.
+
+Supports bulk mode: call ensure_bulk_downloaded() once before analyzing
+many tickers to avoid per-ticker Reddit API calls.
 """
 
 from loguru import logger
 
 from pennystock.config import FINANCIAL_LEXICON_UPDATES
 from pennystock.data import reddit_scraper, stocktwits_client, twitter_scraper
+
+
+def ensure_bulk_downloaded():
+    """
+    Pre-download Reddit posts from all subreddits in one batch.
+    Call this ONCE before analyzing many tickers to avoid rate limiting.
+    After this, reddit_scraper.get_ticker_mentions() uses local search only.
+    """
+    reddit_scraper.bulk_download_posts()
+    logger.info("Reddit bulk download ready — ticker searches will be local only.")
 
 
 def _get_vader():
@@ -95,12 +108,12 @@ def analyze(ticker: str) -> dict:
     """
     analyzer = _get_vader()
 
-    # ── Reddit ──────────────────────────────────────────────────────
-    reddit_data = reddit_scraper.get_ticker_mentions(ticker)
+    # ── Reddit (uses bulk cache if available, zero API calls) ──────
+    reddit_data = reddit_scraper.get_ticker_mentions(ticker, use_bulk=True)
     reddit_texts = [f"{p['title']} {p['text']}" for p in reddit_data["posts"]]
     reddit_sentiment = score_texts(reddit_texts, analyzer)
 
-    # ── StockTwits ──────────────────────────────────────────────────
+    # ── StockTwits (respects rate limits) ───────────────────────────
     st_data = stocktwits_client.get_messages(ticker)
     st_texts = [m["body"] for m in st_data["messages"]]
     st_sentiment = score_texts(st_texts, analyzer)
@@ -109,7 +122,7 @@ def analyze(ticker: str) -> dict:
     st_total = st_data["total_count"] or 1
     st_label_score = (st_data["bullish_count"] - st_data["bearish_count"]) / st_total
 
-    # ── Twitter (optional) ──────────────────────────────────────────
+    # ── Twitter (optional, respects rate limits) ────────────────────
     tw_data = twitter_scraper.get_cashtag_tweets(ticker)
     tw_texts = [t["text"] for t in tw_data["tweets"]]
     tw_sentiment = score_texts(tw_texts, analyzer)

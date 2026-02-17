@@ -20,6 +20,7 @@ from pennystock.data.yahoo_client import get_price_history, get_stock_info
 from pennystock.analysis.technical import extract_features as extract_tech_features
 from pennystock.analysis.technical import analyze as analyze_technical
 from pennystock.analysis.sentiment import analyze as analyze_sentiment
+from pennystock.analysis.sentiment import ensure_bulk_downloaded
 from pennystock.analysis.fundamental import extract_features as extract_fund_features
 from pennystock.analysis.fundamental import analyze as analyze_fundamental
 from pennystock.analysis.catalyst import analyze as analyze_catalyst
@@ -140,6 +141,11 @@ def build_algorithm(progress_callback=None):
 
     # ── Step 5: Sentiment + fundamentals (winners + sample of losers)
     _log("Step 4: Analyzing sentiment & fundamentals (winners + loser sample)...")
+
+    # Pre-download Reddit posts ONCE to avoid per-ticker rate limiting
+    _log("  Pre-downloading Reddit posts (bulk mode)...")
+    ensure_bulk_downloaded()
+
     loser_sample = losers[:min(len(losers), len(winners) * 2)]  # 2:1 ratio
 
     sentiment_features = {"winners": [], "losers": []}
@@ -349,6 +355,10 @@ def pick_stocks(top_n=5, progress_callback=None):
     sent_factors = [f for f in algorithm["factors"] if f["category"] == "sentiment"]
     fund_factors = [f for f in algorithm["factors"] if f["category"] == "fundamental"]
     cat_weights = algorithm.get("category_weights", {})
+
+    # Pre-download Reddit posts ONCE to avoid per-ticker rate limiting
+    _log("Pre-downloading Reddit posts (bulk mode)...")
+    ensure_bulk_downloaded()
 
     _log(f"Stage 2: Deep analysis on top {len(top_candidates)} stocks...")
     final_results = []

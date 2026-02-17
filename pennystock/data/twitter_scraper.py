@@ -4,14 +4,29 @@ Optional Twitter/X scraper using twikit. Requires:
   2. A throwaway Twitter/X account (credentials in env vars or config)
 
 Set TWITTER_ENABLED = True in config.py to activate.
+Includes rate limit detection -- stops trying after first failure.
 """
 
 import asyncio
 import os
+import time
 
 from loguru import logger
 
 from pennystock.config import TWITTER_ENABLED, TWITTER_COOKIES_FILE, TWITTER_TWEETS_PER_TICKER
+
+# Global rate limit tracking
+_rate_limited_until = 0
+
+
+def _is_rate_limited():
+    return time.time() < _rate_limited_until
+
+
+def _set_rate_limited(seconds=300):
+    global _rate_limited_until
+    _rate_limited_until = time.time() + seconds
+    logger.warning(f"Twitter rate limited. Pausing requests for {seconds}s.")
 
 
 async def _search_cashtag(ticker: str, limit: int) -> list:
@@ -89,12 +104,15 @@ def get_cashtag_tweets(ticker: str, limit: int = None) -> dict:
     if not TWITTER_ENABLED:
         return {"ticker": ticker, "tweets": [], "total_count": 0, "enabled": False}
 
+    if _is_rate_limited():
+        logger.debug(f"Twitter skipped for {ticker} (rate limited)")
+        return {"ticker": ticker, "tweets": [], "total_count": 0, "enabled": True}
+
     limit = limit or TWITTER_TWEETS_PER_TICKER
 
     try:
         loop = asyncio.get_event_loop()
         if loop.is_running():
-            # If already in an async context, create a new task
             import concurrent.futures
             with concurrent.futures.ThreadPoolExecutor() as pool:
                 tweets = pool.submit(
@@ -104,6 +122,8 @@ def get_cashtag_tweets(ticker: str, limit: int = None) -> dict:
             tweets = asyncio.run(_search_cashtag(ticker, limit))
     except Exception as e:
         logger.debug(f"Twitter scraping failed for {ticker}: {e}")
+        # If it fails, assume rate limited and back off
+        _set_rate_limited(300)
         tweets = []
 
     return {
