@@ -158,11 +158,11 @@ def _analyze_market_trend() -> dict:
         result = {
             "score": max(0, min(100, score)),
             "trend": trend,
-            "spy_price": round(current, 2),
-            "above_20sma": above_20,
-            "above_50sma": above_50,
-            "change_5d_pct": round(pct_change_5d, 1),
-            "change_20d_pct": round(pct_change_20d, 1),
+            "spy_price": round(float(current), 2),
+            "above_20sma": bool(above_20),
+            "above_50sma": bool(above_50),
+            "change_5d_pct": round(float(pct_change_5d), 1),
+            "change_20d_pct": round(float(pct_change_20d), 1),
         }
         cache_set(cache_key, result)
         return result
