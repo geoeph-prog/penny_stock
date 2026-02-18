@@ -165,6 +165,40 @@ def get_news(ticker: str) -> list:
         return []
 
 
+def has_recent_reverse_split(ticker: str, months: int = 6) -> dict:
+    """
+    Check if a stock had a reverse split in the last N months.
+    Reverse splits have ratio < 1.0 (e.g., 0.1 for 1-for-10).
+
+    Returns:
+        {"has_reverse_split": bool, "split_ratio": float or None, "split_date": str or None}
+    """
+    try:
+        t = yf.Ticker(ticker)
+        splits = t.splits
+        if splits is None or splits.empty:
+            return {"has_reverse_split": False, "split_ratio": None, "split_date": None}
+
+        # Filter to recent splits
+        from datetime import datetime, timedelta
+        cutoff = datetime.now() - timedelta(days=months * 30)
+
+        for date, ratio in splits.items():
+            split_date = pd.Timestamp(date)
+            if split_date >= pd.Timestamp(cutoff) and ratio < 1.0:
+                return {
+                    "has_reverse_split": True,
+                    "split_ratio": float(ratio),
+                    "split_date": str(split_date.date()),
+                }
+
+        return {"has_reverse_split": False, "split_ratio": None, "split_date": None}
+
+    except Exception as e:
+        logger.debug(f"Reverse split check failed for {ticker}: {e}")
+        return {"has_reverse_split": False, "split_ratio": None, "split_date": None}
+
+
 def get_quarterly_financials(ticker: str) -> pd.DataFrame:
     """Get quarterly financials for revenue momentum analysis."""
     try:

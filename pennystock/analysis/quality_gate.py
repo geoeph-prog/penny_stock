@@ -35,7 +35,7 @@ from pennystock.config import (
     KILL_MIN_GROSS_MARGIN,
     KILL_MIN_CASH_RUNWAY_YEARS,
 )
-from pennystock.data.yahoo_client import get_stock_info, get_news
+from pennystock.data.yahoo_client import get_stock_info, get_news, has_recent_reverse_split
 from pennystock.data.sec_client import check_going_concern
 
 
@@ -173,8 +173,20 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
                 f"burn). Threshold: {KILL_MIN_CASH_RUNWAY_YEARS * 12:.0f} months."
             )
 
+    # ── Filter 9: Recent Reverse Split ────────────────────────────────
+    try:
+        rs = has_recent_reverse_split(ticker, months=6)
+        if rs["has_reverse_split"]:
+            ratio_str = f"1-for-{int(1/rs['split_ratio'])}" if rs["split_ratio"] > 0 else "unknown"
+            kill_reasons.append(
+                f"REVERSE SPLIT: {ratio_str} reverse split on {rs['split_date']}. "
+                f"Penny stocks with recent reverse splits often continue declining."
+            )
+    except Exception as e:
+        logger.debug(f"Reverse split check failed for {ticker}: {e}")
+
     # ── Compile result ───────────────────────────────────────────────
-    total_filters = 8
+    total_filters = 9
     killed = len(kill_reasons) > 0
 
     if killed:

@@ -137,7 +137,7 @@ class BuildAlgorithmTab(QWidget):
             "Analyzes all penny stocks ($0.05-$1.00) over the past 3 months.\n"
             "Finds stocks that gained steadily over 2-4+ weeks (not pump & dumps).\n"
             "Compares winners vs losers on technical, sentiment, and fundamental factors.\n"
-            "Builds ONE unified algorithm and saves it permanently."
+            "Builds ONE unified algorithm with kill filters + weighted scoring."
         )
         desc.setStyleSheet("color: #a6adc8; padding: 0 10px 10px 10px;")
         layout.addWidget(desc)
@@ -242,9 +242,10 @@ class PickStocksTab(QWidget):
 
         # Results table
         self.table = QTableWidget()
-        self.table.setColumnCount(7)
+        self.table.setColumnCount(9)
         self.table.setHorizontalHeaderLabels([
-            "Rank", "Ticker", "Price", "Score", "Technical", "Sentiment", "Fundamental"
+            "Rank", "Ticker", "Price", "Score",
+            "Setup", "Technical", "Fundamental", "Catalyst", "Key Info"
         ])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.setVisible(False)
@@ -303,14 +304,26 @@ class PickStocksTab(QWidget):
         self.table.setRowCount(len(picks))
         for row, pick in enumerate(picks):
             ss = pick.get("sub_scores", {})
+            ki = pick.get("key_indicators", {})
+
+            # Build key info string
+            float_val = ki.get("float_shares", 0) or 0
+            float_str = f"{float_val/1e6:.1f}M" if float_val > 0 else "N/A"
+            insider_val = (ki.get("insider_pct") or 0) * 100
+            rsi_val = ki.get("rsi")
+            rsi_str = f"{rsi_val:.0f}" if rsi_val is not None else "N/A"
+            key_info = f"Float:{float_str} Ins:{insider_val:.0f}% RSI:{rsi_str}"
+
             items = [
                 (f"#{row + 1}", None),
                 (pick["ticker"], None),
                 (f"${pick['price']:.2f}", None),
                 (f"{pick['final_score']:.1f}", self._score_color(pick["final_score"])),
+                (f"{ss.get('setup', 0):.0f}", self._score_color(ss.get("setup", 0))),
                 (f"{ss.get('technical', 0):.0f}", self._score_color(ss.get("technical", 0))),
-                (f"{ss.get('sentiment', 0):.0f}", self._score_color(ss.get("sentiment", 0))),
                 (f"{ss.get('fundamental', 0):.0f}", self._score_color(ss.get("fundamental", 0))),
+                (f"{ss.get('catalyst', 0):.0f}", self._score_color(ss.get("catalyst", 0))),
+                (key_info, None),
             ]
             for col, (text, color) in enumerate(items):
                 item = QTableWidgetItem(text)
