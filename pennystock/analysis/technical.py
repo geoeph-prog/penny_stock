@@ -708,19 +708,42 @@ def analyze(hist: pd.DataFrame) -> dict:
 
     # ── NEW INDICATOR SCORES ──────────────────────────────────────
 
-    # ADX Score: Strong trend = higher score (filters out choppy stocks)
+    # ADX Score: Must consider DIRECTION, not just strength.
+    # High ADX + bullish (plus_di > minus_di) = great.
+    # High ADX + bearish (minus_di > plus_di) = TERRIBLE (strong downtrend).
+    # UPLD had ADX 72.4 in a strong DOWNTREND and scored 95 -- that's wrong.
+    is_bullish = (
+        not np.isnan(current_plus_di) and not np.isnan(current_minus_di)
+        and current_plus_di > current_minus_di
+    )
+    is_bearish = (
+        not np.isnan(current_plus_di) and not np.isnan(current_minus_di)
+        and current_minus_di > current_plus_di
+    )
+
     if np.isnan(current_adx):
         adx_score = 50
     elif current_adx >= 50:
-        adx_score = 95  # Very strong trend
+        if is_bullish:
+            adx_score = 95  # Very strong BULLISH trend -- excellent
+        elif is_bearish:
+            adx_score = 10  # Very strong BEARISH trend -- avoid at all costs
+        else:
+            adx_score = 50  # Strong trend, unknown direction
     elif current_adx >= 25:
-        # Strong trend. Bonus if +DI > -DI (bullish direction)
-        adx_score = 80
-        if not np.isnan(current_plus_di) and not np.isnan(current_minus_di):
-            if current_plus_di > current_minus_di:
-                adx_score = 90  # Strong bullish trend
+        if is_bullish:
+            adx_score = 90  # Strong bullish trend
+        elif is_bearish:
+            adx_score = 20  # Strong bearish trend -- penalize
+        else:
+            adx_score = 55  # Moderate trend, unknown direction
     elif current_adx >= 20:
-        adx_score = 60  # Developing trend
+        if is_bullish:
+            adx_score = 70  # Developing bullish trend
+        elif is_bearish:
+            adx_score = 35  # Developing bearish trend
+        else:
+            adx_score = 50  # Developing trend
     else:
         adx_score = 30  # No trend, choppy -- avoid
 

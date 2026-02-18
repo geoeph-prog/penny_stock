@@ -14,14 +14,18 @@ HARD KILLS (instant disqualification, score 0):
   - Cash runway exhaustion (< 6 months of cash left at current burn)
   - Pre-revenue burn (< $1M revenue + burning > $50M/year)
   - Already pumped (> 100% gain in 5 days = too late, chasing the pump)
+  - Negative shareholder equity (balance sheet is underwater)
+  - Sub-dime price (< $0.10 = untradeable garbage)
+  - Extreme profit margin losses (< -200% = hemorrhaging money)
 
 SCORING PENALTIES (reduce score but don't kill):
   "Normal penny stock shadiness" -- bad signs but not fatal:
   - Going concern (auditor doubt -- common in penny land)
   - Delisting / compliance notices (often resolved, stock can recover)
-  - Extreme price decay (85%+ from 52w high -- could be a deep value play)
-  - Recent reverse splits (desperation but stock may stabilize)
+  - Extreme price decay (85%+ from 52w high -- scaled, 95%+ hits harder)
+  - Recent reverse splits (scaled -- 1-for-50+ gets heavier penalty)
   - Excessive float (> 100M shares -- harder to squeeze but not impossible)
+  - Micro-employee count (< 10 employees = likely shell/zombie company)
 
 The key insight: catch stocks BEFORE the pump, not after. The "Already Pumped"
 filter is the most important -- a stock up >100% in 5 days has already moved.
@@ -50,15 +54,24 @@ from pennystock.config import (
     KILL_PRE_REVENUE_MIN_BURN,
     KILL_ALREADY_PUMPED_PCT,
     KILL_ALREADY_PUMPED_DAYS,
+    KILL_NEGATIVE_EQUITY,
+    KILL_MIN_PRICE,
+    KILL_EXTREME_LOSS_MARGIN,
     KILL_GOING_CONCERN,
     KILL_DELISTING_KEYWORDS,
     PENALTY_GOING_CONCERN,
     PENALTY_DELISTING_NOTICE,
     PENALTY_PRICE_DECAY,
     PENALTY_PRICE_DECAY_THRESHOLD,
+    PENALTY_PRICE_DECAY_EXTREME,
+    PENALTY_PRICE_DECAY_EXTREME_THRESHOLD,
     PENALTY_REVERSE_SPLIT,
+    PENALTY_REVERSE_SPLIT_EXTREME,
+    PENALTY_REVERSE_SPLIT_EXTREME_RATIO,
     PENALTY_EXCESSIVE_FLOAT,
     PENALTY_MAX_FLOAT,
+    PENALTY_MICRO_EMPLOYEES,
+    PENALTY_MICRO_EMPLOYEES_THRESHOLD,
 )
 from pennystock.data.yahoo_client import (
     get_stock_info, get_news, has_recent_reverse_split, get_price_history,
@@ -195,6 +208,45 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
                 f"Pre-revenue company burning through cash with no product revenue."
             )
 
+    # ── Kill 8: Negative Shareholder Equity ──────────────────────
+    # Balance sheet is underwater -- liabilities exceed assets.
+    # Would have killed: SMXT (-$11.78M), XPON (-$65M)
+    if KILL_NEGATIVE_EQUITY:
+        stockholders_equity = info.get("stockholders_equity")
+        book_value = info.get("book_value")
+        if stockholders_equity is not None and stockholders_equity < 0:
+            kill_reasons.append(
+                f"NEGATIVE EQUITY: Stockholders' equity is "
+                f"${stockholders_equity:,.0f}. Liabilities exceed assets -- "
+                f"the company is technically insolvent."
+            )
+        elif book_value is not None and book_value < 0:
+            kill_reasons.append(
+                f"NEGATIVE EQUITY: Book value per share is "
+                f"${book_value:.2f}. Balance sheet is underwater."
+            )
+
+    # ── Kill 9: Sub-Dime Stock Price ─────────────────────────────
+    # Stocks below $0.10 are untradeable penny garbage, usually
+    # manipulated or dying. Would have killed: BYAH ($0.05)
+    if price > 0 and price < KILL_MIN_PRICE:
+        kill_reasons.append(
+            f"SUB-DIME PRICE: Stock at ${price:.4f} "
+            f"(< ${KILL_MIN_PRICE:.2f} minimum). "
+            f"Sub-dime stocks are untradeable, illiquid, and manipulated."
+        )
+
+    # ── Kill 10: Extreme Profit Margin Losses ────────────────────
+    # Companies with profit margins worse than -200% are hemorrhaging
+    # money at an absurd rate. Would have killed: BYAH (-701%), XPON
+    profit_margins = info.get("profit_margins")
+    if profit_margins is not None and profit_margins < KILL_EXTREME_LOSS_MARGIN:
+        kill_reasons.append(
+            f"EXTREME LOSSES: Profit margin {profit_margins*100:.0f}% "
+            f"(< {KILL_EXTREME_LOSS_MARGIN*100:.0f}% threshold). "
+            f"Company is losing money at a catastrophic rate."
+        )
+
     # ═════════════════════════════════════════════════════════════════
     # SCORING PENALTIES: Normal penny stock shadiness
     # These reduce the final score but don't instantly disqualify.
@@ -228,10 +280,20 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
         if any("DELISTING" in p for p in penalties):
             break
 
-    # ── Penalty: Extreme Price Decay ───────────────────────────────
+    # ── Penalty: Extreme Price Decay (SCALED) ────────────────────
     if high_52w > 0 and price > 0:
         decay_ratio = price / high_52w
-        if decay_ratio < PENALTY_PRICE_DECAY_THRESHOLD:
+        if decay_ratio < PENALTY_PRICE_DECAY_EXTREME_THRESHOLD:
+            # 95%+ decline (e.g. BYAH at 99.9%) -- much heavier penalty
+            pct_decline = (1 - decay_ratio) * 100
+            total_penalty += PENALTY_PRICE_DECAY_EXTREME
+            penalties.append(
+                f"CATASTROPHIC DECAY (-{PENALTY_PRICE_DECAY_EXTREME}pts): "
+                f"Price ${price:.4f} is {pct_decline:.1f}% below 52-week high "
+                f"${high_52w:.2f} (ratio {decay_ratio:.4f}). "
+                f"This stock has been destroyed."
+            )
+        elif decay_ratio < PENALTY_PRICE_DECAY_THRESHOLD:
             pct_decline = (1 - decay_ratio) * 100
             total_penalty += PENALTY_PRICE_DECAY
             penalties.append(
@@ -240,17 +302,27 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
                 f"(ratio {decay_ratio:.4f}). Could be deep value or could be dead."
             )
 
-    # ── Penalty: Recent Reverse Split ──────────────────────────────
+    # ── Penalty: Recent Reverse Split (SCALED for extreme ratios) ──
     try:
         rs = has_recent_reverse_split(ticker, months=6)
         if rs["has_reverse_split"]:
-            ratio_str = f"1-for-{int(1/rs['split_ratio'])}" if rs["split_ratio"] > 0 else "unknown"
-            total_penalty += PENALTY_REVERSE_SPLIT
-            penalties.append(
-                f"REVERSE SPLIT (-{PENALTY_REVERSE_SPLIT}pts): {ratio_str} "
-                f"reverse split on {rs['split_date']}. Desperation move to "
-                f"maintain listing, but stock may stabilize."
-            )
+            inv_ratio = int(1 / rs["split_ratio"]) if rs["split_ratio"] > 0 else 0
+            ratio_str = f"1-for-{inv_ratio}" if inv_ratio > 0 else "unknown"
+            if inv_ratio >= PENALTY_REVERSE_SPLIT_EXTREME_RATIO:
+                # Extreme reverse split (1-for-50+) -- much heavier penalty
+                total_penalty += PENALTY_REVERSE_SPLIT_EXTREME
+                penalties.append(
+                    f"EXTREME REVERSE SPLIT (-{PENALTY_REVERSE_SPLIT_EXTREME}pts): "
+                    f"{ratio_str} reverse split on {rs['split_date']}. "
+                    f"Ratios this extreme signal a dying company."
+                )
+            else:
+                total_penalty += PENALTY_REVERSE_SPLIT
+                penalties.append(
+                    f"REVERSE SPLIT (-{PENALTY_REVERSE_SPLIT}pts): {ratio_str} "
+                    f"reverse split on {rs['split_date']}. Desperation move to "
+                    f"maintain listing, but stock may stabilize."
+                )
     except Exception as e:
         logger.debug(f"Reverse split check failed for {ticker}: {e}")
 
@@ -264,8 +336,21 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
             f"but not impossible with enough catalyst."
         )
 
+    # ── Penalty: Micro-Employee Count ────────────────────────────
+    # Companies with fewer than 10 employees are often shells, zombies,
+    # or SPACs masquerading as operating companies.
+    # Would have penalized: ATON (4 employees)
+    if 0 < employees < PENALTY_MICRO_EMPLOYEES_THRESHOLD:
+        total_penalty += PENALTY_MICRO_EMPLOYEES
+        penalties.append(
+            f"MICRO EMPLOYEES (-{PENALTY_MICRO_EMPLOYEES}pts): "
+            f"Only {employees} full-time employee(s) reported. "
+            f"Companies with < {PENALTY_MICRO_EMPLOYEES_THRESHOLD} FTEs "
+            f"are often shells, zombies, or SPACs."
+        )
+
     # ── Compile result ─────────────────────────────────────────────
-    total_hard_kills = 7
+    total_hard_kills = 10  # Updated: 7 original + 3 new kills
     killed = len(kill_reasons) > 0
 
     if killed:

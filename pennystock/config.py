@@ -1,7 +1,7 @@
 """Central configuration for the Penny Stock Analyzer."""
 
 # ── Price & Volume Filters ──────────────────────────────────────────
-MIN_PRICE = 0.05
+MIN_PRICE = 0.10   # Raised from 0.05 -- sub-dime stocks are untradeable garbage
 MAX_PRICE = 1.00
 MIN_VOLUME = 50_000
 
@@ -86,6 +86,18 @@ KILL_PRE_REVENUE_MAX_REVENUE = 1_000_000    # < $1M revenue = pre-revenue
 KILL_PRE_REVENUE_MIN_BURN = -50_000_000     # Burning > $50M/year
 # Would have killed: GUTS ($3K revenue, -$86M/year burn)
 
+# -- Kill: Negative Shareholder Equity (balance sheet is underwater) -
+KILL_NEGATIVE_EQUITY = True
+# Would have killed: SMXT (-$11.78M equity), XPON (-$65M equity)
+
+# -- Kill: Sub-dime stock price (untradeable, manipulated) ----------
+KILL_MIN_PRICE = 0.10             # Stocks below $0.10 are garbage
+# Would have killed: BYAH ($0.05)
+
+# -- Kill: Extreme profit margin losses (hemorrhaging money) --------
+KILL_EXTREME_LOSS_MARGIN = -2.0   # -200% profit margin = burning faster than revenue
+# Would have killed: BYAH (-701%), XPON (-300%+)
+
 # -- Kill: Already Pumped (catch BEFORE the pump, not after) -------
 KILL_ALREADY_PUMPED_PCT = 100.0   # > 100% gain in recent days = already ran
 KILL_ALREADY_PUMPED_DAYS = 5      # Lookback window (trading days)
@@ -102,18 +114,28 @@ KILL_ALREADY_PUMPED_DAYS = 5      # Lookback window (trading days)
 PENALTY_GOING_CONCERN = 25          # Points deducted from final score (0-100)
 
 # Delisting / compliance notice -> score penalty instead of kill
-PENALTY_DELISTING_NOTICE = 20       # Points deducted from final score
+PENALTY_DELISTING_NOTICE = 30       # Raised from 20 -- XPON/BYAH both had notices and survived
+# Strengthened because delisting risk is more severe than originally modeled
 
-# Extreme price decay (85%+ from 52w high) -> score penalty instead of kill
-PENALTY_PRICE_DECAY = 15            # Points deducted from final score
-PENALTY_PRICE_DECAY_THRESHOLD = 0.15  # Same threshold, but penalty not kill
+# Extreme price decay (85%+ from 52w high) -> SCALED penalty
+PENALTY_PRICE_DECAY = 15            # Base penalty for 85%+ decay
+PENALTY_PRICE_DECAY_THRESHOLD = 0.15  # Trigger: price < 15% of 52w high
+PENALTY_PRICE_DECAY_EXTREME = 30    # Penalty for 95%+ decay (BYAH-level: 99.9%)
+PENALTY_PRICE_DECAY_EXTREME_THRESHOLD = 0.05  # Trigger: price < 5% of 52w high
 
-# Recent reverse split -> score penalty instead of kill
-PENALTY_REVERSE_SPLIT = 20          # Points deducted from final score
+# Recent reverse split -> score penalty (scaled for extreme ratios)
+PENALTY_REVERSE_SPLIT = 20          # Base penalty for normal reverse splits
+PENALTY_REVERSE_SPLIT_EXTREME = 35  # Penalty for 1-for-50+ extreme splits
+PENALTY_REVERSE_SPLIT_EXTREME_RATIO = 50  # 1-for-50 threshold
 
 # Excessive float -> score penalty instead of kill
 PENALTY_EXCESSIVE_FLOAT = 15        # Points deducted from final score
 PENALTY_MAX_FLOAT = 100_000_000     # Same threshold as before
+
+# Micro-employee count -> score penalty (shell/zombie indicator)
+PENALTY_MICRO_EMPLOYEES = 20        # Points deducted for < 10 employees
+PENALTY_MICRO_EMPLOYEES_THRESHOLD = 10  # < 10 FTEs = suspicious
+# Would have penalized: ATON (4 employees), BYAH (17 barely above)
 
 # ═══════════════════════════════════════════════════════════════════
 # LAYER 2: POSITIVE SCORING WEIGHTS

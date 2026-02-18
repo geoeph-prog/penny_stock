@@ -223,7 +223,23 @@ def build_algorithm(progress_callback=None):
     # Sort by discrimination power
     all_factors.sort(key=lambda f: f["separation"], reverse=True)
 
-    # Assign category weights based on how discriminative each category is
+    # Assign category weights based on how discriminative each category is,
+    # but with HARD CAPS to prevent pathological results.
+    #
+    # Bug fix: Previously, sentiment could get 50%+ weight with negative
+    # correlation (winners had LOWER sentiment than losers). While partially
+    # true (ORKT had zero buzz), letting sentiment dominate is nonsensical.
+    #
+    # Constraints:
+    #   - technical: minimum 30%, maximum 60%
+    #   - fundamental: minimum 20%, maximum 50%
+    #   - sentiment: minimum 5%, maximum 20%
+    WEIGHT_CAPS = {
+        "technical":   {"min": 0.30, "max": 0.60},
+        "fundamental": {"min": 0.20, "max": 0.50},
+        "sentiment":   {"min": 0.05, "max": 0.20},
+    }
+
     cat_separations = {}
     for f in all_factors:
         cat = f["category"]
@@ -231,15 +247,21 @@ def build_algorithm(progress_callback=None):
 
     total_sep = sum(np.mean(v) for v in cat_separations.values()) or 1
     category_weights = {
-        cat: round(np.mean(seps) / total_sep, 3)
+        cat: np.mean(seps) / total_sep
         for cat, seps in cat_separations.items()
     }
 
-    # Ensure minimum weights
+    # Ensure all categories exist
     for cat in ["technical", "sentiment", "fundamental"]:
         if cat not in category_weights:
-            category_weights[cat] = 0.1
-    # Re-normalize
+            category_weights[cat] = WEIGHT_CAPS[cat]["min"]
+
+    # Apply hard caps
+    for cat, caps in WEIGHT_CAPS.items():
+        if cat in category_weights:
+            category_weights[cat] = max(caps["min"], min(caps["max"], category_weights[cat]))
+
+    # Re-normalize to sum to 1.0
     wt = sum(category_weights.values())
     category_weights = {k: round(v / wt, 3) for k, v in category_weights.items()}
 
@@ -305,13 +327,17 @@ def pick_stocks(top_n=5, progress_callback=None):
         - Toxic gross margins (<5%) -> KILL
         - Cash runway exhaustion (<6 months) -> KILL
         - Pre-revenue massive burn -> KILL
+        - Negative shareholder equity -> KILL (balance sheet underwater)
+        - Sub-dime price (<$0.10) -> KILL (untradeable garbage)
+        - Extreme profit margin losses (<-200%) -> KILL (hemorrhaging money)
 
       Scoring Penalties (reduce score, don't kill):
         - Going concern in SEC filings -> PENALTY (-25pts)
-        - Delisting / compliance notice -> PENALTY (-20pts)
-        - Extreme price decay (85%+ from 52w high) -> PENALTY (-15pts)
-        - Recent reverse split -> PENALTY (-20pts)
+        - Delisting / compliance notice -> PENALTY (-30pts)
+        - Extreme price decay (85%+ from 52w high) -> PENALTY (-15 to -30pts scaled)
+        - Recent reverse split -> PENALTY (-20 to -35pts scaled for extreme ratios)
         - Excessive float (>100M shares) -> PENALTY (-15pts)
+        - Micro-employees (<10 FTEs) -> PENALTY (-20pts)
 
     LAYER 2: Positive Scoring
       - Setup quality (40%): float, insider ownership, proximity-to-low, P/B
