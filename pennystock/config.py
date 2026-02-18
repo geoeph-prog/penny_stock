@@ -19,6 +19,7 @@ STOCHRSI_PERIOD = 14  # StochRSI lookback on RSI values
 # ── Screening ───────────────────────────────────────────────────────
 STAGE1_KEEP_TOP_N = 50        # Stocks to pass from Stage 1 -> Stage 2
 STAGE2_RETURN_TOP_N = 5       # Final picks returned to user
+MIN_RECOMMENDATION_SCORE = 40 # Don't recommend stocks scoring below this
 HISTORY_PERIOD = "6mo"        # Price history for technical analysis
 SHORT_HISTORY_PERIOD = "3mo"  # Shorter window for recent patterns
 
@@ -102,6 +103,15 @@ KILL_EXTREME_LOSS_MARGIN = -2.0   # -200% profit margin = burning faster than re
 KILL_ALREADY_PUMPED_PCT = 100.0   # > 100% gain in recent days = already ran
 KILL_ALREADY_PUMPED_DAYS = 5      # Lookback window (trading days)
 # The single most important filter: we want stocks BEFORE the explosion
+
+# -- Kill: Pump-and-Dump Aftermath (the party is over) -------------
+# Detect stocks that had a massive spike (>300% in <30 trading days)
+# followed by a crash (>80% from peak). This is the aftermath pattern
+# of manipulation -- the money has been extracted, stock is dead.
+# Would have killed: MSGY (IPO $4 -> peak $22.20 -> $0.66)
+KILL_PUMP_DUMP_SPIKE_RATIO = 3.0     # Peak must be >3x the pre-spike base
+KILL_PUMP_DUMP_SPIKE_WINDOW = 30     # Spike must happen within 30 trading days
+KILL_PUMP_DUMP_DECLINE_PCT = 0.20    # Current price must be <20% of peak
 
 # ═══════════════════════════════════════════════════════════════════
 # SCORING PENALTIES (downgraded from hard kills)
