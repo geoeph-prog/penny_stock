@@ -17,6 +17,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QFont, QColor
 
+from pennystock import __version__
 from pennystock.algorithm import build_algorithm, pick_stocks, load_algorithm
 
 
@@ -348,7 +349,7 @@ class PickStocksTab(QWidget):
 class PennyStockGUI(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Penny Stock Analyzer")
+        self.setWindowTitle(f"Penny Stock Analyzer v{__version__}")
         self.setMinimumSize(950, 700)
 
         tabs = QTabWidget()
