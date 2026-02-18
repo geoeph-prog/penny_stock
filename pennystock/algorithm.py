@@ -530,7 +530,21 @@ def pick_stocks(top_n=5, progress_callback=None):
                     "revenue_growth": info.get("revenue_growth", 0),
                     "short_pct_float": info.get("short_percent_of_float", 0),
                     "sentiment": round(sent.get("combined_sentiment", 0), 3),
+                    # New indicators
+                    "adx": candidate["features"].get("adx"),
+                    "mfi": candidate["features"].get("mfi"),
+                    "bb_squeeze": tech_analysis.get("bb_squeeze", {}).get("is_squeeze", False) if tech_analysis.get("valid") else False,
+                    "consolidating": tech_analysis.get("consolidation", {}).get("is_consolidating", False) if tech_analysis.get("valid") else False,
+                    "multiday_unusual_vol": tech_analysis.get("multiday_unusual_volume", {}).get("unusual_days", 0) if tech_analysis.get("valid") else 0,
+                    "squeeze_setup": fund_result.get("squeeze_composite", {}).get("is_squeeze_setup", False),
+                    "dilution_filings": fund_result.get("dilution_risk", {}).get("dilution_filings_6m", 0),
+                    "atr": tech_analysis.get("atr", 0) if tech_analysis.get("valid") else 0,
                 },
+                "risk_management": _compute_risk_management(
+                    candidate.get("price", 0),
+                    tech_analysis.get("atr", 0) if tech_analysis.get("valid") else 0,
+                    tech_analysis.get("support_resistance", {}).get("support") if tech_analysis.get("valid") else None,
+                ),
                 "sentiment_detail": sent,
                 "catalyst_detail": cat_result,
             })
@@ -565,6 +579,28 @@ def pick_stocks(top_n=5, progress_callback=None):
              f"P/B: {ki.get('price_to_book', 'N/A')} | "
              f"RSI: {ki.get('rsi', 'N/A')} | "
              f"StochRSI: {ki.get('stochrsi', 'N/A')}")
+        # New indicators summary
+        signals = []
+        if ki.get("bb_squeeze"):
+            signals.append("BB-SQUEEZE")
+        if ki.get("consolidating"):
+            signals.append("CONSOLIDATING")
+        if ki.get("squeeze_setup"):
+            signals.append("SQUEEZE-SETUP")
+        if ki.get("multiday_unusual_vol", 0) >= 3:
+            signals.append(f"UNUSUAL-VOL({ki['multiday_unusual_vol']}d)")
+        if ki.get("dilution_filings", 0) > 0:
+            signals.append(f"DILUTION-RISK({ki['dilution_filings']})")
+        if signals:
+            _log(f"      Signals: {' | '.join(signals)}")
+        # ADX/MFI
+        _log(f"      ADX: {ki.get('adx', 'N/A')} | "
+             f"MFI: {ki.get('mfi', 'N/A')}")
+        # Risk management
+        rm = pick.get("risk_management", {})
+        if rm.get("stop_loss"):
+            _log(f"      Stop: ${rm['stop_loss']:.4f} "
+                 f"({rm['risk_pct']:.1f}% risk)")
         if pick.get("penalty_deduction", 0) > 0:
             _log(f"      Penalties: -{pick['penalty_deduction']}pts "
                  f"({len(pick['quality_gate'].get('penalties', []))} issue(s))")
@@ -686,6 +722,42 @@ def _score_features(stock_features: dict, algorithm_factors: list) -> float:
     if total_weight > 0:
         return (total_score / total_weight) * 100
     return 50.0
+
+
+def _compute_risk_management(price: float, atr: float, support: float = None) -> dict:
+    """
+    Compute risk management levels for a pick.
+    Uses ATR-based stop-loss (2x ATR below entry) and support levels.
+    """
+    if not price or price <= 0:
+        return {"stop_loss": None, "risk_pct": None, "position_note": ""}
+
+    # ATR-based stop (2x ATR below entry)
+    atr_stop = price - (2 * atr) if atr > 0 else None
+
+    # Support-based stop (just below nearest support)
+    support_stop = support * 0.97 if support and support > 0 else None
+
+    # Use the tighter (higher) stop-loss
+    if atr_stop and support_stop:
+        stop = max(atr_stop, support_stop)
+    elif atr_stop:
+        stop = atr_stop
+    elif support_stop:
+        stop = support_stop
+    else:
+        stop = price * 0.85  # Default 15% stop
+
+    stop = max(0.01, stop)  # Never below $0.01
+    risk_pct = ((price - stop) / price) * 100
+
+    return {
+        "stop_loss": round(stop, 4),
+        "risk_pct": round(risk_pct, 1),
+        "atr_stop": round(atr_stop, 4) if atr_stop else None,
+        "support_stop": round(support_stop, 4) if support_stop else None,
+        "position_note": f"Stop ${stop:.4f} ({risk_pct:.1f}% risk)" if stop else "",
+    }
 
 
 def _save_algorithm(algorithm: dict):

@@ -33,7 +33,9 @@ from pennystock.config import (
     SHORT_INTEREST_THRESHOLDS,
 )
 from pennystock.data.yahoo_client import get_stock_info, get_quarterly_financials
-from pennystock.data.sec_client import get_insider_transactions, get_recent_filings
+from pennystock.data.sec_client import (
+    get_insider_transactions, get_recent_filings, check_dilution_filings,
+)
 
 
 # ════════════════════════════════════════════════════════════════════
@@ -220,7 +222,8 @@ def _score_price_to_book(info: dict) -> dict:
 def score_fundamentals(ticker: str, info: dict = None) -> dict:
     """
     Score the fundamental quality of a stock's business.
-    Revenue growth, short interest setup, and cash position.
+    Revenue growth, short interest setup, cash position, squeeze potential,
+    and dilution risk.
 
     Returns:
         {
@@ -228,6 +231,8 @@ def score_fundamentals(ticker: str, info: dict = None) -> dict:
             "revenue_growth": dict,
             "short_interest": dict,
             "cash_position": dict,
+            "squeeze_composite": dict,
+            "dilution_risk": dict,
         }
     """
     if info is None:
@@ -236,6 +241,8 @@ def score_fundamentals(ticker: str, info: dict = None) -> dict:
     rev = _score_revenue_growth(ticker, info)
     si = _score_short_interest(info)
     cash = _score_cash_position(info)
+    squeeze = _score_squeeze_composite(info)
+    dilution = _score_dilution_risk(ticker)
 
     composite = (
         rev["score"] * FUNDAMENTAL_WEIGHTS["revenue_growth"] +
@@ -243,11 +250,20 @@ def score_fundamentals(ticker: str, info: dict = None) -> dict:
         cash["score"] * FUNDAMENTAL_WEIGHTS["cash_position"]
     )
 
+    # Squeeze composite as bonus adjustment (+/- 5 pts max)
+    squeeze_adj = (squeeze["score"] - 50) * 0.10
+    # Dilution risk as penalty (-0 to -8 pts)
+    dilution_adj = -dilution["penalty"]
+
+    composite = max(0, min(100, composite + squeeze_adj + dilution_adj))
+
     return {
-        "score": round(max(0, min(100, composite)), 1),
+        "score": round(composite, 1),
         "revenue_growth": rev,
         "short_interest": si,
         "cash_position": cash,
+        "squeeze_composite": squeeze,
+        "dilution_risk": dilution,
     }
 
 
@@ -293,10 +309,21 @@ def _score_revenue_growth(ticker: str, info: dict) -> dict:
         except Exception:
             pass
 
+    # Bonus for EPS/earnings growth (rare in penny stocks but very powerful)
+    # IQST had record quarterly revenue AND earnings beat -> +118%
+    earnings_growth = info.get("earnings_growth", 0) or 0
+    if earnings_growth > 0.5:
+        score = min(100, score + 8)  # EPS growing 50%+
+    elif earnings_growth > 0.2:
+        score = min(100, score + 4)  # EPS growing 20%+
+    elif earnings_growth > 0:
+        score = min(100, score + 2)  # Any positive EPS growth
+
     return {
         "score": max(0, min(100, score)),
         "revenue_growth": rev_growth,
         "total_revenue": total_rev,
+        "earnings_growth": earnings_growth,
     }
 
 
@@ -409,6 +436,103 @@ def _score_cash_position(info: dict) -> dict:
     }
 
 
+def _score_squeeze_composite(info: dict) -> dict:
+    """
+    Composite short squeeze probability score.
+    Combines: SI% + float size + days-to-cover + SI change + float ratio.
+
+    The interaction effect matters: low float + high SI + rising SI +
+    high DTC = much more than the sum of parts.
+
+    Validated: SMX (1M float + squeeze dynamics = +1000%)
+    BBGI (<1M float + 8 days-to-cover + social coordination = +312%)
+    ORKT (353% SI increase + 7.8M float = squeeze setup)
+    """
+    si_pct = info.get("short_percent_of_float", 0) or 0
+    float_shares = info.get("float_shares", 0) or 0
+    short_ratio = info.get("short_ratio", 0) or 0
+    shares_short = info.get("shares_short", 0) or 0
+    shares_short_prior = info.get("shares_short_prior", 0) or 0
+
+    score = 30  # Baseline
+
+    # SI% of float (most important squeeze component)
+    if si_pct >= 0.30:
+        score += 25
+    elif si_pct >= 0.20:
+        score += 20
+    elif si_pct >= 0.10:
+        score += 12
+    elif si_pct >= 0.05:
+        score += 5
+
+    # Float size (smaller = more violent squeeze)
+    if 0 < float_shares < 5_000_000:
+        score += 20  # Ultra-low float
+    elif float_shares < 10_000_000:
+        score += 15
+    elif float_shares < 20_000_000:
+        score += 8
+
+    # Days to cover (higher = harder for shorts to exit)
+    if short_ratio > 10:
+        score += 15
+    elif short_ratio > 5:
+        score += 10
+    elif short_ratio > 3:
+        score += 5
+
+    # SI change (rising = squeeze building)
+    if shares_short > 0 and shares_short_prior > 0:
+        si_change = (shares_short - shares_short_prior) / shares_short_prior
+        if si_change > 1.0:
+            score += 15  # Doubled
+        elif si_change > 0.5:
+            score += 10
+        elif si_change > 0.2:
+            score += 5
+        elif si_change < -0.3:
+            score -= 10  # Shorts covering = squeeze may be over
+
+    return {
+        "score": min(100, max(0, score)),
+        "si_pct": round(si_pct, 4),
+        "float_shares": float_shares,
+        "short_ratio": short_ratio,
+        "is_squeeze_setup": score >= 65,
+    }
+
+
+def _score_dilution_risk(ticker: str) -> dict:
+    """
+    Score dilution risk from SEC filings (S-1, S-3, 424B).
+    S-3 shelf registrations on small companies are ticking time bombs.
+
+    check_dilution_filings() already exists in sec_client but was
+    previously unused. Now wired into fundamental scoring.
+    """
+    try:
+        result = check_dilution_filings(ticker, days_back=180)
+        count = result.get("dilution_filings", 0)
+    except Exception:
+        count = 0
+
+    if count >= 3:
+        penalty = 8  # Heavy dilution activity
+    elif count >= 2:
+        penalty = 5
+    elif count >= 1:
+        penalty = 3
+    else:
+        penalty = 0
+
+    return {
+        "dilution_filings_6m": count,
+        "penalty": penalty,
+        "has_dilution_risk": count > 0,
+    }
+
+
 # ════════════════════════════════════════════════════════════════════
 # COMBINED ANALYSIS (backward-compatible with existing callers)
 # ════════════════════════════════════════════════════════════════════
@@ -500,4 +624,7 @@ def extract_features(ticker: str) -> dict:
         "operating_cashflow": info.get("operating_cashflow", 0) or 0,
         "free_cashflow": info.get("free_cashflow", 0) or 0,
         "short_interest_change_mom": round(si_change, 4),
+        # NEW: EPS growth and dilution risk
+        "earnings_growth": info.get("earnings_growth", 0) or 0,
+        "profit_margins": info.get("profit_margins", 0) or 0,
     }
