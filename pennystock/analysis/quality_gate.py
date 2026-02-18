@@ -5,14 +5,17 @@ LAYER 1 of the two-layer scoring system.
 Any single kill filter triggering = instant disqualification (score 0).
 
 These catch the categories of disasters that no technical setup can overcome:
-  - Going concern (auditor doubts the company will survive)
+  - Going concern (auditor doubts the company will survive, incl. 20-F foreign filers)
   - Delisting notices (exchange is kicking them out)
-  - Fraud / SEC investigations (management is crooked)
+  - Fraud / SEC / DOJ investigations (management is crooked)
   - Core product failures (Phase 3 trial failed, etc.)
   - Shell company indicators (no revenue, no employees)
-  - Extreme price decay (99%+ decline from high = structural wreckage)
+  - Extreme price decay (85%+ decline from 52w high = structural wreckage)
   - Toxic gross margins (< 5% = business model doesn't work)
   - Cash runway exhaustion (< 6 months of cash left at current burn)
+  - Recent reverse splits (desperation move to maintain listing)
+  - Excessive float (> 100M shares = declining mid-cap, not a setup)
+  - Pre-revenue burn (< $1M revenue + burning > $50M/year)
 
 Real-world examples this would have caught:
   - ZONE (CleanCore): going concern in 10-K
@@ -20,6 +23,10 @@ Real-world examples this would have caught:
   - QNCX (Quince): "Phase 3 failed" in news + zero revenue shell
   - AZI (Autozi): 1.6% gross margin + 99.97% price decay
   - AGL (Agilon): fraud lawsuit in news + $20M/month cash burn
+  - DXST: 95% decay, reverse split vote, auditor change (foreign filer 20-F)
+  - SOPA: 99.9% decay, going concern in 20-F, reverse split
+  - SLQT: DOJ kickback lawsuit, 143.8M float (excessive)
+  - GUTS: $3K revenue, -$86M/year burn (pre-revenue burn)
 """
 
 from loguru import logger
@@ -34,6 +41,9 @@ from pennystock.config import (
     KILL_PRICE_DECAY_THRESHOLD,
     KILL_MIN_GROSS_MARGIN,
     KILL_MIN_CASH_RUNWAY_YEARS,
+    KILL_MAX_FLOAT,
+    KILL_PRE_REVENUE_MAX_REVENUE,
+    KILL_PRE_REVENUE_MIN_BURN,
 )
 from pennystock.data.yahoo_client import get_stock_info, get_news, has_recent_reverse_split
 from pennystock.data.sec_client import check_going_concern
@@ -185,8 +195,28 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
     except Exception as e:
         logger.debug(f"Reverse split check failed for {ticker}: {e}")
 
+    # ── Filter 10: Max Float (too large for penny stock setup) ────────
+    float_shares = info.get("float_shares", 0) or 0
+    if float_shares > KILL_MAX_FLOAT:
+        kill_reasons.append(
+            f"EXCESSIVE FLOAT: {float_shares/1e6:.1f}M shares float "
+            f"(> {KILL_MAX_FLOAT/1e6:.0f}M max). This is a declining mid-cap, "
+            f"not a tight penny stock setup."
+        )
+
+    # ── Filter 11: Pre-Revenue Company with Massive Burn ────────────
+    if total_revenue < KILL_PRE_REVENUE_MAX_REVENUE:
+        if operating_cf < KILL_PRE_REVENUE_MIN_BURN:
+            kill_reasons.append(
+                f"PRE-REVENUE BURN: Revenue ${total_revenue:,.0f} "
+                f"(< ${KILL_PRE_REVENUE_MAX_REVENUE:,.0f}) with "
+                f"${abs(operating_cf)/1e6:.1f}M/year cash burn "
+                f"(> ${abs(KILL_PRE_REVENUE_MIN_BURN)/1e6:.0f}M/year max). "
+                f"Pre-revenue company burning through cash with no product revenue."
+            )
+
     # ── Compile result ───────────────────────────────────────────────
-    total_filters = 9
+    total_filters = 11
     killed = len(kill_reasons) > 0
 
     if killed:

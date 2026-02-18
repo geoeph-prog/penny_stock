@@ -37,17 +37,20 @@ KILL_GOING_CONCERN = True  # Search 10-K/10-Q for "going concern"
 KILL_DELISTING_KEYWORDS = [
     "delisting", "delist", "compliance notice", "noncompliance",
     "non-compliance", "listing requirements", "listing standards",
-    "notice of deficiency",
+    "notice of deficiency", "reverse stock split", "proposed reverse split",
+    "share consolidation",
 ]
-# Would have killed: OPAD (Offerpad)
+# Would have killed: OPAD (Offerpad), DXST (reverse split vote)
 
 # -- Kill: Fraud / SEC investigation (news headline keywords) ------
 KILL_FRAUD_KEYWORDS = [
     "fraud", "sec investigation", "securities class action",
     "class action lawsuit", "restatement", "accounting irregularity",
     "securities fraud", "investor lawsuit", "shareholder lawsuit",
+    "false claims act", "kickback", "department of justice", "doj lawsuit",
+    "doj intervene", "sec halt", "trading halt", "trading suspended",
 ]
-# Would have killed: AGL (Agilon Health)
+# Would have killed: AGL (Agilon), SLQT (DOJ kickbacks), SOPA (SEC halt)
 
 # -- Kill: Core product failure (news headline patterns) -----------
 KILL_FAILURE_KEYWORDS = [
@@ -64,8 +67,8 @@ KILL_SHELL_MAX_MARKET_CAP = 5_000_000  # < $5M market cap
 # Would have killed: QNCX (post-failure), AZI (Autozi)
 
 # -- Kill: Extreme price decay from 52-week high ------------------
-KILL_PRICE_DECAY_THRESHOLD = 0.05   # price < 5% of 52w high = 95%+ drop
-# Would have killed: AZI (99.97% decline from ATH)
+KILL_PRICE_DECAY_THRESHOLD = 0.15   # price < 15% of 52w high = 85%+ drop
+# Would have killed: AZI, DXST (7.3%), SOPA (13.2%), SLQT (12.2%), GUTS (13.2%)
 
 # -- Kill: Gross margin below threshold (non-pre-revenue) ---------
 KILL_MIN_GROSS_MARGIN = 0.05        # 5% gross margin minimum
@@ -75,6 +78,15 @@ KILL_MIN_GROSS_MARGIN = 0.05        # 5% gross margin minimum
 KILL_MIN_CASH_RUNWAY_YEARS = 0.5    # < 6 months cash = death spiral
 # Computed as: total_cash / abs(operating_cashflow) when OCF < 0
 # Would have killed: AGL (burning $20M/month with inadequate reserves)
+
+# -- Kill: Max float (too large for penny stock setup) -------------
+KILL_MAX_FLOAT = 100_000_000        # > 100M float = declining mid-cap, not a setup
+# Would have killed: SLQT (143.8M), GUTS (116.9M)
+
+# -- Kill: Pre-revenue company with massive burn -------------------
+KILL_PRE_REVENUE_MAX_REVENUE = 1_000_000    # < $1M revenue = pre-revenue
+KILL_PRE_REVENUE_MIN_BURN = -50_000_000     # Burning > $50M/year
+# Would have killed: GUTS ($3K revenue, -$86M/year burn)
 
 # ═══════════════════════════════════════════════════════════════════
 # LAYER 2: POSITIVE SCORING WEIGHTS

@@ -248,13 +248,24 @@ def search_filing_text(ticker: str, search_term: str, forms: str = "10-K,10-Q",
 def check_going_concern(ticker: str) -> bool:
     """
     Check if a company has 'going concern' language in recent SEC filings.
+    Checks both 10-K/10-Q (US filers) and 20-F (foreign filers).
     Returns True if going concern was found (= BAD, should be killed).
     """
+    # Check US filers (10-K, 10-Q)
     result = search_filing_text(ticker, "going concern", forms="10-K,10-Q", days_back=365)
     if result["found"]:
         logger.info(f"KILL FLAG: {ticker} has 'going concern' in {result['match_count']} "
-                     f"recent SEC filing(s)")
-    return result["found"]
+                     f"recent 10-K/10-Q filing(s)")
+        return True
+
+    # Check foreign filers (20-F, 6-K)
+    result_foreign = search_filing_text(ticker, "going concern", forms="20-F,6-K", days_back=365)
+    if result_foreign["found"]:
+        logger.info(f"KILL FLAG: {ticker} has 'going concern' in {result_foreign['match_count']} "
+                     f"recent 20-F/6-K filing(s)")
+        return True
+
+    return False
 
 
 def check_dilution_filings(ticker: str, days_back: int = 180) -> dict:

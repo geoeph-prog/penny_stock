@@ -1,6 +1,7 @@
 """Yahoo Finance data client with rate limiting and caching."""
 
 import time
+from io import StringIO
 
 import pandas as pd
 import yfinance as yf
@@ -25,7 +26,7 @@ def get_price_history(ticker: str, period: str = None) -> pd.DataFrame:
     cached = cache_get(cache_key)
     if cached is not None:
         try:
-            return pd.read_json(cached, orient="split")
+            return pd.read_json(StringIO(cached), orient="split")
         except Exception:
             pass
 
