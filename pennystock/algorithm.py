@@ -296,15 +296,22 @@ def pick_stocks(top_n=5, progress_callback=None):
     """
     Apply the two-layer system to find today's best penny stock picks.
 
-    LAYER 1: Kill Filters (quality_gate.py)
-      - Going concern in SEC filings -> KILL
-      - Delisting notice in news -> KILL
-      - Fraud / SEC investigation in news -> KILL
-      - Core product failure in news -> KILL
-      - Shell company indicators -> KILL
-      - Extreme price decay (>95% from 52w high) -> KILL
-      - Toxic gross margins (<5%) -> KILL
-      - Cash runway exhaustion (<6 months) -> KILL
+    LAYER 1: Quality Gate (quality_gate.py)
+      Hard Kills (instant disqualification):
+        - Already pumped (>100% in 5 days) -> KILL (most important!)
+        - Fraud / SEC investigation in news -> KILL
+        - Core product failure in news -> KILL
+        - Shell company indicators -> KILL
+        - Toxic gross margins (<5%) -> KILL
+        - Cash runway exhaustion (<6 months) -> KILL
+        - Pre-revenue massive burn -> KILL
+
+      Scoring Penalties (reduce score, don't kill):
+        - Going concern in SEC filings -> PENALTY (-25pts)
+        - Delisting / compliance notice -> PENALTY (-20pts)
+        - Extreme price decay (85%+ from 52w high) -> PENALTY (-15pts)
+        - Recent reverse split -> PENALTY (-20pts)
+        - Excessive float (>100M shares) -> PENALTY (-15pts)
 
     LAYER 2: Positive Scoring
       - Setup quality (40%): float, insider ownership, proximity-to-low, P/B
@@ -317,8 +324,8 @@ def pick_stocks(top_n=5, progress_callback=None):
       2. Get ALL current penny stocks from Finviz
       3. Stage 1: Quick technical score (fast filter)
       4. Stage 2: On top 50:
-         a. Run kill filters (LAYER 1) -- disqualify broken stocks
-         b. Score survivors (LAYER 2) -- rank by composite score
+         a. Run quality gate -- kill broken stocks, penalize sketchy ones
+         b. Score survivors -- rank by composite score minus penalties
       5. Return top N picks with full breakdown
     """
     def _log(msg):
@@ -401,7 +408,7 @@ def pick_stocks(top_n=5, progress_callback=None):
     for j, candidate in enumerate(top_candidates):
         ticker = candidate["ticker"]
         try:
-            # ── LAYER 1: Kill Filters ────────────────────────────
+            # ── LAYER 1: Kill Filters + Penalties ──────────────
             info = get_stock_info(ticker)
             gate = run_kill_filters(ticker, info=info)
 
@@ -409,6 +416,12 @@ def pick_stocks(top_n=5, progress_callback=None):
                 killed_count += 1
                 _log(f"  KILLED {ticker}: {gate['kill_reasons'][0][:80]}...")
                 continue  # Skip to next stock -- this one is dead
+
+            # Penalty deduction applied to final score later
+            penalty_deduction = gate.get("total_penalty", 0)
+            if penalty_deduction > 0:
+                _log(f"  PENALTY {ticker}: -{penalty_deduction}pts "
+                     f"({len(gate.get('penalties', []))} issue(s))")
 
             # ── LAYER 2: Positive Scoring ────────────────────────
 
@@ -479,7 +492,13 @@ def pick_stocks(top_n=5, progress_callback=None):
             sent_adj = (sent_score - 50) * 0.03  # +/- 1.5 points max
             mkt_adj = (mkt_score - 50) * 0.02    # +/- 1.0 points max
 
-            final_score = max(0, min(100, base_score + sent_adj + mkt_adj))
+            # Apply quality gate penalty deductions (going concern,
+            # delisting notices, price decay, reverse splits, excessive float).
+            # These are "normal penny stock shadiness" -- bad signs that
+            # reduce the score but don't kill outright.
+            penalty_adj = -penalty_deduction
+
+            final_score = max(0, min(100, base_score + sent_adj + mkt_adj + penalty_adj))
 
             final_results.append({
                 "ticker": ticker,
@@ -489,6 +508,7 @@ def pick_stocks(top_n=5, progress_callback=None):
                 "volume": candidate.get("volume", 0),
                 "sector": candidate.get("sector", ""),
                 "quality_gate": gate,
+                "penalty_deduction": penalty_deduction,
                 "sub_scores": {
                     "setup": round(setup_score, 1),
                     "technical": round(tech_score, 1),
@@ -545,6 +565,11 @@ def pick_stocks(top_n=5, progress_callback=None):
              f"P/B: {ki.get('price_to_book', 'N/A')} | "
              f"RSI: {ki.get('rsi', 'N/A')} | "
              f"StochRSI: {ki.get('stochrsi', 'N/A')}")
+        if pick.get("penalty_deduction", 0) > 0:
+            _log(f"      Penalties: -{pick['penalty_deduction']}pts "
+                 f"({len(pick['quality_gate'].get('penalties', []))} issue(s))")
+            for pen in pick["quality_gate"].get("penalties", []):
+                _log(f"        {pen[:100]}")
     _log("=" * 60)
 
     # Save picks to database

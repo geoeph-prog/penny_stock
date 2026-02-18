@@ -66,9 +66,8 @@ KILL_SHELL_MAX_REVENUE = 100_000    # < $100K revenue = effectively zero
 KILL_SHELL_MAX_MARKET_CAP = 5_000_000  # < $5M market cap
 # Would have killed: QNCX (post-failure), AZI (Autozi)
 
-# -- Kill: Extreme price decay from 52-week high ------------------
-KILL_PRICE_DECAY_THRESHOLD = 0.15   # price < 15% of 52w high = 85%+ drop
-# Would have killed: AZI, DXST (7.3%), SOPA (13.2%), SLQT (12.2%), GUTS (13.2%)
+# -- (DOWNGRADED to penalty) Extreme price decay from 52-week high -
+# Now a scoring penalty, not a kill. See PENALTY_PRICE_DECAY below.
 
 # -- Kill: Gross margin below threshold (non-pre-revenue) ---------
 KILL_MIN_GROSS_MARGIN = 0.05        # 5% gross margin minimum
@@ -79,14 +78,42 @@ KILL_MIN_CASH_RUNWAY_YEARS = 0.5    # < 6 months cash = death spiral
 # Computed as: total_cash / abs(operating_cashflow) when OCF < 0
 # Would have killed: AGL (burning $20M/month with inadequate reserves)
 
-# -- Kill: Max float (too large for penny stock setup) -------------
-KILL_MAX_FLOAT = 100_000_000        # > 100M float = declining mid-cap, not a setup
-# Would have killed: SLQT (143.8M), GUTS (116.9M)
+# -- (DOWNGRADED to penalty) Max float (too large for penny setup) -
+# Now a scoring penalty, not a kill. See PENALTY_EXCESSIVE_FLOAT below.
 
 # -- Kill: Pre-revenue company with massive burn -------------------
 KILL_PRE_REVENUE_MAX_REVENUE = 1_000_000    # < $1M revenue = pre-revenue
 KILL_PRE_REVENUE_MIN_BURN = -50_000_000     # Burning > $50M/year
 # Would have killed: GUTS ($3K revenue, -$86M/year burn)
+
+# -- Kill: Already Pumped (catch BEFORE the pump, not after) -------
+KILL_ALREADY_PUMPED_PCT = 100.0   # > 100% gain in recent days = already ran
+KILL_ALREADY_PUMPED_DAYS = 5      # Lookback window (trading days)
+# The single most important filter: we want stocks BEFORE the explosion
+
+# ═══════════════════════════════════════════════════════════════════
+# SCORING PENALTIES (downgraded from hard kills)
+# These are "normal penny stock shadiness" -- bad signs that reduce
+# the score but don't instantly disqualify. A stock can overcome
+# these with strong setup + technicals + fundamentals.
+# ═══════════════════════════════════════════════════════════════════
+
+# Going concern -> score penalty instead of kill
+PENALTY_GOING_CONCERN = 25          # Points deducted from final score (0-100)
+
+# Delisting / compliance notice -> score penalty instead of kill
+PENALTY_DELISTING_NOTICE = 20       # Points deducted from final score
+
+# Extreme price decay (85%+ from 52w high) -> score penalty instead of kill
+PENALTY_PRICE_DECAY = 15            # Points deducted from final score
+PENALTY_PRICE_DECAY_THRESHOLD = 0.15  # Same threshold, but penalty not kill
+
+# Recent reverse split -> score penalty instead of kill
+PENALTY_REVERSE_SPLIT = 20          # Points deducted from final score
+
+# Excessive float -> score penalty instead of kill
+PENALTY_EXCESSIVE_FLOAT = 15        # Points deducted from final score
+PENALTY_MAX_FLOAT = 100_000_000     # Same threshold as before
 
 # ═══════════════════════════════════════════════════════════════════
 # LAYER 2: POSITIVE SCORING WEIGHTS
