@@ -27,7 +27,7 @@ import numpy as np
 import pandas as pd
 from loguru import logger
 
-from pennystock.config import WEIGHTS
+from pennystock.config import WEIGHTS, MIN_RECOMMENDATION_SCORE
 from pennystock.data.finviz_client import get_penny_stocks, get_high_gainers
 from pennystock.data.yahoo_client import get_price_history, get_stock_info
 from pennystock.analysis.technical import extract_features as extract_tech_features
@@ -321,6 +321,7 @@ def pick_stocks(top_n=5, progress_callback=None):
     LAYER 1: Quality Gate (quality_gate.py)
       Hard Kills (instant disqualification):
         - Already pumped (>100% in 5 days) -> KILL (most important!)
+        - Pump-and-dump aftermath (>300% spike + >80% crash) -> KILL
         - Fraud / SEC investigation in news -> KILL
         - Core product failure in news -> KILL
         - Shell company indicators -> KILL
@@ -583,19 +584,34 @@ def pick_stocks(top_n=5, progress_callback=None):
                  f"({killed_count} killed, {len(final_results)} scored)")
 
     final_results.sort(key=lambda x: x["final_score"], reverse=True)
-    picks = final_results[:top_n]
+
+    # Apply minimum score threshold -- don't recommend garbage
+    qualified = [r for r in final_results if r["final_score"] >= MIN_RECOMMENDATION_SCORE]
+    below_threshold = len(final_results) - len(qualified)
+    picks = qualified[:top_n]
 
     elapsed = time.time() - start
     _log("=" * 60)
     _log(f"RESULTS: {killed_count} stocks KILLED by quality filters, "
-         f"{len(final_results)} survived")
+         f"{len(final_results)} survived scoring")
+    if below_threshold > 0:
+        _log(f"  {below_threshold} stocks scored below minimum threshold "
+             f"({MIN_RECOMMENDATION_SCORE}pts) and were excluded")
+    if not picks:
+        _log("NO STOCKS MEET MINIMUM QUALITY THRESHOLD.")
+        _log(f"All {len(final_results)} survivors scored below {MIN_RECOMMENDATION_SCORE}pts.")
+        _log("This means the current market has no penny stocks worth recommending.")
+        _log("This is BETTER than recommending garbage -- sit on cash.")
+        _log("=" * 60)
+        return []
     _log(f"TOP {len(picks)} PICKS (found in {elapsed:.0f}s)")
     _log("=" * 60)
     for k, pick in enumerate(picks, 1):
         ss = pick["sub_scores"]
         ki = pick["key_indicators"]
+        confidence = "LOW" if pick["final_score"] < 50 else "MEDIUM" if pick["final_score"] < 65 else "HIGH"
         _log(f"  #{k}. {pick['ticker']} - ${pick['price']:.2f} "
-             f"(Score: {pick['final_score']:.1f})")
+             f"(Score: {pick['final_score']:.1f}, Confidence: {confidence})")
         _log(f"      {pick['company']}")
         _log(f"      Setup:{ss['setup']:.0f} Tech:{ss['technical']:.0f} "
              f"Fund:{ss['fundamental']:.0f} Cat:{ss['catalyst']:.0f}")

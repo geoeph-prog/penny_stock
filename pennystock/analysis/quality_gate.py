@@ -14,6 +14,7 @@ HARD KILLS (instant disqualification, score 0):
   - Cash runway exhaustion (< 6 months of cash left at current burn)
   - Pre-revenue burn (< $1M revenue + burning > $50M/year)
   - Already pumped (> 100% gain in 5 days = too late, chasing the pump)
+  - Pump-and-dump aftermath (>300% spike in <30 days then >80% crash)
   - Negative shareholder equity (balance sheet is underwater)
   - Sub-dime price (< $0.10 = untradeable garbage)
   - Extreme profit margin losses (< -200% = hemorrhaging money)
@@ -43,6 +44,8 @@ Real-world examples:
 
 from loguru import logger
 
+import numpy as np
+
 from pennystock.config import (
     KILL_FRAUD_KEYWORDS,
     KILL_FAILURE_KEYWORDS,
@@ -57,6 +60,9 @@ from pennystock.config import (
     KILL_NEGATIVE_EQUITY,
     KILL_MIN_PRICE,
     KILL_EXTREME_LOSS_MARGIN,
+    KILL_PUMP_DUMP_SPIKE_RATIO,
+    KILL_PUMP_DUMP_SPIKE_WINDOW,
+    KILL_PUMP_DUMP_DECLINE_PCT,
     KILL_GOING_CONCERN,
     KILL_DELISTING_KEYWORDS,
     PENALTY_GOING_CONCERN,
@@ -138,7 +144,24 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
     except Exception as e:
         logger.debug(f"Already-pumped check failed for {ticker}: {e}")
 
-    # ── Kill 2: Fraud / SEC Investigation (news headlines) ─────────
+    # ── Kill 2: Pump-and-Dump Aftermath ──────────────────────────
+    # Detect stocks that had a massive spike (>300% in <30 trading days)
+    # followed by a crash (>80% from peak). The money has been extracted.
+    # Would have killed: MSGY (IPO $4 -> $22.20 in weeks -> $0.66)
+    # Safe for pre-pump winners: SMX, BBGI, BEAT etc. hadn't spiked yet
+    try:
+        pnd = _check_pump_dump_aftermath(ticker)
+        if pnd["is_pump_dump"]:
+            kill_reasons.append(
+                f"PUMP-AND-DUMP AFTERMATH: Stock spiked {pnd['spike_magnitude']:.0f}x "
+                f"in {pnd['spike_days']} trading days (peak ${pnd['peak_price']:.2f}), "
+                f"then crashed {pnd['decline_pct']:.0f}% from peak. "
+                f"The party is over -- this is post-manipulation dead money."
+            )
+    except Exception as e:
+        logger.debug(f"Pump-and-dump check failed for {ticker}: {e}")
+
+    # ── Kill 3: Fraud / SEC Investigation (news headlines) ─────────
     for title in news_titles:
         for keyword in KILL_FRAUD_KEYWORDS:
             if keyword in title:
@@ -150,7 +173,7 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
         if any(r.startswith("FRAUD") for r in kill_reasons):
             break
 
-    # ── Kill 3: Core Product Failure (news headlines) ──────────────
+    # ── Kill 4: Core Product Failure (news headlines) ──────────────
     for title in news_titles:
         for keyword in KILL_FAILURE_KEYWORDS:
             if keyword in title:
@@ -162,7 +185,7 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
         if any(r.startswith("PRODUCT") for r in kill_reasons):
             break
 
-    # ── Kill 4: Shell Company Indicators ───────────────────────────
+    # ── Kill 5: Shell Company Indicators ───────────────────────────
     if total_revenue < KILL_SHELL_MAX_REVENUE and market_cap > 0:
         if market_cap < KILL_SHELL_MAX_MARKET_CAP:
             kill_reasons.append(
@@ -175,7 +198,7 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
                 "SHELL COMPANY: Zero revenue AND zero reported employees"
             )
 
-    # ── Kill 5: Toxic Gross Margins ────────────────────────────────
+    # ── Kill 6: Toxic Gross Margins ────────────────────────────────
     if total_revenue > KILL_SHELL_MAX_REVENUE and 0 < gross_margins < KILL_MIN_GROSS_MARGIN:
         kill_reasons.append(
             f"TOXIC MARGINS: Gross margin {gross_margins*100:.1f}% "
@@ -183,7 +206,7 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
             f"Business model does not generate meaningful gross profit."
         )
 
-    # ── Kill 6: Cash Runway Exhaustion ─────────────────────────────
+    # ── Kill 7: Cash Runway Exhaustion ─────────────────────────────
     if operating_cf < 0 and total_cash > 0:
         annual_burn = abs(operating_cf)
         runway_years = total_cash / annual_burn if annual_burn > 0 else float("inf")
@@ -197,7 +220,7 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
                 f"burn). Threshold: {KILL_MIN_CASH_RUNWAY_YEARS * 12:.0f} months."
             )
 
-    # ── Kill 7: Pre-Revenue Company with Massive Burn ────────────
+    # ── Kill 8: Pre-Revenue Company with Massive Burn ────────────
     if total_revenue < KILL_PRE_REVENUE_MAX_REVENUE:
         if operating_cf < KILL_PRE_REVENUE_MIN_BURN:
             kill_reasons.append(
@@ -208,7 +231,7 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
                 f"Pre-revenue company burning through cash with no product revenue."
             )
 
-    # ── Kill 8: Negative Shareholder Equity ──────────────────────
+    # ── Kill 9: Negative Shareholder Equity ──────────────────────
     # Balance sheet is underwater -- liabilities exceed assets.
     # Would have killed: SMXT (-$11.78M), XPON (-$65M)
     if KILL_NEGATIVE_EQUITY:
@@ -226,7 +249,7 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
                 f"${book_value:.2f}. Balance sheet is underwater."
             )
 
-    # ── Kill 9: Sub-Dime Stock Price ─────────────────────────────
+    # ── Kill 10: Sub-Dime Stock Price ────────────────────────────
     # Stocks below $0.10 are untradeable penny garbage, usually
     # manipulated or dying. Would have killed: BYAH ($0.05)
     if price > 0 and price < KILL_MIN_PRICE:
@@ -236,7 +259,7 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
             f"Sub-dime stocks are untradeable, illiquid, and manipulated."
         )
 
-    # ── Kill 10: Extreme Profit Margin Losses ────────────────────
+    # ── Kill 11: Extreme Profit Margin Losses ────────────────────
     # Companies with profit margins worse than -200% are hemorrhaging
     # money at an absurd rate. Would have killed: BYAH (-701%), XPON
     profit_margins = info.get("profit_margins")
@@ -350,7 +373,7 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
         )
 
     # ── Compile result ─────────────────────────────────────────────
-    total_hard_kills = 10  # Updated: 7 original + 3 new kills
+    total_hard_kills = 11  # 7 original + pump-dump + neg equity + sub-dime + extreme losses
     killed = len(kill_reasons) > 0
 
     if killed:
@@ -399,3 +422,73 @@ def _check_recent_gain(ticker: str, days: int) -> float | None:
         return None
 
     return ((price_now - price_then) / price_then) * 100
+
+
+def _check_pump_dump_aftermath(ticker: str) -> dict:
+    """
+    Detect pump-and-dump aftermath pattern in 1-year price history.
+
+    Looks for: massive spike (>300% in <30 trading days) followed by
+    crash (>80% from peak). This catches the AFTERMATH of manipulation --
+    the money has already been extracted, the stock is dead.
+
+    Safe for pre-pump winners: if we evaluate a stock BEFORE it spikes,
+    no spike exists yet, so this filter won't trigger.
+
+    Returns:
+        {"is_pump_dump": True/False, ...details...}
+    """
+    hist = get_price_history(ticker, period="1y")
+    if hist is None or hist.empty or len(hist) < 60:
+        return {"is_pump_dump": False}
+
+    close = hist["Close"]
+    if hasattr(close, 'values'):
+        prices = close.values.flatten()
+    else:
+        prices = np.array(close)
+
+    current_price = float(prices[-1])
+    peak_price = float(np.nanmax(prices))
+    peak_pos = int(np.nanargmax(prices))
+
+    if peak_price <= 0 or current_price <= 0:
+        return {"is_pump_dump": False}
+
+    # Must be down >80% from peak (current < 20% of peak)
+    decline_ratio = current_price / peak_price
+    if decline_ratio > KILL_PUMP_DUMP_DECLINE_PCT:
+        return {"is_pump_dump": False}
+
+    # Check if the rise to peak was rapid (<30 trading days from base)
+    # Find where the stock was at 1/3 of peak price, looking backwards
+    target_price = peak_price / KILL_PUMP_DUMP_SPIKE_RATIO
+    spike_start = None
+    search_start = max(0, peak_pos - 60)  # Look up to 60 days before peak
+
+    for i in range(peak_pos - 1, search_start - 1, -1):
+        if float(prices[i]) <= target_price:
+            spike_start = i
+            break
+
+    if spike_start is None:
+        # Price was always above 1/3 of peak in the lookback -- not a spike
+        return {"is_pump_dump": False}
+
+    spike_days = peak_pos - spike_start
+    if spike_days > KILL_PUMP_DUMP_SPIKE_WINDOW:
+        # Spike took too long -- this is a gradual rise, not a pump
+        return {"is_pump_dump": False}
+
+    spike_magnitude = peak_price / float(prices[spike_start])
+    decline_pct = (1 - decline_ratio) * 100
+
+    return {
+        "is_pump_dump": True,
+        "spike_days": spike_days,
+        "peak_price": peak_price,
+        "spike_magnitude": spike_magnitude,
+        "decline_pct": decline_pct,
+        "base_price": float(prices[spike_start]),
+        "current_price": current_price,
+    }

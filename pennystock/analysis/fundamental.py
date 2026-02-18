@@ -517,12 +517,19 @@ def _score_dilution_risk(ticker: str) -> dict:
     except Exception:
         count = 0
 
-    if count >= 3:
-        penalty = 8  # Heavy dilution activity
+    # Scaled penalty: more filings = dramatically worse
+    # GTEC had 7 filings and was garbage. 8pts was laughably insufficient.
+    # Validated against winners: post-spike capital raises (WVE $350M,
+    # KTTA $60M, SIDU $41M) happen AFTER the move, so the algorithm
+    # evaluating stocks PRE-move won't see heavy recent dilution.
+    if count >= 5:
+        penalty = 25  # Serial diluter -- running the ATM machine
+    elif count >= 3:
+        penalty = 15  # Heavy dilution activity
     elif count >= 2:
-        penalty = 5
+        penalty = 8
     elif count >= 1:
-        penalty = 3
+        penalty = 4
     else:
         penalty = 0
 
