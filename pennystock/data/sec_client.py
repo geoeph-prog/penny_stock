@@ -185,6 +185,108 @@ def get_recent_filings(ticker: str, forms: str = "8-K,10-Q,10-K", days_back: int
         return {"ticker": ticker, "total_filings": 0, "filing_types": {}, "filings": []}
 
 
+def search_filing_text(ticker: str, search_term: str, forms: str = "10-K,10-Q",
+                       days_back: int = 365) -> dict:
+    """
+    Search SEC EDGAR full-text index for a specific term in recent filings.
+
+    This is used by kill filters to detect "going concern" language,
+    restatements, or other red-flag disclosures in 10-K/10-Q filings.
+
+    Args:
+        ticker: Stock ticker symbol.
+        search_term: Text to search for (e.g., "going concern").
+        forms: Comma-separated SEC form types to search.
+        days_back: How far back to search.
+
+    Returns:
+        {
+            "found": bool,          # Whether the term was found
+            "match_count": int,     # Number of filings containing the term
+            "filings": list[dict],  # Matching filing details
+        }
+    """
+    start_date = (datetime.now() - timedelta(days=days_back)).strftime("%Y-%m-%d")
+    end_date = datetime.now().strftime("%Y-%m-%d")
+
+    try:
+        params = {
+            "q": f'"{ticker}" "{search_term}"',
+            "dateRange": "custom",
+            "startdt": start_date,
+            "enddt": end_date,
+            "forms": forms,
+        }
+        resp = requests.get(SEC_SEARCH_URL, headers=HEADERS, params=params, timeout=15)
+        if resp.status_code != 200:
+            return {"found": False, "match_count": 0, "filings": []}
+
+        data = resp.json()
+        hits = data.get("hits", {}).get("hits", [])
+
+        filings = []
+        for hit in hits[:10]:
+            source = hit.get("_source", {})
+            filings.append({
+                "form": source.get("form_type", ""),
+                "date": source.get("file_date", ""),
+                "description": (source.get("display_names", [""])[0]
+                                if source.get("display_names") else ""),
+            })
+
+        return {
+            "found": len(filings) > 0,
+            "match_count": len(filings),
+            "filings": filings,
+        }
+
+    except Exception as e:
+        logger.debug(f"SEC text search failed for '{search_term}' in {ticker}: {e}")
+        return {"found": False, "match_count": 0, "filings": []}
+
+
+def check_going_concern(ticker: str) -> bool:
+    """
+    Check if a company has 'going concern' language in recent SEC filings.
+    Returns True if going concern was found (= BAD, should be killed).
+    """
+    result = search_filing_text(ticker, "going concern", forms="10-K,10-Q", days_back=365)
+    if result["found"]:
+        logger.info(f"KILL FLAG: {ticker} has 'going concern' in {result['match_count']} "
+                     f"recent SEC filing(s)")
+    return result["found"]
+
+
+def check_dilution_filings(ticker: str, days_back: int = 180) -> dict:
+    """
+    Check for S-1, S-3 registration statements (share issuance / dilution).
+    Returns count of dilution-related filings.
+    """
+    start_date = (datetime.now() - timedelta(days=days_back)).strftime("%Y-%m-%d")
+    end_date = datetime.now().strftime("%Y-%m-%d")
+
+    try:
+        params = {
+            "q": f'"{ticker}"',
+            "dateRange": "custom",
+            "startdt": start_date,
+            "enddt": end_date,
+            "forms": "S-1,S-3,424B",
+        }
+        resp = requests.get(SEC_SEARCH_URL, headers=HEADERS, params=params, timeout=15)
+        if resp.status_code != 200:
+            return {"dilution_filings": 0}
+
+        data = resp.json()
+        hits = data.get("hits", {}).get("hits", [])
+
+        return {"dilution_filings": len(hits)}
+
+    except Exception as e:
+        logger.debug(f"SEC dilution check failed for {ticker}: {e}")
+        return {"dilution_filings": 0}
+
+
 def _empty_insider_result(ticker: str) -> dict:
     return {
         "ticker": ticker,

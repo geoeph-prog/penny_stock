@@ -14,6 +14,7 @@ BOLLINGER_PERIOD = 20
 BOLLINGER_STD = 2.0
 VOLUME_AVG_PERIOD = 50
 STOCHASTIC_PERIOD = 14
+STOCHRSI_PERIOD = 14  # StochRSI lookback on RSI values
 
 # ── Screening ───────────────────────────────────────────────────────
 STAGE1_KEEP_TOP_N = 50        # Stocks to pass from Stage 1 -> Stage 2
@@ -21,27 +22,178 @@ STAGE2_RETURN_TOP_N = 5       # Final picks returned to user
 HISTORY_PERIOD = "6mo"        # Price history for technical analysis
 SHORT_HISTORY_PERIOD = "3mo"  # Shorter window for recent patterns
 
-# ── Scoring Weights (Stage 2 composite) ─────────────────────────────
-# These are initial guesses -- backtesting will optimize them
+# ═══════════════════════════════════════════════════════════════════
+# LAYER 1: HARD KILL FILTERS
+# Any single trigger = instant disqualification (score 0, excluded).
+# These catch fundamentally broken companies that no amount of
+# technical setup can save.
+# ═══════════════════════════════════════════════════════════════════
+
+# -- Kill: Going concern / auditor doubt (SEC EDGAR full-text) ------
+KILL_GOING_CONCERN = True  # Search 10-K/10-Q for "going concern"
+# Would have killed: ZONE (CleanCore Solutions)
+
+# -- Kill: Delisting notice (news headline keywords) ---------------
+KILL_DELISTING_KEYWORDS = [
+    "delisting", "delist", "compliance notice", "noncompliance",
+    "non-compliance", "listing requirements", "listing standards",
+    "notice of deficiency",
+]
+# Would have killed: OPAD (Offerpad)
+
+# -- Kill: Fraud / SEC investigation (news headline keywords) ------
+KILL_FRAUD_KEYWORDS = [
+    "fraud", "sec investigation", "securities class action",
+    "class action lawsuit", "restatement", "accounting irregularity",
+    "securities fraud", "investor lawsuit", "shareholder lawsuit",
+]
+# Would have killed: AGL (Agilon Health)
+
+# -- Kill: Core product failure (news headline patterns) -----------
+KILL_FAILURE_KEYWORDS = [
+    "failed trial", "phase 3 fail", "phase 2 fail", "phase 3 failure",
+    "trial failure", "trial failed", "fda reject", "crl",
+    "complete response letter", "discontinued", "terminated study",
+    "clinical hold",
+]
+# Would have killed: QNCX (Quince Therapeutics)
+
+# -- Kill: Shell company indicators (Yahoo Finance fundamentals) ---
+KILL_SHELL_MAX_REVENUE = 100_000    # < $100K revenue = effectively zero
+KILL_SHELL_MAX_MARKET_CAP = 5_000_000  # < $5M market cap
+# Would have killed: QNCX (post-failure), AZI (Autozi)
+
+# -- Kill: Extreme price decay from 52-week high ------------------
+KILL_PRICE_DECAY_THRESHOLD = 0.05   # price < 5% of 52w high = 95%+ drop
+# Would have killed: AZI (99.97% decline from ATH)
+
+# -- Kill: Gross margin below threshold (non-pre-revenue) ---------
+KILL_MIN_GROSS_MARGIN = 0.05        # 5% gross margin minimum
+# Would have killed: AZI (1.6% gross margin)
+
+# -- Kill: Cash runway under threshold ----------------------------
+KILL_MIN_CASH_RUNWAY_YEARS = 0.5    # < 6 months cash = death spiral
+# Computed as: total_cash / abs(operating_cashflow) when OCF < 0
+# Would have killed: AGL (burning $20M/month with inadequate reserves)
+
+# ═══════════════════════════════════════════════════════════════════
+# LAYER 2: POSITIVE SCORING WEIGHTS
+# After passing kill filters, score stocks 0-100 across these
+# weighted dimensions. Designed to rank RIME/ORKT-type setups highly.
+# ═══════════════════════════════════════════════════════════════════
+
+# -- Category-level weights (must sum to 1.0) ----------------------
 WEIGHTS = {
-    "technical":    0.25,
-    "sentiment":    0.20,
-    "fundamental":  0.15,
-    "catalyst":     0.15,
-    "market_ctx":   0.10,
-    "short_squeeze": 0.15,
+    "setup":        0.40,   # Float, insider ownership, proximity-to-low, P/B
+    "technical":    0.25,   # RSI, MACD, StochRSI, volume, price trend
+    "fundamental":  0.25,   # Revenue growth, short interest, cash position
+    "catalyst":     0.10,   # News-based catalysts
 }
 
-# ── Technical Sub-Weights ───────────────────────────────────────────
-TECH_WEIGHTS = {
-    "rsi":          0.15,
-    "macd":         0.15,
-    "volume_spike": 0.25,
-    "obv_trend":    0.10,
-    "bollinger":    0.10,
-    "stochastic":   0.10,
-    "price_trend":  0.15,
+# -- Setup sub-weights (within the 40% setup allocation) -----------
+SETUP_WEIGHTS = {
+    "float_tightness":      0.35,   # Ultra-low float = explosive moves
+    "insider_ownership":    0.25,   # High insider lock = less supply
+    "proximity_to_low":     0.25,   # Near 52w low = max upside, min downside
+    "price_to_book":        0.15,   # Below book value = margin of safety
 }
+
+# -- Technical sub-weights (within the 25% technical allocation) ---
+TECH_WEIGHTS = {
+    "rsi":          0.20,
+    "macd":         0.20,
+    "stochrsi":     0.20,   # NEW: StochRSI oversold detection
+    "volume_spike": 0.15,
+    "obv_trend":    0.10,
+    "bollinger":    0.05,
+    "price_trend":  0.10,
+}
+
+# -- Fundamental sub-weights (within the 25% fundamental alloc.) ---
+FUNDAMENTAL_WEIGHTS = {
+    "revenue_growth":   0.40,   # Strong growth = real business momentum
+    "short_interest":   0.30,   # High SI + low float = squeeze fuel
+    "cash_position":    0.30,   # Healthy cash = survival + opportunity
+}
+
+# ═══════════════════════════════════════════════════════════════════
+# SCORING THRESHOLDS
+# Specific breakpoints for each scoring dimension.
+# ═══════════════════════════════════════════════════════════════════
+
+# Float tightness scoring (shares)
+FLOAT_THRESHOLDS = [
+    (5_000_000,   100),   # < 5M shares: perfect squeeze setup
+    (10_000_000,   85),   # 5-10M: excellent
+    (20_000_000,   65),   # 10-20M: good
+    (50_000_000,   40),   # 20-50M: average
+    (float("inf"), 15),   # > 50M: diluted, hard to move
+]
+
+# Insider ownership scoring (fraction 0.0 - 1.0)
+INSIDER_THRESHOLDS = [
+    (0.50, 100),   # > 50%: insiders have massive skin in the game
+    (0.30,  80),   # 30-50%: strong alignment
+    (0.15,  60),   # 15-30%: decent
+    (0.05,  40),   # 5-15%: moderate
+    (0.00,  20),   # < 5%: insiders don't care
+]
+
+# Proximity to 52-week low scoring
+# position = (price - 52w_low) / (52w_high - 52w_low), where 0 = at low, 1 = at high
+PROXIMITY_LOW_THRESHOLDS = [
+    (0.10,  95),   # Within 10% of bottom: maximum upside
+    (0.25,  80),   # Near bottom quarter
+    (0.40,  60),   # Lower half
+    (0.60,  40),   # Middle
+    (1.00,  15),   # Near 52w high: limited upside, chasing risk
+]
+
+# Price-to-book scoring
+PB_THRESHOLDS = [
+    (0.50, 100),   # Below half of book value: deep value
+    (1.00,  75),   # Below book: value territory
+    (2.00,  50),   # Reasonable
+    (5.00,  30),   # Expensive for a penny stock
+    (float("inf"), 15),
+]
+
+# Revenue growth scoring (YoY fraction, e.g. 1.0 = 100% growth)
+REVENUE_GROWTH_THRESHOLDS = [
+    (1.00, 100),   # > 100% YoY: explosive growth (RIME had 300%)
+    (0.50,  80),   # 50-100%: strong
+    (0.20,  65),   # 20-50%: healthy
+    (0.00,  45),   # Flat
+    (-0.20, 25),   # Declining
+    (float("-inf"), 10),  # Collapsing (OPAD)
+]
+
+# Short interest as % of float scoring
+SHORT_INTEREST_THRESHOLDS = [
+    (0.20, 90),    # > 20%: heavy squeeze potential
+    (0.10, 75),    # 10-20%: meaningful short pressure
+    (0.05, 55),    # 5-10%: some shorts
+    (0.00, 40),    # < 5%: minimal
+]
+
+# RSI scoring for penny stocks (optimal is 30-50 oversold bounce zone)
+RSI_SCORE_MAP = {
+    "30_50":  90,   # Oversold bounce zone (RIME was 42-47)
+    "50_60":  70,   # Neutral with room to run
+    "below_30": 55, # Deeply oversold, risky but could bounce
+    "60_70":  40,   # Getting extended
+    "above_70": 10, # Overbought, avoid
+}
+
+# StochRSI scoring (lower = more oversold = better entry)
+STOCHRSI_THRESHOLDS = [
+    (10,   95),    # Deeply oversold (RIME was 5.76)
+    (20,   80),    # Oversold
+    (40,   60),    # Neutral-low
+    (60,   40),    # Neutral-high
+    (80,   20),    # Overbought zone
+    (100,   5),    # Extremely overbought
+]
 
 # ── Reddit Scraping ─────────────────────────────────────────────────
 REDDIT_SUBREDDITS = [
@@ -69,16 +221,22 @@ TWITTER_COOKIES_FILE = "twitter_cookies.json"
 TWITTER_TWEETS_PER_TICKER = 30
 
 # ── Catalyst Keywords ──────────────────────────────────────────────
+# These are scored on a spectrum, NOT kill filters.
+# Kill-worthy keywords (fraud, delisting, etc.) are in the KILL_ lists above.
 POSITIVE_CATALYSTS = [
     "contract", "partnership", "approval", "fda", "patent",
     "acquisition", "merger", "revenue", "earnings beat", "upgrade",
     "launch", "expansion", "grant", "license", "breakthrough",
     "deal", "award", "milestone", "collaboration", "agreement",
+    "buyback", "repurchase", "analyst upgrade", "price target",
+    "forbes", "featured in", "accelerating",
 ]
 NEGATIVE_CATALYSTS = [
     "dilution", "offering", "lawsuit", "delisting", "bankruptcy",
     "sec investigation", "fraud", "default", "downgrade", "recall",
-    "loss", "layoff", "suspend", "warning", "debt",
+    "layoff", "suspend", "warning", "going concern",
+    "resignation", "ceo depart", "ceo resign", "restatement",
+    "shell company", "reverse split", "pump and dump",
 ]
 
 # ── Sentiment NLP ───────────────────────────────────────────────────

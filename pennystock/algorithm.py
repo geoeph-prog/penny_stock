@@ -1,7 +1,19 @@
 """
 The ONE algorithm for penny stock prediction.
 
-Two functions:
+Two-layer architecture:
+  LAYER 1: Kill Filters  - Instantly disqualify broken stocks (quality_gate.py)
+  LAYER 2: Positive Score - Rank survivors by setup + technical + fundamental + catalyst
+
+Scoring formula (Layer 2):
+  final_score = setup(40%) + technical(25%) + fundamental(25%) + catalyst(10%)
+
+  Setup (40%):     float_tightness(35%) + insider_own(25%) + proximity_low(25%) + P/B(15%)
+  Technical (25%): RSI(20%) + MACD(20%) + StochRSI(20%) + volume(15%) + OBV(10%) + BB(5%) + trend(10%)
+  Fundamental(25%): revenue_growth(40%) + short_interest(30%) + cash_position(30%)
+  Catalyst (10%):  news-based positive/negative catalyst detection
+
+Functions:
   build_algorithm()  - Tab 1: Learn what predicts winners from 3 months of data
   pick_stocks()      - Tab 2: Apply the learned algorithm to find today's top 5
 """
@@ -15,6 +27,7 @@ import numpy as np
 import pandas as pd
 from loguru import logger
 
+from pennystock.config import WEIGHTS
 from pennystock.data.finviz_client import get_penny_stocks, get_high_gainers
 from pennystock.data.yahoo_client import get_price_history, get_stock_info
 from pennystock.analysis.technical import extract_features as extract_tech_features
@@ -23,8 +36,10 @@ from pennystock.analysis.sentiment import analyze as analyze_sentiment
 from pennystock.analysis.sentiment import ensure_bulk_downloaded
 from pennystock.analysis.fundamental import extract_features as extract_fund_features
 from pennystock.analysis.fundamental import analyze as analyze_fundamental
+from pennystock.analysis.fundamental import score_setup, score_fundamentals
 from pennystock.analysis.catalyst import analyze as analyze_catalyst
 from pennystock.analysis.market_context import analyze as analyze_market
+from pennystock.analysis.quality_gate import run_kill_filters
 from pennystock.storage.db import Database
 
 ALGORITHM_FILE = "algorithm.json"
@@ -279,14 +294,32 @@ def build_algorithm(progress_callback=None):
 
 def pick_stocks(top_n=5, progress_callback=None):
     """
-    Apply the learned algorithm to find today's best penny stock picks.
+    Apply the two-layer system to find today's best penny stock picks.
+
+    LAYER 1: Kill Filters (quality_gate.py)
+      - Going concern in SEC filings -> KILL
+      - Delisting notice in news -> KILL
+      - Fraud / SEC investigation in news -> KILL
+      - Core product failure in news -> KILL
+      - Shell company indicators -> KILL
+      - Extreme price decay (>95% from 52w high) -> KILL
+      - Toxic gross margins (<5%) -> KILL
+      - Cash runway exhaustion (<6 months) -> KILL
+
+    LAYER 2: Positive Scoring
+      - Setup quality (40%): float, insider ownership, proximity-to-low, P/B
+      - Technical (25%): RSI, MACD, StochRSI, volume, OBV, BB, trend
+      - Fundamental (25%): revenue growth, short interest, cash position
+      - Catalyst (10%): news-based catalyst detection
 
     Steps:
       1. Load saved algorithm
       2. Get ALL current penny stocks from Finviz
-      3. Stage 1: Score each stock on technical features (fast)
-      4. Stage 2: Deep analysis (sentiment, fundamentals) on top 50
-      5. Return top N picks with full scoring breakdown
+      3. Stage 1: Quick technical score (fast filter)
+      4. Stage 2: On top 50:
+         a. Run kill filters (LAYER 1) -- disqualify broken stocks
+         b. Score survivors (LAYER 2) -- rank by composite score
+      5. Return top N picks with full breakdown
     """
     def _log(msg):
         logger.info(msg)
@@ -300,7 +333,7 @@ def pick_stocks(top_n=5, progress_callback=None):
 
     start = time.time()
     _log("=" * 60)
-    _log("PICKING TOP PENNY STOCKS")
+    _log("PICKING TOP PENNY STOCKS (v3: Kill Filters + Setup Scoring)")
     _log(f"Using algorithm from {algorithm.get('built_date', 'unknown')}")
     _log("=" * 60)
 
@@ -355,61 +388,98 @@ def pick_stocks(top_n=5, progress_callback=None):
     top_candidates = stage1_results[:50]
     sent_factors = [f for f in algorithm["factors"] if f["category"] == "sentiment"]
     fund_factors = [f for f in algorithm["factors"] if f["category"] == "fundamental"]
-    cat_weights = algorithm.get("category_weights", {})
 
     # Pre-download Reddit posts ONCE to avoid per-ticker rate limiting
     _log("Pre-downloading Reddit posts (bulk mode)...")
     ensure_bulk_downloaded()
 
     _log(f"Stage 2: Deep analysis on top {len(top_candidates)} stocks...")
+    _log("  Running LAYER 1 kill filters + LAYER 2 scoring...")
     final_results = []
+    killed_count = 0
 
     for j, candidate in enumerate(top_candidates):
         ticker = candidate["ticker"]
         try:
-            # Sentiment
+            # ── LAYER 1: Kill Filters ────────────────────────────
+            info = get_stock_info(ticker)
+            gate = run_kill_filters(ticker, info=info)
+
+            if gate["killed"]:
+                killed_count += 1
+                _log(f"  KILLED {ticker}: {gate['kill_reasons'][0][:80]}...")
+                continue  # Skip to next stock -- this one is dead
+
+            # ── LAYER 2: Positive Scoring ────────────────────────
+
+            # A. Setup quality (40% of total)
+            setup_result = score_setup(ticker, info)
+            setup_score = setup_result["score"]
+
+            # B. Technical score (25% of total)
+            # Use the learned algorithm factors for the technical component
+            tech_score = candidate["tech_score"]
+            # Also compute the direct technical analysis score and blend
+            tech_analysis = analyze_technical(
+                get_price_history(ticker, period="3mo")
+            )
+            if tech_analysis.get("valid"):
+                # Blend learned score with direct analysis (60/40)
+                tech_score = tech_score * 0.6 + tech_analysis["score"] * 0.4
+
+            # C. Fundamental quality (25% of total)
+            fund_result = score_fundamentals(ticker, info)
+            fund_score = fund_result["score"]
+            # Also blend with learned fundamental factors if available
+            if fund_factors:
+                fund_feat = extract_fund_features(ticker)
+                learned_fund = _score_features(fund_feat, fund_factors)
+                fund_score = fund_score * 0.7 + learned_fund * 0.3
+
+            # D. Catalyst score (10% of total)
+            cat_result = analyze_catalyst(ticker)
+            cat_score = cat_result.get("score", 50)
+
+            # E. Sentiment (informational, not in primary weights,
+            #    but used as a small adjustment)
             sent = analyze_sentiment(ticker)
             has_sentiment_data = sent.get("has_data", False)
-            sent_features = {
-                "reddit_mentions": sent.get("reddit", {}).get("mentions", 0),
-                "reddit_sentiment": sent.get("reddit", {}).get("avg_sentiment", 0),
-                "stocktwits_bullish_pct": (
-                    sent.get("stocktwits", {}).get("bullish", 0) /
-                    max(1, sent.get("stocktwits", {}).get("total", 1))
-                ),
-                "combined_sentiment": sent.get("combined_sentiment", 0),
-                "buzz_score": sent.get("buzz_score", 0),
-            }
-
-            # Fundamentals
-            fund_feat = extract_fund_features(ticker)
-
-            # Catalyst
-            cat_result = analyze_catalyst(ticker)
-
-            # Market context
-            mkt_result = analyze_market(candidate.get("sector", ""))
-
-            # Score each category
-            tech_score = candidate["tech_score"]
-            # No social media data = neutral score (don't score zeros as signal)
             if has_sentiment_data and sent_factors:
+                sent_features = {
+                    "reddit_mentions": sent.get("reddit", {}).get("mentions", 0),
+                    "reddit_sentiment": sent.get("reddit", {}).get("avg_sentiment", 0),
+                    "stocktwits_bullish_pct": (
+                        sent.get("stocktwits", {}).get("bullish", 0) /
+                        max(1, sent.get("stocktwits", {}).get("total", 1))
+                    ),
+                    "combined_sentiment": sent.get("combined_sentiment", 0),
+                    "buzz_score": sent.get("buzz_score", 0),
+                }
                 sent_score = _score_features(sent_features, sent_factors)
             else:
                 sent_score = 50.0
-            fund_score = _score_features(fund_feat, fund_factors) if fund_factors else 50
-            cat_score = cat_result.get("score", 50)
+
+            # Market context (small adjustment only)
+            mkt_result = analyze_market(candidate.get("sector", ""))
             mkt_score = mkt_result.get("score", 50)
 
-            # Weighted composite
-            tw = cat_weights.get("technical", 0.4)
-            sw = cat_weights.get("sentiment", 0.3)
-            fw = cat_weights.get("fundamental", 0.3)
+            # ── Composite Score ──────────────────────────────────
+            # Primary: setup(40%) + technical(25%) + fundamental(25%) + catalyst(10%)
+            base_score = (
+                setup_score * WEIGHTS["setup"] +
+                tech_score * WEIGHTS["technical"] +
+                fund_score * WEIGHTS["fundamental"] +
+                cat_score * WEIGHTS["catalyst"]
+            )
 
-            # Add catalyst and market as bonus adjustments (not learned, fixed)
-            base_score = tech_score * tw + sent_score * sw + fund_score * fw
-            adjustment = (cat_score - 50) * 0.1 + (mkt_score - 50) * 0.05
-            final_score = max(0, min(100, base_score + adjustment))
+            # Secondary adjustments: sentiment + market context
+            # These are small nudges, not primary drivers.
+            # ORKT had zero social buzz but still ran +300% -- sentiment
+            # should NOT be a gate.
+            sent_adj = (sent_score - 50) * 0.03  # +/- 1.5 points max
+            mkt_adj = (mkt_score - 50) * 0.02    # +/- 1.0 points max
+
+            final_score = max(0, min(100, base_score + sent_adj + mkt_adj))
 
             final_results.append({
                 "ticker": ticker,
@@ -418,20 +488,28 @@ def pick_stocks(top_n=5, progress_callback=None):
                 "price": candidate.get("price", 0),
                 "volume": candidate.get("volume", 0),
                 "sector": candidate.get("sector", ""),
+                "quality_gate": gate,
                 "sub_scores": {
+                    "setup": round(setup_score, 1),
                     "technical": round(tech_score, 1),
-                    "sentiment": round(sent_score, 1),
                     "fundamental": round(fund_score, 1),
                     "catalyst": round(cat_score, 1),
+                    "sentiment": round(sent_score, 1),
                     "market": round(mkt_score, 1),
                 },
+                "setup_detail": setup_result,
+                "fundamental_detail": fund_result,
                 "key_indicators": {
+                    "float_shares": info.get("float_shares", 0),
+                    "insider_pct": info.get("insider_percent_held", 0),
+                    "position_52w": setup_result["proximity_to_low"].get("position"),
+                    "price_to_book": setup_result["price_to_book"].get("price_to_book"),
                     "rsi": candidate["features"].get("rsi"),
+                    "stochrsi": candidate["features"].get("stochrsi"),
                     "volume_spike": candidate["features"].get("volume_spike"),
-                    "price_trend_20d": candidate["features"].get("price_trend_20d"),
-                    "reddit_mentions": sent_features.get("reddit_mentions", 0),
-                    "sentiment": round(sent_features.get("combined_sentiment", 0), 3),
-                    "insider_direction": "N/A",
+                    "revenue_growth": info.get("revenue_growth", 0),
+                    "short_pct_float": info.get("short_percent_of_float", 0),
+                    "sentiment": round(sent.get("combined_sentiment", 0), 3),
                 },
                 "sentiment_detail": sent,
                 "catalyst_detail": cat_result,
@@ -441,23 +519,32 @@ def pick_stocks(top_n=5, progress_callback=None):
             logger.debug(f"Stage 2 failed for {ticker}: {e}")
 
         if (j + 1) % 5 == 0:
-            _log(f"  Stage 2: {j+1}/{len(top_candidates)}")
+            _log(f"  Stage 2: {j+1}/{len(top_candidates)} "
+                 f"({killed_count} killed, {len(final_results)} scored)")
 
     final_results.sort(key=lambda x: x["final_score"], reverse=True)
     picks = final_results[:top_n]
 
     elapsed = time.time() - start
     _log("=" * 60)
+    _log(f"RESULTS: {killed_count} stocks KILLED by quality filters, "
+         f"{len(final_results)} survived")
     _log(f"TOP {len(picks)} PICKS (found in {elapsed:.0f}s)")
     _log("=" * 60)
     for k, pick in enumerate(picks, 1):
         ss = pick["sub_scores"]
+        ki = pick["key_indicators"]
         _log(f"  #{k}. {pick['ticker']} - ${pick['price']:.2f} "
              f"(Score: {pick['final_score']:.1f})")
         _log(f"      {pick['company']}")
-        _log(f"      Tech:{ss['technical']:.0f} Sent:{ss['sentiment']:.0f} "
-             f"Fund:{ss['fundamental']:.0f} Cat:{ss['catalyst']:.0f} "
-             f"Mkt:{ss['market']:.0f}")
+        _log(f"      Setup:{ss['setup']:.0f} Tech:{ss['technical']:.0f} "
+             f"Fund:{ss['fundamental']:.0f} Cat:{ss['catalyst']:.0f}")
+        _log(f"      Float: {ki.get('float_shares', 'N/A'):,.0f} | "
+             f"Insider: {(ki.get('insider_pct') or 0)*100:.0f}% | "
+             f"52w Pos: {ki.get('position_52w', 'N/A')} | "
+             f"P/B: {ki.get('price_to_book', 'N/A')} | "
+             f"RSI: {ki.get('rsi', 'N/A')} | "
+             f"StochRSI: {ki.get('stochrsi', 'N/A')}")
     _log("=" * 60)
 
     # Save picks to database
@@ -468,6 +555,8 @@ def pick_stocks(top_n=5, progress_callback=None):
         "type": "pick_stocks",
         "total_screened": len(stocks),
         "stage1_passed": len(stage1_results),
+        "killed_by_filters": killed_count,
+        "final_scored": len(final_results),
         "final_picks": len(picks),
         "elapsed_sec": round(elapsed),
     })

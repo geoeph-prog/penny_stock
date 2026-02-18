@@ -13,7 +13,8 @@ from loguru import logger
 from pennystock.config import (
     RSI_PERIOD, MACD_FAST, MACD_SLOW, MACD_SIGNAL,
     BOLLINGER_PERIOD, BOLLINGER_STD, VOLUME_AVG_PERIOD,
-    STOCHASTIC_PERIOD, TECH_WEIGHTS,
+    STOCHASTIC_PERIOD, STOCHRSI_PERIOD, TECH_WEIGHTS,
+    RSI_SCORE_MAP, STOCHRSI_THRESHOLDS,
 )
 
 
@@ -67,6 +68,32 @@ def compute_obv(close: pd.Series, volume: pd.Series) -> pd.Series:
     return obv
 
 
+def compute_stochrsi(prices: pd.Series, rsi_period: int = None,
+                     stoch_period: int = None) -> pd.Series:
+    """
+    Compute Stochastic RSI.
+
+    StochRSI = (RSI - min(RSI, N)) / (max(RSI, N) - min(RSI, N)) * 100
+
+    This is the stochastic oscillator applied to RSI values rather than price.
+    It ranges 0-100 where < 20 is oversold and > 80 is overbought.
+
+    RIME had StochRSI of 5.76 before its +325% run -- deeply oversold.
+    """
+    rsi_period = rsi_period or RSI_PERIOD
+    stoch_period = stoch_period or STOCHRSI_PERIOD
+
+    rsi = compute_rsi(prices, rsi_period)
+
+    lowest_rsi = rsi.rolling(window=stoch_period).min()
+    highest_rsi = rsi.rolling(window=stoch_period).max()
+
+    rsi_range = highest_rsi - lowest_rsi
+    stochrsi = ((rsi - lowest_rsi) / rsi_range.replace(0, np.nan)) * 100
+
+    return stochrsi
+
+
 def compute_volume_spike(volume: pd.Series, period: int = None) -> float:
     """Current volume relative to N-day average."""
     period = period or VOLUME_AVG_PERIOD
@@ -112,6 +139,7 @@ def analyze(hist: pd.DataFrame) -> dict:
     macd = compute_macd(close)
     bb = compute_bollinger_bands(close)
     stoch = compute_stochastic(high, low, close)
+    stochrsi = compute_stochrsi(close)
     obv = compute_obv(close, volume)
     vol_spike = compute_volume_spike(volume)
     price_trend_20d = compute_price_trend(close, 20)
@@ -124,23 +152,23 @@ def analyze(hist: pd.DataFrame) -> dict:
     current_bb_lower = bb["lower"].iloc[-1] if not bb["lower"].empty else current_price
     current_bb_mid = bb["middle"].iloc[-1] if not bb["middle"].empty else current_price
     current_stoch_k = stoch["k"].iloc[-1] if not stoch["k"].empty else 50
+    current_stochrsi = stochrsi.iloc[-1] if not stochrsi.empty else 50
 
     # ── Score each indicator (0-100) ────────────────────────────────
 
-    # RSI Score: Best when 40-60 (room to run, not overbought)
-    # Penalize heavily above 70 (overbought) or below 30 (may keep falling)
+    # RSI Score: Best when 30-50 (oversold bounce zone, like RIME at 42-47)
     if np.isnan(current_rsi):
         rsi_score = 50
-    elif 40 <= current_rsi <= 60:
-        rsi_score = 90 - abs(current_rsi - 50) * 1  # Peak at 50
-    elif 30 <= current_rsi < 40:
-        rsi_score = 70  # Oversold territory, potential bounce
+    elif 30 <= current_rsi <= 50:
+        rsi_score = RSI_SCORE_MAP["30_50"]
+    elif 50 < current_rsi <= 60:
+        rsi_score = RSI_SCORE_MAP["50_60"]
     elif current_rsi < 30:
-        rsi_score = 55  # Deep oversold -- risky but could bounce
+        rsi_score = RSI_SCORE_MAP["below_30"]
     elif 60 < current_rsi <= 70:
-        rsi_score = 60  # Getting hot
+        rsi_score = RSI_SCORE_MAP["60_70"]
     else:
-        rsi_score = max(0, 40 - (current_rsi - 70) * 2)  # Overbought penalty
+        rsi_score = RSI_SCORE_MAP["above_70"]
 
     # MACD Score: Positive histogram = bullish momentum
     if np.isnan(current_macd_hist):
@@ -208,6 +236,17 @@ def analyze(hist: pd.DataFrame) -> dict:
     else:
         stoch_score = 50  # Deep oversold
 
+    # StochRSI Score: Lower = more oversold = better entry point
+    # RIME had StochRSI of 5.76 before its +325% move -- deeply oversold.
+    if np.isnan(current_stochrsi):
+        stochrsi_score = 50
+    else:
+        stochrsi_score = 50  # default
+        for threshold, score_val in STOCHRSI_THRESHOLDS:
+            if current_stochrsi <= threshold:
+                stochrsi_score = score_val
+                break
+
     # Price Trend Score: Moderate uptrend is ideal
     # We want stocks starting to move, not ones that already exploded
     if 5 <= price_trend_20d <= 30:
@@ -225,10 +264,10 @@ def analyze(hist: pd.DataFrame) -> dict:
     composite = (
         rsi_score * TECH_WEIGHTS["rsi"] +
         macd_score * TECH_WEIGHTS["macd"] +
+        stochrsi_score * TECH_WEIGHTS["stochrsi"] +
         vol_score * TECH_WEIGHTS["volume_spike"] +
         obv_score * TECH_WEIGHTS["obv_trend"] +
         bb_score * TECH_WEIGHTS["bollinger"] +
-        stoch_score * TECH_WEIGHTS["stochastic"] +
         trend_score * TECH_WEIGHTS["price_trend"]
     )
 
@@ -237,6 +276,7 @@ def analyze(hist: pd.DataFrame) -> dict:
         "valid": True,
         # Raw indicator values
         "rsi": round(current_rsi, 1) if not np.isnan(current_rsi) else None,
+        "stochrsi": round(current_stochrsi, 2) if not np.isnan(current_stochrsi) else None,
         "macd_histogram": round(current_macd_hist, 4) if not np.isnan(current_macd_hist) else None,
         "volume_spike": round(vol_spike, 2),
         "price_trend_20d": round(price_trend_20d, 1),
@@ -248,10 +288,10 @@ def analyze(hist: pd.DataFrame) -> dict:
         "sub_scores": {
             "rsi": round(rsi_score, 1),
             "macd": round(macd_score, 1),
+            "stochrsi": round(stochrsi_score, 1),
             "volume_spike": round(vol_score, 1),
             "obv_trend": round(obv_score, 1),
             "bollinger": round(bb_score, 1),
-            "stochastic": round(stoch_score, 1),
             "price_trend": round(trend_score, 1),
         },
     }
@@ -269,11 +309,17 @@ def extract_features(hist: pd.DataFrame) -> dict:
     volume = hist["Volume"]
 
     rsi = compute_rsi(close)
+    stochrsi = compute_stochrsi(close)
     macd = compute_macd(close)
     vol_spike = compute_volume_spike(volume)
 
+    current_stochrsi = stochrsi.iloc[-1] if not stochrsi.empty else None
+    if current_stochrsi is not None and np.isnan(current_stochrsi):
+        current_stochrsi = None
+
     return {
         "rsi": float(rsi.iloc[-1]) if not rsi.empty and not np.isnan(rsi.iloc[-1]) else None,
+        "stochrsi": float(current_stochrsi) if current_stochrsi is not None else None,
         "macd_histogram": float(macd["histogram"].iloc[-1]) if not macd["histogram"].empty else None,
         "volume_spike": float(vol_spike),
         "price_trend_5d": float(compute_price_trend(close, 5)),
