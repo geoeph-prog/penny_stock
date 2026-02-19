@@ -3,7 +3,7 @@
 # ── Algorithm Version ─────────────────────────────────────────────
 # Bump on every change. Major.Minor.Patch
 # Major = new strategy/architecture, Minor = new signals, Patch = tuning
-ALGORITHM_VERSION = "3.3.1"
+ALGORITHM_VERSION = "3.3.2"
 
 # ── Price & Volume Filters ──────────────────────────────────────────
 MIN_PRICE = 0.10   # Raised from 0.05 -- sub-dime stocks are untradeable garbage
@@ -117,8 +117,12 @@ KILL_ALREADY_PUMPED_DAYS = 5      # Lookback window (trading days)
 # Would have killed: MRNO (pumped 111% on Jan 28, 3 weeks before pick)
 #                    VRME (pumped 70% on Jan 5, +47% swing on Feb 12)
 # Safe for pre-pump setups: HKPD, YCBD had no recent spikes.
-KILL_RECENT_SPIKE_PCT = 80.0      # Max high/min low > 80% = recent spike
-KILL_RECENT_SPIKE_DAYS = 20       # Lookback window (trading days, ~1 month)
+# v3.3.2: Tightened from 80%/20d to 60%/40d after VRME slipped through.
+# VRME pumped 70% on Jan 5 + 47% swing Feb 12, but the 20-day window
+# let the Jan 5 spike age out. 40 trading days (~2 months) and 60%
+# threshold catches stocks that had ANY significant run recently.
+KILL_RECENT_SPIKE_PCT = 60.0      # Max high/min low > 60% = recent spike (was 80%)
+KILL_RECENT_SPIKE_DAYS = 40       # Lookback window (trading days, ~2 months) (was 20)
 
 # -- Kill: Pump-and-Dump Aftermath (the party is over) -------------
 # Detect stocks that had a massive spike (>200% in <30 trading days)
