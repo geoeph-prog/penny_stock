@@ -144,7 +144,7 @@ def run_deep_dive(ticker: str, progress_callback=None) -> dict:
     p(f"\n{'─' * 72}")
     p(f"  SENTIMENT ANALYSIS  (Reddit + StockTwits + Twitter)")
     p(f"{'─' * 72}")
-    sent_result = sentiment.analyze(ticker)
+    sent_result = sentiment.analyze(ticker, company_name=company)
     _print_sentiment(p, sent_result)
 
     # ── 12. COMPOSITE SCORE ─────────────────────────────────────────
@@ -629,6 +629,9 @@ def _print_sentiment(p, sent):
     p(f"  Combined Sentiment: {sent.get('combined_sentiment', 0):+.3f} (-1 to +1)")
     p(f"  Total Mentions: {sent.get('total_mentions', 0)}")
     p(f"  Buzz Score: {sent.get('buzz_score', 0):.1f}/100")
+    aliases = sent.get("search_aliases", [])
+    if aliases:
+        p(f"  Search Aliases: {', '.join(aliases)}  (company name matches included)")
 
     # Reddit
     reddit = sent.get("reddit", {})

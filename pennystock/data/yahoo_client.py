@@ -103,6 +103,8 @@ def get_stock_info(ticker: str) -> dict:
 
         result = {
             "ticker": ticker,
+            "company_name": info.get("longName", ""),
+            "short_name": info.get("shortName", ""),
             "sector": info.get("sector", ""),
             "industry": info.get("industry", ""),
             "country": info.get("country", ""),

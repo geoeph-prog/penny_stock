@@ -31,6 +31,11 @@ def _set_rate_limited(seconds=300):
 
 async def _search_cashtag(ticker: str, limit: int) -> list:
     """Internal async search for $TICKER on Twitter/X."""
+    return await _search_cashtag_query(f"${ticker}", limit)
+
+
+async def _search_cashtag_query(query: str, limit: int) -> list:
+    """Internal async search for an arbitrary query on Twitter/X."""
     try:
         from twikit import Client
     except ImportError:
@@ -68,7 +73,7 @@ async def _search_cashtag(ticker: str, limit: int) -> list:
             return []
 
     try:
-        tweets = await client.search_tweet(f"${ticker}", "Latest")
+        tweets = await client.search_tweet(query, "Latest")
         results = []
         count = 0
         for tweet in tweets:
@@ -85,13 +90,18 @@ async def _search_cashtag(ticker: str, limit: int) -> list:
         return results
 
     except Exception as e:
-        logger.debug(f"Twitter search failed for ${ticker}: {e}")
+        logger.debug(f"Twitter search failed for '{query}': {e}")
         return []
 
 
-def get_cashtag_tweets(ticker: str, limit: int = None) -> dict:
+def get_cashtag_tweets(ticker: str, limit: int = None, aliases: list = None) -> dict:
     """
-    Search Twitter/X for $TICKER mentions.
+    Search Twitter/X for $TICKER mentions and company name aliases.
+
+    Args:
+        ticker: Stock ticker symbol.
+        limit: Max tweets to fetch per search query.
+        aliases: Company name aliases (e.g. ['Getty Images']) to search alongside $TICKER.
 
     Returns:
         {
@@ -110,25 +120,40 @@ def get_cashtag_tweets(ticker: str, limit: int = None) -> dict:
 
     limit = limit or TWITTER_TWEETS_PER_TICKER
 
-    try:
-        loop = asyncio.get_event_loop()
-        if loop.is_running():
-            import concurrent.futures
-            with concurrent.futures.ThreadPoolExecutor() as pool:
-                tweets = pool.submit(
-                    asyncio.run, _search_cashtag(ticker, limit)
-                ).result(timeout=30)
-        else:
-            tweets = asyncio.run(_search_cashtag(ticker, limit))
-    except Exception as e:
-        logger.debug(f"Twitter scraping failed for {ticker}: {e}")
-        # If it fails, assume rate limited and back off
-        _set_rate_limited(300)
-        tweets = []
+    # Build search queries: cashtag + company name aliases
+    queries = [f"${ticker}"]
+    for alias in (aliases or []):
+        queries.append(f'"{alias}" stock')  # Add "stock" to reduce false positives
+
+    all_tweets = []
+    seen_texts = set()
+
+    for query in queries:
+        try:
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                import concurrent.futures
+                with concurrent.futures.ThreadPoolExecutor() as pool:
+                    tweets = pool.submit(
+                        asyncio.run, _search_cashtag_query(query, limit)
+                    ).result(timeout=30)
+            else:
+                tweets = asyncio.run(_search_cashtag_query(query, limit))
+        except Exception as e:
+            logger.debug(f"Twitter scraping failed for query '{query}': {e}")
+            _set_rate_limited(300)
+            tweets = []
+
+        # Deduplicate across queries
+        for tw in tweets:
+            text_key = tw["text"][:100]
+            if text_key not in seen_texts:
+                seen_texts.add(text_key)
+                all_tweets.append(tw)
 
     return {
         "ticker": ticker,
-        "tweets": tweets,
-        "total_count": len(tweets),
+        "tweets": all_tweets,
+        "total_count": len(all_tweets),
         "enabled": True,
     }

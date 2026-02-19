@@ -119,16 +119,26 @@ def bulk_download_posts(subreddits: list = None, posts_per_sub: int = 100) -> di
     return all_posts
 
 
-def search_bulk_posts(ticker: str, bulk_posts: dict = None) -> dict:
+def search_bulk_posts(ticker: str, bulk_posts: dict = None, aliases: list = None) -> dict:
     """
-    Search pre-downloaded bulk posts for a specific ticker.
+    Search pre-downloaded bulk posts for a specific ticker AND company name aliases.
     No API calls -- purely local string matching.
+
+    Args:
+        ticker: Stock ticker symbol (e.g. 'GETY').
+        bulk_posts: Pre-downloaded posts dict. Uses cache if None.
+        aliases: Company name aliases (e.g. ['Getty Images']). Searched case-insensitively.
     """
     if bulk_posts is None:
         bulk_posts = _bulk_cache or {}
 
     ticker_upper = ticker.upper()
-    pattern = re.compile(rf'(\$|(?<!\w)){re.escape(ticker_upper)}(?!\w)')
+    ticker_pattern = re.compile(rf'(\$|(?<!\w)){re.escape(ticker_upper)}(?!\w)')
+
+    # Build alias patterns (case-insensitive word-boundary match)
+    alias_patterns = []
+    for alias in (aliases or []):
+        alias_patterns.append(re.compile(rf'(?<!\w){re.escape(alias)}(?!\w)', re.IGNORECASE))
 
     all_matches = []
     subreddit_counts = {}
@@ -136,8 +146,11 @@ def search_bulk_posts(ticker: str, bulk_posts: dict = None) -> dict:
     for sub, posts in bulk_posts.items():
         matches = []
         for post in posts:
-            combined = f"{post['title']} {post['text']}".upper()
-            if pattern.search(combined):
+            combined = f"{post['title']} {post['text']}"
+            combined_upper = combined.upper()
+            if ticker_pattern.search(combined_upper):
+                matches.append(post)
+            elif any(ap.search(combined) for ap in alias_patterns):
                 matches.append(post)
 
         subreddit_counts[sub] = len(matches)
@@ -199,7 +212,7 @@ def search_ticker_in_subreddit(ticker: str, subreddit: str, limit: int = None) -
     return posts
 
 
-def get_ticker_mentions(ticker: str, subreddits: list = None, use_bulk: bool = True) -> dict:
+def get_ticker_mentions(ticker: str, subreddits: list = None, use_bulk: bool = True, aliases: list = None) -> dict:
     """
     Get mentions of a ticker across all subreddits.
 
@@ -207,10 +220,11 @@ def get_ticker_mentions(ticker: str, subreddits: list = None, use_bulk: bool = T
         ticker: Stock ticker to search for.
         use_bulk: If True, uses bulk cached posts (fast, no extra API calls).
                   If False, makes individual search requests per subreddit.
+        aliases: Company name aliases to also search for (e.g. ['Getty Images']).
     """
     # Prefer bulk mode (no API calls per ticker)
     if use_bulk and _bulk_cache:
-        return search_bulk_posts(ticker)
+        return search_bulk_posts(ticker, aliases=aliases)
 
     # Fallback to individual searches (but respect rate limits)
     if _is_rate_limited():
@@ -220,15 +234,37 @@ def get_ticker_mentions(ticker: str, subreddits: list = None, use_bulk: bool = T
     all_posts = []
     subreddit_counts = {}
 
+    # Build alias patterns for filtering
+    alias_patterns = []
+    for alias in (aliases or []):
+        alias_patterns.append(re.compile(rf'(?<!\w){re.escape(alias)}(?!\w)', re.IGNORECASE))
+
+    # Build search queries: ticker + each alias
+    search_terms = [ticker] + (aliases or [])
+
     for sub in subreddits:
         if _is_rate_limited():
             subreddit_counts[sub] = 0
             continue
 
-        posts = search_ticker_in_subreddit(ticker, sub)
-        subreddit_counts[sub] = len(posts)
-        all_posts.extend(posts)
-        time.sleep(REDDIT_DELAY_SECONDS)
+        sub_posts = []
+        seen_titles = set()
+        for term in search_terms:
+            posts = search_ticker_in_subreddit(term, sub)
+            for post in posts:
+                # Deduplicate across search terms
+                if post["title"] not in seen_titles:
+                    # For alias searches, verify the alias actually appears
+                    if term != ticker:
+                        combined = f"{post['title']} {post['text']}"
+                        if not any(ap.search(combined) for ap in alias_patterns):
+                            continue
+                    seen_titles.add(post["title"])
+                    sub_posts.append(post)
+            time.sleep(REDDIT_DELAY_SECONDS)
+
+        subreddit_counts[sub] = len(sub_posts)
+        all_posts.extend(sub_posts)
 
     return {
         "ticker": ticker,
