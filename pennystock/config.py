@@ -3,7 +3,7 @@
 # ── Algorithm Version ─────────────────────────────────────────────
 # Bump on every change. Major.Minor.Patch
 # Major = new strategy/architecture, Minor = new signals, Patch = tuning
-ALGORITHM_VERSION = "3.1.0"
+ALGORITHM_VERSION = "3.1.1"
 
 # ── Price & Volume Filters ──────────────────────────────────────────
 MIN_PRICE = 0.10   # Raised from 0.05 -- sub-dime stocks are untradeable garbage
@@ -109,14 +109,26 @@ KILL_ALREADY_PUMPED_PCT = 100.0   # > 100% gain in recent days = already ran
 KILL_ALREADY_PUMPED_DAYS = 5      # Lookback window (trading days)
 # The single most important filter: we want stocks BEFORE the explosion
 
+# -- Kill: Recent Spike History (extended pump detection) -----------
+# The 5-day "Already Pumped" filter misses stocks that pumped 2-4 weeks ago.
+# This filter looks at the HIGH/LOW range over a longer window.
+# If the max intraday high is >80% above the min intraday low in the last
+# 20 trading days, the stock had a major spike recently -- don't chase.
+# Would have killed: MRNO (pumped 111% on Jan 28, 3 weeks before pick)
+#                    VRME (pumped 70% on Jan 5, +47% swing on Feb 12)
+# Safe for pre-pump setups: HKPD, YCBD had no recent spikes.
+KILL_RECENT_SPIKE_PCT = 80.0      # Max high/min low > 80% = recent spike
+KILL_RECENT_SPIKE_DAYS = 20       # Lookback window (trading days, ~1 month)
+
 # -- Kill: Pump-and-Dump Aftermath (the party is over) -------------
-# Detect stocks that had a massive spike (>300% in <30 trading days)
-# followed by a crash (>80% from peak). This is the aftermath pattern
+# Detect stocks that had a massive spike (>200% in <30 trading days)
+# followed by a crash (>70% from peak). This is the aftermath pattern
 # of manipulation -- the money has been extracted, stock is dead.
 # Would have killed: MSGY (IPO $4 -> peak $22.20 -> $0.66)
-KILL_PUMP_DUMP_SPIKE_RATIO = 3.0     # Peak must be >3x the pre-spike base
+# v3.1.1: Lowered from 3x/80% to 2x/70% to catch moderate pumps like MRNO
+KILL_PUMP_DUMP_SPIKE_RATIO = 2.0     # Peak must be >2x the pre-spike base (was 3x)
 KILL_PUMP_DUMP_SPIKE_WINDOW = 30     # Spike must happen within 30 trading days
-KILL_PUMP_DUMP_DECLINE_PCT = 0.20    # Current price must be <20% of peak
+KILL_PUMP_DUMP_DECLINE_PCT = 0.30    # Current price must be <30% of peak (was 20%)
 
 # ═══════════════════════════════════════════════════════════════════
 # SCORING PENALTIES (downgraded from hard kills)

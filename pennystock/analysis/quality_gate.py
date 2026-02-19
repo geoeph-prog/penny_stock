@@ -14,7 +14,8 @@ HARD KILLS (instant disqualification, score 0):
   - Cash runway exhaustion (< 6 months of cash left at current burn)
   - Pre-revenue burn (< $1M revenue + burning > $50M/year)
   - Already pumped (> 100% gain in 5 days = too late, chasing the pump)
-  - Pump-and-dump aftermath (>300% spike in <30 days then >80% crash)
+  - Recent spike history (> 80% high/low range in 20 days = already had its move)
+  - Pump-and-dump aftermath (>200% spike in <30 days then >70% crash)
   - Negative shareholder equity (balance sheet is underwater)
   - Sub-dime price (< $0.10 = untradeable garbage)
   - Extreme profit margin losses (< -200% = hemorrhaging money)
@@ -57,6 +58,8 @@ from pennystock.config import (
     KILL_PRE_REVENUE_MIN_BURN,
     KILL_ALREADY_PUMPED_PCT,
     KILL_ALREADY_PUMPED_DAYS,
+    KILL_RECENT_SPIKE_PCT,
+    KILL_RECENT_SPIKE_DAYS,
     KILL_NEGATIVE_EQUITY,
     KILL_MIN_PRICE,
     KILL_EXTREME_LOSS_MARGIN,
@@ -144,9 +147,26 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
     except Exception as e:
         logger.debug(f"Already-pumped check failed for {ticker}: {e}")
 
+    # ── Kill 1b: Recent Spike History (extended pump detection) ───
+    # The 5-day check above misses pumps from 2-4 weeks ago.
+    # This checks the HIGH/LOW range over a longer window.
+    # MRNO pumped 111% on Jan 28 (3 weeks before pick) -- missed by 5-day check.
+    # VRME pumped 70% on Jan 5, +47% swing on Feb 12 -- also missed.
+    try:
+        spike_pct = _check_recent_spike(ticker, KILL_RECENT_SPIKE_DAYS)
+        if spike_pct is not None and spike_pct >= KILL_RECENT_SPIKE_PCT:
+            kill_reasons.append(
+                f"RECENT SPIKE: Stock had a {spike_pct:.0f}% spike "
+                f"(high/low range) in the last {KILL_RECENT_SPIKE_DAYS} trading "
+                f"days (threshold: {KILL_RECENT_SPIKE_PCT:.0f}%). "
+                f"This stock already had its big move -- don't chase."
+            )
+    except Exception as e:
+        logger.debug(f"Recent spike check failed for {ticker}: {e}")
+
     # ── Kill 2: Pump-and-Dump Aftermath ──────────────────────────
-    # Detect stocks that had a massive spike (>300% in <30 trading days)
-    # followed by a crash (>80% from peak). The money has been extracted.
+    # Detect stocks that had a massive spike (>200% in <30 trading days)
+    # followed by a crash (>70% from peak). The money has been extracted.
     # Would have killed: MSGY (IPO $4 -> $22.20 in weeks -> $0.66)
     # Safe for pre-pump winners: SMX, BBGI, BEAT etc. hadn't spiked yet
     try:
@@ -373,7 +393,7 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
         )
 
     # ── Compile result ─────────────────────────────────────────────
-    total_hard_kills = 11  # 7 original + pump-dump + neg equity + sub-dime + extreme losses
+    total_hard_kills = 12  # 7 original + recent spike + pump-dump + neg equity + sub-dime + extreme losses
     killed = len(kill_reasons) > 0
 
     if killed:
@@ -422,6 +442,47 @@ def _check_recent_gain(ticker: str, days: int) -> float | None:
         return None
 
     return ((price_now - price_then) / price_then) * 100
+
+
+def _check_recent_spike(ticker: str, days: int) -> float | None:
+    """
+    Check the max high-to-low spike range in the last N trading days.
+
+    Unlike _check_recent_gain which compares current price to N days ago,
+    this finds the MAXIMUM range (highest high vs lowest low) in the window.
+    This catches stocks that pumped AND crashed back -- the gain-based check
+    would miss those because current price is back near the starting point.
+
+    Returns the percentage spike (e.g., 111.0 for a 111% range), or None
+    if insufficient data.
+    """
+    hist = get_price_history(ticker, period="3mo")
+    if hist is None or hist.empty:
+        return None
+
+    # Get the last N trading days
+    if len(hist) < days + 1:
+        recent = hist
+    else:
+        recent = hist.iloc[-(days + 1):]
+
+    # Use High and Low columns for intraday range detection
+    if "High" in recent.columns and "Low" in recent.columns:
+        highs = recent["High"]
+        lows = recent["Low"]
+        max_high = float(highs.max())
+        min_low = float(lows.min())
+    else:
+        # Fallback to Close prices
+        close = recent["Close"]
+        max_high = float(close.max())
+        min_low = float(close.min())
+
+    if min_low <= 0:
+        return None
+
+    spike_pct = ((max_high - min_low) / min_low) * 100
+    return spike_pct
 
 
 def _check_pump_dump_aftermath(ticker: str) -> dict:
