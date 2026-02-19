@@ -1,2 +1,2 @@
 """Penny Stock Analyzer - Intelligent penny stock screening with backtesting."""
-__version__ = "2.0.0"
+from pennystock.config import ALGORITHM_VERSION as __version__
