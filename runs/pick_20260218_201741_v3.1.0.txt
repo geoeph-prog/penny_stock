@@ -1,0 +1,635 @@
+Penny Stock Analyzer v3.1.0
+Run type: pick
+Timestamp: 2026-02-18 20:20:17
+======================================================================
+
+============================================================
+PICKING TOP PENNY STOCKS (v3.1.0: MEGA-ALGORITHM)
+Using algorithm from 2026-02-18 20:13:49
+Weights: setup=25% tech=20% pre_pump=35% fund=10% cat=10%
+============================================================
+Discovering current penny stocks...
+Found 341 stocks. Running Stage 1 technical screen...
+  Stage 1: 25/341 ~327s remaining
+  Stage 1: 50/341 ~167s remaining
+  Stage 1: 75/341 ~111s remaining
+  Stage 1: 100/341 ~82s remaining
+  Stage 1: 125/341 ~64s remaining
+  Stage 1: 150/341 ~51s remaining
+  Stage 1: 175/341 ~40s remaining
+  Stage 1: 200/341 ~32s remaining
+  Stage 1: 225/341 ~25s remaining
+  Stage 1: 250/341 ~19s remaining
+  Stage 1: 275/341 ~13s remaining
+  Stage 1: 300/341 ~8s remaining
+  Stage 1: 325/341 ~3s remaining
+Stage 1 done: 341 stocks scored
+Pre-downloading Reddit posts (bulk mode)...
+Stage 2: Deep analysis on top 50 stocks...
+  Running LAYER 1 kill filters + LAYER 2 scoring...
+  PENALTY BARK: -27pts (2 issue(s))
+  PENALTY FURY: -47pts (3 issue(s))
+  PENALTY VRME: -12pts (1 issue(s))
+  PENALTY WWR: -27pts (2 issue(s))
+  KILLED ELBM: PUMP-AND-DUMP AFTERMATH: Stock spiked 4x in 1 trading days (peak $7.02), then cr...
+  PENALTY XPL: -20pts (1 issue(s))
+  KILLED IMTE: SHELL COMPANY: Revenue $72,641 (< $100,000) and market cap $2,398,718 (< $5,000,...
+  KILLED TRIB: NEGATIVE EQUITY: Book value per share is $-2.93. Balance sheet is underwater....
+  PENALTY PDSB: -12pts (1 issue(s))
+  PENALTY PED: -12pts (1 issue(s))
+  Stage 2: 10/50 (3 killed, 7 scored)
+  KILLED SMXT: NEGATIVE EQUITY: Book value per share is $-0.22. Balance sheet is underwater....
+  PENALTY YIBO: -12pts (1 issue(s))
+  KILLED KWM: PUMP-AND-DUMP AFTERMATH: Stock spiked 4x in 5 trading days (peak $7.29), then cr...
+  PENALTY OPTT: -27pts (2 issue(s))
+  PENALTY MRNO: -27pts (2 issue(s))
+  Stage 2: 15/50 (5 killed, 10 scored)
+  PENALTY COOK: -12pts (1 issue(s))
+  PENALTY DTSS: -12pts (1 issue(s))
+  KILLED KITT: CASH DEATH SPIRAL: Only 2.9 months of cash remaining ($5,492,350 cash / $1,918,0...
+  PENALTY HAIN: -12pts (1 issue(s))
+  PENALTY XTKG: -42pts (2 issue(s))
+  Stage 2: 20/50 (6 killed, 14 scored)
+  PENALTY FSP: -12pts (1 issue(s))
+  PENALTY RNXT: -12pts (1 issue(s))
+  KILLED SURG: CASH DEATH SPIRAL: Only 1.2 months of cash remaining ($2,514,862 cash / $2,135,5...
+  KILLED PRSO: CASH DEATH SPIRAL: Only 4.3 months of cash remaining ($1,865,000 cash / $436,833...
+  KILLED PRPL: NEGATIVE EQUITY: Book value per share is $-0.25. Balance sheet is underwater....
+  KILLED YHC: TOXIC MARGINS: Gross margin 4.6% (< 5% minimum). Business model does not generat...
+  KILLED NRSN: CASH DEATH SPIRAL: Only 1.0 months of cash remaining ($666,000 cash / $698,750/m...
+  KILLED HOWL: PRE-REVENUE BURN: Revenue $0 (< $1,000,000) with $63.5M/year cash burn (> $50M/y...
+  KILLED SVRE: PUMP-AND-DUMP AFTERMATH: Stock spiked 16x in 16 trading days (peak $46.80), then...
+  PENALTY XPON: -27pts (2 issue(s))
+  Stage 2: 30/50 (13 killed, 17 scored)
+  PENALTY MSGY: -30pts (1 issue(s))
+  PENALTY SOBR: -27pts (2 issue(s))
+  KILLED YMT: CASH DEATH SPIRAL: Only 0.5 months of cash remaining ($2,055,000 cash / $3,906,2...
+  PENALTY MAPS: -12pts (1 issue(s))
+  PENALTY GCL: -27pts (2 issue(s))
+  Stage 2: 35/50 (14 killed, 21 scored)
+  KILLED SGMO: CASH DEATH SPIRAL: Only 4.7 months of cash remaining ($29,616,000 cash / $6,346,...
+  PENALTY HKPD: -12pts (1 issue(s))
+  KILLED KXIN: PUMP-AND-DUMP AFTERMATH: Stock spiked 3x in 19 trading days (peak $54.00), then ...
+  KILLED ISPC: CASH DEATH SPIRAL: Only 4.8 months of cash remaining ($2,782,758 cash / $574,697...
+  PENALTY TLIH: -30pts (1 issue(s))
+  Stage 2: 40/50 (17 killed, 23 scored)
+  PENALTY XTLB: -27pts (2 issue(s))
+  KILLED PPCB: PUMP-AND-DUMP AFTERMATH: Stock spiked 4x in 3 trading days (peak $11.00), then c...
+  PENALTY CUE: -12pts (1 issue(s))
+  KILLED GAUZ: CASH DEATH SPIRAL: Only 0.7 months of cash remaining ($1,235,000 cash / $1,676,0...
+  PENALTY GTEC: -12pts (1 issue(s))
+  Stage 2: 45/50 (19 killed, 26 scored)
+  PENALTY BRN: -12pts (1 issue(s))
+  KILLED LFWD: CASH DEATH SPIRAL: Only 1.4 months of cash remaining ($1,956,000 cash / $1,436,6...
+  PENALTY NIVF: -42pts (2 issue(s))
+  PENALTY ATON: -62pts (3 issue(s))
+  PENALTY YCBD: -12pts (1 issue(s))
+  Stage 2: 50/50 (20 killed, 30 scored)
+============================================================
+RESULTS: 20 stocks KILLED by quality filters, 30 survived scoring
+  16 stocks scored below minimum threshold (40pts) and were excluded
+TOP 5 PICKS (found in 155s)
+============================================================
+  #1. HKPD - $0.70 (Score: 62.5, Confidence: MEDIUM)
+      Cellyan Biotechnology Co Ltd
+      Setup:91 Tech:54 PrePump:82 Fund:41 Cat:52
+      Float: 3,213,650 | Insider: 133% | 52w Pos: 0.02 | P/B: 1.548 | RSI: 32.94742225993157 | StochRSI: 2.279147863856354
+      Pre-Pump: confluence=4/7 confidence=MEDIUM SI-change=-69.1% float-rot=0.025
+      Bullish Pre-Pump: short_interest_change(95) | compliance_risk(95) | supply_lock(100) | beaten_down(85)
+      ADX: 10.26543859403452 | MFI: 31.99231295833343
+      Stop: $0.5244 (25.1% risk)
+      Penalties: -12pts (1 issue(s))
+        GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in 
+  #2. MRNO - $0.76 (Score: 60.0, Confidence: MEDIUM)
+      Murano Global Investments PLC
+      Setup:99 Tech:58 PrePump:84 Fund:65 Cat:52
+      Float: 1,349,131 | Insider: 98% | 52w Pos: 0.021 | P/B: 0.2 | RSI: 29.776599455821213 | StochRSI: 0.0
+      Pre-Pump: confluence=5/7 confidence=HIGH SI-change=3611.4% float-rot=1.833
+      Bullish Pre-Pump: float_rotation(95) | compliance_risk(85) | supply_lock(100) | squeeze_setup(75) | beaten_down(85)
+      Tech Signals: SQUEEZE-SETUP | DILUTION-RISK(3)
+      ADX: 29.296417150063665 | MFI: 70.16129990081129
+      Stop: $0.1576 (79.3% risk)
+      Penalties: -27pts (2 issue(s))
+        GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in 
+        EXTREME DECAY (-15pts): Price $0.76 is 94.2% below 52-week high $13.25 (ratio 0.0577). Could be deep
+  #3. YIBO - $0.87 (Score: 58.5, Confidence: MEDIUM)
+      Planet Image International Ltd
+      Setup:93 Tech:71 PrePump:57 Fund:46 Cat:55
+      Float: 7,128,838 | Insider: 78% | 52w Pos: 0.075 | P/B: 0.886 | RSI: 33.582086374025195 | StochRSI: 39.37570559066171
+      Pre-Pump: confluence=3/7 confidence=MEDIUM SI-change=1703.3% float-rot=0.002
+      Bullish Pre-Pump: compliance_risk(85) | supply_lock(88) | beaten_down(85)
+      Tech Signals: CONSOLIDATING | DILUTION-RISK(2)
+      ADX: 46.285945558545784 | MFI: 92.9872257165365
+      Stop: $0.7804 (10.3% risk)
+      Penalties: -12pts (1 issue(s))
+        GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in 
+  #4. VRME - $0.97 (Score: 57.1, Confidence: MEDIUM)
+      VerifyMe Inc
+      Setup:64 Tech:66 PrePump:76 Fund:49 Cat:55
+      Float: 9,731,056 | Insider: 19% | 52w Pos: 0.441 | P/B: 1.072 | RSI: 33.627504309366884 | StochRSI: 21.67268563575142
+      Pre-Pump: confluence=4/7 confidence=MEDIUM SI-change=-43.6% float-rot=0.277
+      Bullish Pre-Pump: short_interest_change(85) | float_rotation(70) | compliance_risk(95) | supply_lock(68)
+      Tech Signals: BB-SQUEEZE | CONSOLIDATING
+      ADX: 20.282088698997466 | MFI: 6.682237661798169
+      Stop: $0.6966 (28.2% risk)
+      Penalties: -12pts (1 issue(s))
+        GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in 
+  #5. YCBD - $0.72 (Score: 56.6, Confidence: MEDIUM)
+      cbdMD Inc
+      Setup:76 Tech:50 PrePump:76 Fund:43 Cat:55
+      Float: 9,164,521 | Insider: 11% | 52w Pos: 0.073 | P/B: 0.893 | RSI: 48.38026605541981 | StochRSI: 87.70361568853792
+      Pre-Pump: confluence=4/7 confidence=MEDIUM SI-change=-41.3% float-rot=0.075
+      Bullish Pre-Pump: short_interest_change(85) | compliance_risk(95) | supply_lock(68) | beaten_down(85)
+      Tech Signals: DILUTION-RISK(4)
+      ADX: 39.52895249849416 | MFI: 85.5765337078209
+      Stop: $0.4314 (40.1% risk)
+      Penalties: -12pts (1 issue(s))
+        GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in 
+============================================================
+
+
+======================================================================
+DETAILED RESULTS (JSON)
+======================================================================
+[
+  {
+    "ticker": "HKPD",
+    "final_score": 62.5,
+    "company": "Cellyan Biotechnology Co Ltd",
+    "price": 0.7,
+    "sub_scores": {
+      "setup": 91.2,
+      "technical": 54.3,
+      "pre_pump": 81.5,
+      "fundamental": 41.4,
+      "catalyst": 52,
+      "sentiment": 50.0,
+      "market": 48.8
+    },
+    "key_indicators": {
+      "float_shares": 3213650,
+      "insider_pct": 1.33006,
+      "position_52w": 0.02,
+      "price_to_book": 1.548,
+      "rsi": 32.94742225993157,
+      "stochrsi": 2.279147863856354,
+      "volume_spike": 0.6332016802885713,
+      "revenue_growth": -0.047,
+      "short_pct_float": 0.0124,
+      "sentiment": 0.0,
+      "adx": 10.26543859403452,
+      "mfi": 31.99231295833343,
+      "bb_squeeze": "False",
+      "consolidating": "False",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 0,
+      "atr": 0.0878,
+      "pre_pump_confluence": 4,
+      "pre_pump_confidence": "MEDIUM",
+      "si_change_pct": -69.1,
+      "float_rotation": 0.025,
+      "supply_lock_score": 100
+    },
+    "penalty_deduction": 12,
+    "pre_pump_detail": {
+      "score": 81.5,
+      "signals": {
+        "short_interest_change": {
+          "score": 95,
+          "change_pct": -69.1,
+          "shares_short": 25106,
+          "shares_short_prior": 81204,
+          "signal": "bullish_covering"
+        },
+        "float_rotation": {
+          "score": 25,
+          "rotation": 0.025,
+          "volume": 80100,
+          "float": 3213650,
+          "signal": "normal"
+        },
+        "compliance_risk": {
+          "score": 95,
+          "below_dollar": true,
+          "price": 0.7026,
+          "signal": "compliance_pump_candidate"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.76,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 100,
+          "insider_pct": 133.0,
+          "float_shares": 3213650,
+          "signal": "locked"
+        },
+        "squeeze_setup": {
+          "score": 45,
+          "short_pct_float": 1.2,
+          "days_to_cover": 1.0,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 85,
+          "position_52w": 0.02,
+          "price": 0.7026,
+          "52w_low": 0.66,
+          "52w_high": 2.76,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 4,
+      "total_signals": 7,
+      "confidence": "MEDIUM"
+    }
+  },
+  {
+    "ticker": "MRNO",
+    "final_score": 60.0,
+    "company": "Murano Global Investments PLC",
+    "price": 0.76,
+    "sub_scores": {
+      "setup": 98.8,
+      "technical": 57.6,
+      "pre_pump": 84.5,
+      "fundamental": 64.8,
+      "catalyst": 52,
+      "sentiment": 100.0,
+      "market": 51.2
+    },
+    "key_indicators": {
+      "float_shares": 1349131,
+      "insider_pct": 0.98297,
+      "position_52w": 0.021,
+      "price_to_book": 0.2,
+      "rsi": 29.776599455821213,
+      "stochrsi": 0.0,
+      "volume_spike": 0.08846987397351018,
+      "revenue_growth": 0.239,
+      "short_pct_float": 0.3549,
+      "sentiment": -0.226,
+      "adx": 29.296417150063665,
+      "mfi": 70.16129990081129,
+      "bb_squeeze": "False",
+      "consolidating": "False",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": true,
+      "dilution_filings": 3,
+      "atr": 0.3012,
+      "pre_pump_confluence": 5,
+      "pre_pump_confidence": "HIGH",
+      "si_change_pct": 3611.4,
+      "float_rotation": 1.833,
+      "supply_lock_score": 100
+    },
+    "penalty_deduction": 27,
+    "pre_pump_detail": {
+      "score": 84.5,
+      "signals": {
+        "short_interest_change": {
+          "score": 15,
+          "change_pct": 3611.4,
+          "shares_short": 479366,
+          "shares_short_prior": 12916,
+          "signal": "bearish_buildup"
+        },
+        "float_rotation": {
+          "score": 95,
+          "rotation": 1.833,
+          "volume": 2472290,
+          "float": 1349131,
+          "signal": "high_rotation"
+        },
+        "compliance_risk": {
+          "score": 85,
+          "below_dollar": true,
+          "price": 0.7644,
+          "signal": "compliance_pump_candidate"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.79,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 100,
+          "insider_pct": 98.3,
+          "float_shares": 1349131,
+          "signal": "locked"
+        },
+        "squeeze_setup": {
+          "score": 75,
+          "short_pct_float": 35.5,
+          "days_to_cover": 0.1,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 85,
+          "position_52w": 0.021,
+          "price": 0.7644,
+          "52w_low": 0.493,
+          "52w_high": 13.25,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 5,
+      "total_signals": 7,
+      "confidence": "HIGH"
+    }
+  },
+  {
+    "ticker": "YIBO",
+    "final_score": 58.5,
+    "company": "Planet Image International Ltd",
+    "price": 0.87,
+    "sub_scores": {
+      "setup": 93.2,
+      "technical": 70.7,
+      "pre_pump": 57.1,
+      "fundamental": 46.3,
+      "catalyst": 55,
+      "sentiment": 50.0,
+      "market": 45.0
+    },
+    "key_indicators": {
+      "float_shares": 7128838,
+      "insider_pct": 0.78344,
+      "position_52w": 0.075,
+      "price_to_book": 0.886,
+      "rsi": 33.582086374025195,
+      "stochrsi": 39.37570559066171,
+      "volume_spike": 9.57282863271509,
+      "revenue_growth": -0.036,
+      "short_pct_float": 0.0106,
+      "sentiment": 0.0,
+      "adx": 46.285945558545784,
+      "mfi": 92.9872257165365,
+      "bb_squeeze": "False",
+      "consolidating": "True",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 2,
+      "atr": 0.1069,
+      "pre_pump_confluence": 3,
+      "pre_pump_confidence": "MEDIUM",
+      "si_change_pct": 1703.3,
+      "float_rotation": 0.002,
+      "supply_lock_score": 88
+    },
+    "penalty_deduction": 12,
+    "pre_pump_detail": {
+      "score": 57.1,
+      "signals": {
+        "short_interest_change": {
+          "score": 15,
+          "change_pct": 1703.3,
+          "shares_short": 75593,
+          "shares_short_prior": 4192,
+          "signal": "bearish_buildup"
+        },
+        "float_rotation": {
+          "score": 25,
+          "rotation": 0.002,
+          "volume": 13880,
+          "float": 7128838,
+          "signal": "normal"
+        },
+        "compliance_risk": {
+          "score": 85,
+          "below_dollar": true,
+          "price": 0.87,
+          "signal": "compliance_pump_candidate"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.06,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 88,
+          "insider_pct": 78.3,
+          "float_shares": 7128838,
+          "signal": "locked"
+        },
+        "squeeze_setup": {
+          "score": 45,
+          "short_pct_float": 1.1,
+          "days_to_cover": 0.1,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 85,
+          "position_52w": 0.075,
+          "price": 0.87,
+          "52w_low": 0.722,
+          "52w_high": 2.69,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 3,
+      "total_signals": 7,
+      "confidence": "MEDIUM"
+    }
+  },
+  {
+    "ticker": "VRME",
+    "final_score": 57.1,
+    "company": "VerifyMe Inc",
+    "price": 0.97,
+    "sub_scores": {
+      "setup": 63.5,
+      "technical": 66.0,
+      "pre_pump": 75.8,
+      "fundamental": 48.6,
+      "catalyst": 55,
+      "sentiment": 50.0,
+      "market": 55.0
+    },
+    "key_indicators": {
+      "float_shares": 9731056,
+      "insider_pct": 0.19352,
+      "position_52w": 0.441,
+      "price_to_book": 1.072,
+      "rsi": 33.627504309366884,
+      "stochrsi": 21.67268563575142,
+      "volume_spike": 0.05368287451543714,
+      "revenue_growth": -0.074,
+      "short_pct_float": 0.015,
+      "sentiment": 0.0,
+      "adx": 20.282088698997466,
+      "mfi": 6.682237661798169,
+      "bb_squeeze": "True",
+      "consolidating": "True",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 0,
+      "atr": 0.1367,
+      "pre_pump_confluence": 4,
+      "pre_pump_confidence": "MEDIUM",
+      "si_change_pct": -43.6,
+      "float_rotation": 0.277,
+      "supply_lock_score": 68
+    },
+    "penalty_deduction": 12,
+    "pre_pump_detail": {
+      "score": 75.8,
+      "signals": {
+        "short_interest_change": {
+          "score": 85,
+          "change_pct": -43.6,
+          "shares_short": 160599,
+          "shares_short_prior": 284761,
+          "signal": "bullish_covering"
+        },
+        "float_rotation": {
+          "score": 70,
+          "rotation": 0.277,
+          "volume": 2695520,
+          "float": 9731056,
+          "signal": "high_rotation"
+        },
+        "compliance_risk": {
+          "score": 95,
+          "below_dollar": true,
+          "price": 0.9714,
+          "signal": "compliance_pump_candidate"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.63,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 68,
+          "insider_pct": 19.4,
+          "float_shares": 9731056,
+          "signal": "normal"
+        },
+        "squeeze_setup": {
+          "score": 45,
+          "short_pct_float": 1.5,
+          "days_to_cover": 0.0,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 45,
+          "position_52w": 0.441,
+          "price": 0.9714,
+          "52w_low": 0.5469,
+          "52w_high": 1.5099,
+          "signal": "normal"
+        }
+      },
+      "confluence_count": 4,
+      "total_signals": 7,
+      "confidence": "MEDIUM"
+    }
+  },
+  {
+    "ticker": "YCBD",
+    "final_score": 56.6,
+    "company": "cbdMD Inc",
+    "price": 0.72,
+    "sub_scores": {
+      "setup": 76.0,
+      "technical": 50.5,
+      "pre_pump": 76.5,
+      "fundamental": 42.7,
+      "catalyst": 55,
+      "sentiment": 50.0,
+      "market": 48.8
+    },
+    "key_indicators": {
+      "float_shares": 9164521,
+      "insider_pct": 0.10589,
+      "position_52w": 0.073,
+      "price_to_book": 0.893,
+      "rsi": 48.38026605541981,
+      "stochrsi": 87.70361568853792,
+      "volume_spike": 0.06329776862019444,
+      "revenue_growth": 0.036,
+      "short_pct_float": 0.0738,
+      "sentiment": 0.0,
+      "adx": 39.52895249849416,
+      "mfi": 85.5765337078209,
+      "bb_squeeze": "False",
+      "consolidating": "False",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 4,
+      "atr": 0.1443,
+      "pre_pump_confluence": 4,
+      "pre_pump_confidence": "MEDIUM",
+      "si_change_pct": -41.3,
+      "float_rotation": 0.075,
+      "supply_lock_score": 68
+    },
+    "penalty_deduction": 12,
+    "pre_pump_detail": {
+      "score": 76.5,
+      "signals": {
+        "short_interest_change": {
+          "score": 85,
+          "change_pct": -41.3,
+          "shares_short": 725021,
+          "shares_short_prior": 1234477,
+          "signal": "bullish_covering"
+        },
+        "float_rotation": {
+          "score": 40,
+          "rotation": 0.075,
+          "volume": 687780,
+          "float": 9164521,
+          "signal": "normal"
+        },
+        "compliance_risk": {
+          "score": 95,
+          "below_dollar": true,
+          "price": 0.7234,
+          "signal": "compliance_pump_candidate"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.06,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 68,
+          "insider_pct": 10.6,
+          "float_shares": 9164521,
+          "signal": "normal"
+        },
+        "squeeze_setup": {
+          "score": 53,
+          "short_pct_float": 7.4,
+          "days_to_cover": 0.4,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 85,
+          "position_52w": 0.073,
+          "price": 0.7234,
+          "52w_low": 0.47,
+          "52w_high": 3.96,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 4,
+      "total_signals": 7,
+      "confidence": "MEDIUM"
+    }
+  }
+]
