@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "built_date": "2026-02-18 17:58:28",
+  "built_date": "2026-02-18 18:45:47",
   "training_summary": {
     "total_stocks": 341,
     "winners": 70,
@@ -32,26 +32,26 @@
   "category_weights": {
     "sentiment": 0.282,
     "fundamental": 0.296,
-    "technical": 0.422
+    "technical": 0.423
   },
   "factors": [
     {
       "feature": "reddit_sentiment",
       "winner_mean": 0.1578,
-      "loser_mean": 0.519,
+      "loser_mean": 0.5028,
       "winner_std": 0.4423,
-      "loser_std": 0.4912,
-      "separation": 0.7729,
+      "loser_std": 0.4953,
+      "separation": 0.7347,
       "direction": "lower",
       "category": "sentiment"
     },
     {
       "feature": "combined_sentiment",
       "winner_mean": 0.1578,
-      "loser_mean": 0.519,
+      "loser_mean": 0.5028,
       "winner_std": 0.4423,
-      "loser_std": 0.4912,
-      "separation": 0.7729,
+      "loser_std": 0.4953,
+      "separation": 0.7347,
       "direction": "lower",
       "category": "sentiment"
     },
@@ -98,10 +98,20 @@
     {
       "feature": "reddit_mentions",
       "winner_mean": 4.2308,
-      "loser_mean": 15.0417,
+      "loser_mean": 15.6087,
       "winner_std": 4.4376,
-      "loser_std": 51.1719,
-      "separation": 0.2977,
+      "loser_std": 52.0251,
+      "separation": 0.3082,
+      "direction": "lower",
+      "category": "sentiment"
+    },
+    {
+      "feature": "buzz_score",
+      "winner_mean": 29.1077,
+      "loser_mean": 33.6435,
+      "winner_std": 11.5939,
+      "loser_std": 18.6219,
+      "separation": 0.2924,
       "direction": "lower",
       "category": "sentiment"
     },
@@ -134,16 +144,6 @@
       "separation": 0.2674,
       "direction": "higher",
       "category": "fundamental"
-    },
-    {
-      "feature": "buzz_score",
-      "winner_mean": 29.1077,
-      "loser_mean": 32.8208,
-      "winner_std": 11.5939,
-      "loser_std": 18.6532,
-      "separation": 0.2391,
-      "direction": "lower",
-      "category": "sentiment"
     },
     {
       "feature": "total_debt",
@@ -266,22 +266,12 @@
       "category": "technical"
     },
     {
-      "feature": "sec_filings_90d",
-      "winner_mean": 6.8143,
-      "loser_mean": 8.1,
-      "winner_std": 7.8506,
-      "loser_std": 9.3442,
-      "separation": 0.149,
-      "direction": "lower",
-      "category": "fundamental"
-    },
-    {
       "feature": "adx",
-      "winner_mean": 39.2112,
-      "loser_mean": 41.7172,
-      "winner_std": 16.5382,
-      "loser_std": 17.4535,
-      "separation": 0.1474,
+      "winner_mean": 39.0872,
+      "loser_mean": 41.6666,
+      "winner_std": 16.6103,
+      "loser_std": 17.4077,
+      "separation": 0.1516,
       "direction": "lower",
       "category": "technical"
     },
@@ -303,6 +293,16 @@
       "loser_std": 0.0613,
       "separation": 0.128,
       "direction": "higher",
+      "category": "fundamental"
+    },
+    {
+      "feature": "sec_filings_90d",
+      "winner_mean": 7.0,
+      "loser_mean": 8.0786,
+      "winner_std": 7.774,
+      "loser_std": 9.3625,
+      "separation": 0.1253,
+      "direction": "lower",
       "category": "fundamental"
     },
     {
@@ -377,11 +377,11 @@
     },
     {
       "feature": "mfi",
-      "winner_mean": 43.5689,
-      "loser_mean": 45.4813,
-      "winner_std": 26.6473,
-      "loser_std": 26.5242,
-      "separation": 0.0719,
+      "winner_mean": 43.5781,
+      "loser_mean": 45.5456,
+      "winner_std": 26.6491,
+      "loser_std": 26.504,
+      "separation": 0.074,
       "direction": "lower",
       "category": "technical"
     },
