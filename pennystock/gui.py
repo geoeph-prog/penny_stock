@@ -675,13 +675,8 @@ class BacktestTab(QWidget):
         self.progress_bar.setVisible(False)
         layout.addWidget(self.progress_bar)
 
-        # Results table
+        # Results table (columns built dynamically based on hold_days)
         self.table = QTableWidget()
-        self.table.setColumnCount(10)
-        self.table.setHorizontalHeaderLabels([
-            "Rank", "Ticker", "Entry $", "Score",
-            "Setup", "Tech", "PrePump", "5d Ret", "10d Ret", "14d Ret",
-        ])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.setVisible(False)
         layout.addWidget(self.table)
@@ -739,18 +734,27 @@ class BacktestTab(QWidget):
         picks = result["picks"]
         target = result["target_date"]
         summary = result.get("summary", {})
+        hold_days = result.get("hold_days", [3, 5, 7, 10, 14])
+        hold_keys = [f"{d}d" for d in hold_days]
 
-        # Status
-        top_wr = summary.get("top_picks_14d", {}).get("win_rate", 0)
+        # Status: show best horizon win rate
+        best_wr_key = max(hold_keys, key=lambda k: summary.get(f"top_picks_{k}", {}).get("win_rate", 0))
+        best_wr = summary.get(f"top_picks_{best_wr_key}", {}).get("win_rate", 0)
         self.status_label.setText(
-            f"{target}: {len(picks)} picks | 14d Win Rate: {top_wr:.0f}%"
+            f"{target}: {len(picks)} picks | Best: {best_wr:.0f}% win @ {best_wr_key}"
         )
-        color = "#a6e3a1" if top_wr > 50 else "#f9e2af" if top_wr >= 40 else "#f38ba8"
+        color = "#a6e3a1" if best_wr > 50 else "#f9e2af" if best_wr >= 40 else "#f38ba8"
         self.status_label.setStyleSheet(f"color: {color}; font-weight: bold;")
 
-        # Populate table
+        # Build dynamic table columns
+        base_headers = ["Rank", "Ticker", "Entry $", "Score", "Setup", "Tech", "PrePump"]
+        ret_headers = [f"{k} Ret" for k in hold_keys]
+        peak_headers = [f"{k} Peak" for k in hold_keys]
+        all_headers = base_headers + ret_headers + peak_headers
+
+        self.table.setColumnCount(len(all_headers))
+        self.table.setHorizontalHeaderLabels(all_headers)
         self.table.setRowCount(len(picks))
-        hold_keys = ["5d", "10d", "14d"]
 
         for row, p in enumerate(picks):
             ss = p.get("sub_scores", {})
@@ -765,11 +769,22 @@ class BacktestTab(QWidget):
                 (f"{ss.get('technical', 0):.0f}", None),
                 (f"{ss.get('pre_pump', 0):.0f}", None),
             ]
+            # Return columns
             for key in hold_keys:
                 r = fr.get(key, {}).get("return_pct")
+                sl = fr.get(key, {}).get("stop_loss_triggered", False)
                 if r is not None:
-                    text = f"{r:+.1f}%"
+                    text = f"{r:+.1f}%{'*' if sl else ''}"
                     c = QColor("#a6e3a1") if r > 0 else QColor("#f38ba8")
+                    items.append((text, c))
+                else:
+                    items.append(("N/A", None))
+            # Peak columns
+            for key in hold_keys:
+                pk = fr.get(key, {}).get("peak_return_pct")
+                if pk is not None:
+                    text = f"{pk:+.1f}%"
+                    c = QColor("#89b4fa") if pk > 0 else QColor("#f38ba8")
                     items.append((text, c))
                 else:
                     items.append(("N/A", None))
@@ -784,17 +799,25 @@ class BacktestTab(QWidget):
         self.table.setVisible(True)
 
         # Build summary
-        self._build_summary(summary)
+        self._build_summary(summary, hold_keys)
 
-    def _build_summary(self, summary):
-        """Build summary statistics display."""
+    def _build_summary(self, summary, hold_keys=None):
+        """Build summary statistics display with stop-loss and peak data."""
+        hold_keys = hold_keys or ["3d", "5d", "7d", "10d", "14d"]
+
         while self.summary_layout.count():
             child = self.summary_layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
 
-        for group, label in [("top_picks", "Top Picks"), ("all_scored", "All Scored Stocks")]:
-            for horizon in ["5d", "10d", "14d"]:
+        for group, label in [("top_picks", "Top Picks"), ("all_scored", "All Scored")]:
+            # Group header
+            hdr = QLabel(f"<b style='color:#f5c2e7'>{label}</b>")
+            hdr.setTextFormat(Qt.TextFormat.RichText)
+            hdr.setStyleSheet("font-size: 13px; padding: 4px 5px 0 5px; border: none;")
+            self.summary_layout.addWidget(hdr)
+
+            for horizon in hold_keys:
                 key = f"{group}_{horizon}"
                 s = summary.get(key, {})
                 if s.get("count", 0) == 0:
@@ -802,17 +825,35 @@ class BacktestTab(QWidget):
 
                 wr = s["win_rate"]
                 wr_color = "#a6e3a1" if wr > 50 else "#f9e2af" if wr >= 40 else "#f38ba8"
+                sl_wr = s.get("sl_win_rate", 0)
+                sl_color = "#a6e3a1" if sl_wr > 50 else "#f9e2af" if sl_wr >= 40 else "#f38ba8"
+                avg_peak = s.get("avg_peak", 0)
+                sl_avg = s.get("sl_avg_return", 0)
+                sl_count = s.get("sl_triggered_count", 0)
+
                 text = (
-                    f"<b>{label} @ {horizon}</b>: "
-                    f"<span style='color:{wr_color}'>{wr:.0f}% win rate</span> | "
-                    f"Avg: {s['avg_return']:+.1f}% | "
-                    f"Best: {s['best']:+.1f}% | Worst: {s['worst']:+.1f}% | "
-                    f"n={s['count']}"
+                    f"  <b>{horizon}</b>: "
+                    f"<span style='color:{wr_color}'>{wr:.0f}%W</span> "
+                    f"Avg:{s['avg_return']:+.1f}% "
+                    f"Peak:{avg_peak:+.1f}% "
+                    f"| SL: <span style='color:{sl_color}'>{sl_wr:.0f}%W</span> "
+                    f"Avg:{sl_avg:+.1f}% "
+                    f"({sl_count} hit) "
+                    f"| n={s['count']}"
                 )
                 lbl = QLabel(text)
                 lbl.setTextFormat(Qt.TextFormat.RichText)
-                lbl.setStyleSheet("font-size: 12px; padding: 2px 5px; border: none;")
+                lbl.setStyleSheet("font-size: 11px; padding: 1px 5px 1px 15px; border: none;")
                 self.summary_layout.addWidget(lbl)
+
+        # Legend
+        legend = QLabel(
+            "<span style='color:#6c7086'>W=Win Rate | Peak=Avg best return during hold | "
+            "SL=With stop-loss | * in table = stop-loss triggered</span>"
+        )
+        legend.setTextFormat(Qt.TextFormat.RichText)
+        legend.setStyleSheet("font-size: 10px; padding: 4px 5px; border: none;")
+        self.summary_layout.addWidget(legend)
 
         self.summary_frame.setVisible(True)
 

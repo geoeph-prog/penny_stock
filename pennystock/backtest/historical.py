@@ -38,7 +38,7 @@ from pennystock.config import (
     KILL_RECENT_SPIKE_PCT, KILL_RECENT_SPIKE_DAYS,
     KILL_PUMP_DUMP_SPIKE_RATIO, KILL_PUMP_DUMP_SPIKE_WINDOW,
     KILL_PUMP_DUMP_DECLINE_PCT,
-    BACKTEST_WINNER_THRESHOLD,
+    BACKTEST_WINNER_THRESHOLD, BACKTEST_STOP_LOSS_PCT,
 )
 from pennystock.data.finviz_client import get_penny_stocks
 from pennystock.data.yahoo_client import get_stock_info, get_batch_history
@@ -76,7 +76,8 @@ def run_historical_backtest(
     Returns:
         Dict with picks, forward returns, and summary statistics.
     """
-    hold_days = hold_days or [5, 10, 14]
+    from pennystock.config import BACKTEST_HOLD_DAYS
+    hold_days = hold_days or BACKTEST_HOLD_DAYS
     target = pd.Timestamp(target_date_str)
     start_time = time.time()
     lines = []
@@ -372,28 +373,78 @@ def _historical_kill_check(hist_before):
 
 
 def _compute_forward_returns(hist_full, entry_date, entry_price, hold_days):
-    """Compute returns at each hold-day horizon after entry."""
+    """
+    Compute returns at each hold-day horizon after entry.
+    Also tracks:
+    - peak_return_pct: best return seen up to that horizon
+    - peak_day: trading day when peak occurred
+    - stop_loss_triggered: whether stop-loss was hit before the horizon
+    - stop_loss_day: which day it triggered (None if not triggered)
+    - return_with_sl: return if using stop-loss (capped at stop-loss level)
+    """
     hist_after = hist_full[hist_full.index > entry_date]
     forward = {}
+    max_horizon = max(hold_days) if hold_days else 14
+
+    # Pre-compute daily returns and track peak/stop-loss across full period
+    stop_loss_day = None
+    stop_loss_pct = BACKTEST_STOP_LOSS_PCT  # e.g. -15.0
 
     for days in hold_days:
         key = f"{days}d"
         if len(hist_after) >= days:
             exit_price = float(hist_after["Close"].iloc[days - 1])
             ret = ((exit_price - entry_price) / entry_price) * 100
+
+            # Track peak (best close) within this horizon
+            closes_in_window = hist_after["Close"].iloc[:days]
+            highs_in_window = hist_after["High"].iloc[:days] if "High" in hist_after.columns else closes_in_window
+            peak_price = float(highs_in_window.max())
+            peak_return = ((peak_price - entry_price) / entry_price) * 100
+
+            # Find which day the peak occurred
+            peak_idx = highs_in_window.idxmax()
+            peak_day_num = list(hist_after.index[:days]).index(peak_idx) + 1
+
+            # Check if stop-loss was triggered within this window
+            sl_triggered = False
+            sl_day = None
+            return_with_sl = ret  # default: same as actual
+
+            if stop_loss_pct < 0:
+                lows_in_window = hist_after["Low"].iloc[:days] if "Low" in hist_after.columns else closes_in_window
+                for d_idx in range(days):
+                    day_low = float(lows_in_window.iloc[d_idx])
+                    day_ret = ((day_low - entry_price) / entry_price) * 100
+                    if day_ret <= stop_loss_pct:
+                        sl_triggered = True
+                        sl_day = d_idx + 1
+                        return_with_sl = stop_loss_pct  # sold at stop
+                        break
+
             forward[key] = {
                 "return_pct": round(ret, 2),
                 "exit_price": round(exit_price, 4),
                 "win": ret > 0,
+                "peak_return_pct": round(peak_return, 2),
+                "peak_day": peak_day_num,
+                "stop_loss_triggered": sl_triggered,
+                "stop_loss_day": sl_day,
+                "return_with_sl": round(return_with_sl, 2),
             }
         else:
-            forward[key] = {"return_pct": None, "exit_price": None, "win": None}
+            forward[key] = {
+                "return_pct": None, "exit_price": None, "win": None,
+                "peak_return_pct": None, "peak_day": None,
+                "stop_loss_triggered": None, "stop_loss_day": None,
+                "return_with_sl": None,
+            }
 
     return forward
 
 
 def _compute_summary(top_picks, all_scored, hold_days):
-    """Compute win rates and average returns across picks."""
+    """Compute win rates and average returns across picks, including stop-loss stats."""
     summary = {}
 
     for group_name, picks in [("top_picks", top_picks), ("all_scored", all_scored)]:
@@ -404,8 +455,25 @@ def _compute_summary(top_picks, all_scored, hold_days):
                 for p in picks
                 if p["forward_returns"].get(key, {}).get("return_pct") is not None
             ]
+            sl_returns = [
+                p["forward_returns"][key]["return_with_sl"]
+                for p in picks
+                if p["forward_returns"].get(key, {}).get("return_with_sl") is not None
+            ]
+            peaks = [
+                p["forward_returns"][key]["peak_return_pct"]
+                for p in picks
+                if p["forward_returns"].get(key, {}).get("peak_return_pct") is not None
+            ]
+            sl_triggered = [
+                p["forward_returns"][key]["stop_loss_triggered"]
+                for p in picks
+                if p["forward_returns"].get(key, {}).get("stop_loss_triggered") is not None
+            ]
+
             wins = [r for r in returns if r > 0]
             big_wins = [r for r in returns if r >= BACKTEST_WINNER_THRESHOLD * 100]
+            sl_wins = [r for r in sl_returns if r > 0]
 
             if returns:
                 summary[f"{group_name}_{key}"] = {
@@ -416,11 +484,21 @@ def _compute_summary(top_picks, all_scored, hold_days):
                     "median_return": round(sorted(returns)[len(returns) // 2], 2),
                     "best": round(max(returns), 2),
                     "worst": round(min(returns), 2),
+                    # Stop-loss adjusted metrics
+                    "sl_win_rate": round(len(sl_wins) / len(sl_returns) * 100, 1) if sl_returns else 0,
+                    "sl_avg_return": round(sum(sl_returns) / len(sl_returns), 2) if sl_returns else 0,
+                    "sl_worst": round(min(sl_returns), 2) if sl_returns else 0,
+                    "sl_triggered_count": sum(1 for s in sl_triggered if s),
+                    # Peak return (best possible exit)
+                    "avg_peak": round(sum(peaks) / len(peaks), 2) if peaks else 0,
+                    "best_peak": round(max(peaks), 2) if peaks else 0,
                 }
             else:
                 summary[f"{group_name}_{key}"] = {
                     "count": 0, "win_rate": 0, "big_win_rate": 0,
                     "avg_return": 0, "median_return": 0, "best": 0, "worst": 0,
+                    "sl_win_rate": 0, "sl_avg_return": 0, "sl_worst": 0,
+                    "sl_triggered_count": 0, "avg_peak": 0, "best_peak": 0,
                 }
 
     return summary
@@ -483,40 +561,58 @@ def _print_results(_log, picks, summary, target_date, hold_days):
         _log(f"      Setup:{ss['setup']:.0f} Tech:{ss['technical']:.0f} "
              f"PrePump:{ss['pre_pump']:.0f} Fund:{ss['fundamental']:.0f}")
 
-        # Forward returns
+        # Forward returns with peak info
         ret_parts = []
         for key in hold_keys:
             fr = p["forward_returns"].get(key, {})
             r = fr.get("return_pct")
             if r is not None:
                 marker = "W" if r > 0 else "L"
-                ret_parts.append(f"{key}:{r:+.1f}%({marker})")
+                peak = fr.get("peak_return_pct", 0)
+                sl = fr.get("stop_loss_triggered", False)
+                sl_marker = " SL!" if sl else ""
+                ret_parts.append(f"{key}:{r:+.1f}%({marker}) pk:{peak:+.1f}%{sl_marker}")
             else:
                 ret_parts.append(f"{key}:N/A")
         _log(f"      Forward: {' | '.join(ret_parts)}")
 
     # Summary stats
     _log(f"\n{'=' * 70}")
-    _log(f"  BACKTEST SUMMARY")
+    _log(f"  BACKTEST SUMMARY  (Stop-loss: {BACKTEST_STOP_LOSS_PCT}%)")
     _log(f"{'=' * 70}")
 
     _log(f"\n  Top {len(picks)} Picks Performance:")
+    _log(f"  {'Hold':>4}  {'WinRate':>7}  {'AvgRet':>7}  {'Best':>7}  {'Worst':>7}"
+         f"  {'AvgPeak':>7}  {'SL WinR':>7}  {'SL Avg':>7}  {'SL#':>3}")
+    _log(f"  {'-'*4}  {'-'*7}  {'-'*7}  {'-'*7}  {'-'*7}  {'-'*7}  {'-'*7}  {'-'*7}  {'-'*3}")
     for key in hold_keys:
         s = summary.get(f"top_picks_{key}", {})
         if s.get("count", 0) > 0:
-            _log(f"    {key:>4}: Win Rate {s['win_rate']:5.1f}% | "
-                 f"Avg {s['avg_return']:+6.1f}% | "
-                 f"Best {s['best']:+6.1f}% | Worst {s['worst']:+6.1f}%")
+            _log(f"  {key:>4}  {s['win_rate']:6.1f}%  {s['avg_return']:+6.1f}%  "
+                 f"{s['best']:+6.1f}%  {s['worst']:+6.1f}%  "
+                 f"{s['avg_peak']:+6.1f}%  {s['sl_win_rate']:6.1f}%  "
+                 f"{s['sl_avg_return']:+6.1f}%  {s['sl_triggered_count']:>3}")
 
     all_count = summary.get(f"all_scored_{hold_keys[0]}", {}).get("count", 0)
     if all_count > len(picks):
         _log(f"\n  All {all_count} Scored Stocks Performance:")
+        _log(f"  {'Hold':>4}  {'WinRate':>7}  {'AvgRet':>7}  {'Best':>7}  {'Worst':>7}"
+             f"  {'AvgPeak':>7}  {'SL WinR':>7}  {'SL Avg':>7}  {'SL#':>3}")
+        _log(f"  {'-'*4}  {'-'*7}  {'-'*7}  {'-'*7}  {'-'*7}  {'-'*7}  {'-'*7}  {'-'*7}  {'-'*3}")
         for key in hold_keys:
             s = summary.get(f"all_scored_{key}", {})
             if s.get("count", 0) > 0:
-                _log(f"    {key:>4}: Win Rate {s['win_rate']:5.1f}% | "
-                     f"Avg {s['avg_return']:+6.1f}% | "
-                     f"Best {s['best']:+6.1f}% | Worst {s['worst']:+6.1f}%")
+                _log(f"  {key:>4}  {s['win_rate']:6.1f}%  {s['avg_return']:+6.1f}%  "
+                     f"{s['best']:+6.1f}%  {s['worst']:+6.1f}%  "
+                     f"{s['avg_peak']:+6.1f}%  {s['sl_win_rate']:6.1f}%  "
+                     f"{s['sl_avg_return']:+6.1f}%  {s['sl_triggered_count']:>3}")
+
+    _log(f"\n  INTERPRETATION:")
+    _log(f"    - WinRate = % of picks with positive return at that horizon")
+    _log(f"    - AvgPeak = average best return seen DURING the hold period")
+    _log(f"    - SL WinR/Avg = performance WITH {BACKTEST_STOP_LOSS_PCT}% stop-loss active")
+    _log(f"    - SL# = how many picks hit the stop-loss")
+    _log(f"    - Compare AvgRet vs SL Avg to see if stop-loss helps")
 
     _log(f"\n  LIMITATIONS:")
     _log(f"    - Survivorship bias: only tests stocks in current Finviz universe")

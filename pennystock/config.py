@@ -3,7 +3,7 @@
 # ── Algorithm Version ─────────────────────────────────────────────
 # Bump on every change. Major.Minor.Patch
 # Major = new strategy/architecture, Minor = new signals, Patch = tuning
-ALGORITHM_VERSION = "3.4.0"
+ALGORITHM_VERSION = "3.5.0"
 
 # ── Price & Volume Filters ──────────────────────────────────────────
 MIN_PRICE = 0.10   # Raised from 0.05 -- sub-dime stocks are untradeable garbage
@@ -400,9 +400,13 @@ SECTOR_ETFS = {
 
 # ── Backtesting ─────────────────────────────────────────────────────
 BACKTEST_LOOKBACK_MONTHS = 12
-BACKTEST_HOLD_DAYS = [5, 10, 20, 30]  # Evaluate returns at these horizons
-BACKTEST_WINNER_THRESHOLD = 0.20      # 20% gain = winner
-BACKTEST_LOSER_THRESHOLD = -0.15      # 15% loss = loser
+BACKTEST_HOLD_DAYS = [3, 5, 7, 10, 14]  # Finer-grained horizons for optimal exit timing
+BACKTEST_WINNER_THRESHOLD = 0.20         # 20% gain = winner
+BACKTEST_LOSER_THRESHOLD = -0.15         # 15% loss = loser
+
+# Stop-loss simulation: if a pick drops below this % from entry, "sell" at stop
+# Set to 0 to disable stop-loss simulation
+BACKTEST_STOP_LOSS_PCT = -15.0  # -15% stop-loss (negative number)
 
 # ── Caching ─────────────────────────────────────────────────────────
 CACHE_DIR = ".cache"
