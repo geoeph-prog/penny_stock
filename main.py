@@ -34,22 +34,30 @@ def cmd_build(args):
 
 def cmd_pick(args):
     from pennystock.algorithm import pick_stocks
+    from pennystock.config import ALGORITHM_VERSION
     picks = pick_stocks(top_n=args.top_n)
     if not picks:
         print("\nNo picks found. Make sure you've built the algorithm first.")
         return
 
     print("\n" + "=" * 70)
-    print(f"  TOP {len(picks)} PENNY STOCK PICKS")
+    print(f"  TOP {len(picks)} PENNY STOCK PICKS (v{ALGORITHM_VERSION} MEGA-ALGORITHM)")
     print("=" * 70)
     for i, pick in enumerate(picks, 1):
         ss = pick.get("sub_scores", {})
-        print(f"\n  #{i}. {pick['ticker']} - ${pick['price']:.2f}  (Score: {pick['final_score']:.1f})")
+        ki = pick.get("key_indicators", {})
+        confidence = "LOW" if pick["final_score"] < 50 else "MEDIUM" if pick["final_score"] < 65 else "HIGH"
+        print(f"\n  #{i}. {pick['ticker']} - ${pick['price']:.2f}  "
+              f"(Score: {pick['final_score']:.1f}, Confidence: {confidence})")
         if pick.get("company"):
             print(f"      {pick['company']}")
-        print(f"      Tech:{ss.get('technical',0):.0f} | Sent:{ss.get('sentiment',0):.0f} | "
-              f"Fund:{ss.get('fundamental',0):.0f} | Cat:{ss.get('catalyst',0):.0f} | "
-              f"Mkt:{ss.get('market',0):.0f}")
+        print(f"      Setup:{ss.get('setup',0):.0f} | Tech:{ss.get('technical',0):.0f} | "
+              f"PrePump:{ss.get('pre_pump',0):.0f} | Fund:{ss.get('fundamental',0):.0f} | "
+              f"Cat:{ss.get('catalyst',0):.0f}")
+        print(f"      Pre-Pump: confluence={ki.get('pre_pump_confluence', 0)}/7 "
+              f"confidence={ki.get('pre_pump_confidence', 'N/A')}")
+        if pick.get("penalty_deduction", 0) > 0:
+            print(f"      Penalties: -{pick['penalty_deduction']}pts")
     print("=" * 70)
 
 

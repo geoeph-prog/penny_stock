@@ -1,5 +1,10 @@
 """Central configuration for the Penny Stock Analyzer."""
 
+# ── Algorithm Version ─────────────────────────────────────────────
+# Bump on every change. Major.Minor.Patch
+# Major = new strategy/architecture, Minor = new signals, Patch = tuning
+ALGORITHM_VERSION = "3.1.0"
+
 # ── Price & Volume Filters ──────────────────────────────────────────
 MIN_PRICE = 0.10   # Raised from 0.05 -- sub-dime stocks are untradeable garbage
 MAX_PRICE = 1.00
@@ -121,7 +126,9 @@ KILL_PUMP_DUMP_DECLINE_PCT = 0.20    # Current price must be <20% of peak
 # ═══════════════════════════════════════════════════════════════════
 
 # Going concern -> score penalty instead of kill
-PENALTY_GOING_CONCERN = 25          # Points deducted from final score (0-100)
+# v3.0: Reduced from 25 to 12. Almost every penny stock has going concern.
+# YIBO had going concern and pumped 60%. It's background noise, not a signal.
+PENALTY_GOING_CONCERN = 12          # Points deducted from final score (0-100)
 
 # Delisting / compliance notice -> score penalty instead of kill
 PENALTY_DELISTING_NOTICE = 30       # Raised from 20 -- XPON/BYAH both had notices and survived
@@ -154,12 +161,24 @@ PENALTY_MICRO_EMPLOYEES_THRESHOLD = 10  # < 10 FTEs = suspicious
 # ═══════════════════════════════════════════════════════════════════
 
 # -- Category-level weights (must sum to 1.0) ----------------------
+# v3.0: Rebalanced for pre-pump detection. Setup + pre-pump signals dominate.
+# Fundamentals matter less for penny stocks (they're ALL garbage companies).
+# The question is: will it pump? Not: is it a good company?
 WEIGHTS = {
-    "setup":        0.40,   # Float, insider ownership, proximity-to-low, P/B
-    "technical":    0.25,   # RSI, MACD, StochRSI, volume, price trend
-    "fundamental":  0.25,   # Revenue growth, short interest, cash position
+    "setup":        0.25,   # Float, insider ownership, proximity-to-low, P/B
+    "technical":    0.20,   # RSI, MACD, StochRSI, volume, price trend, ADX
+    "pre_pump":     0.35,   # NEW: Short interest change, float rotation, volume accel, compliance risk
+    "fundamental":  0.10,   # Revenue growth, short interest, cash position
     "catalyst":     0.10,   # News-based catalysts
 }
+
+# Pre-pump conviction bonus: when the pre-pump module has HIGH confidence
+# (5+ independent signals bullish), add bonus points to final score.
+# Rationale: YIBO had 5/7 bullish pre-pump signals and pumped 60%.
+# When multiple independent signals agree, we should trust the setup
+# even if fundamentals are garbage (they're ALWAYS garbage for penny stocks).
+PRE_PUMP_HIGH_CONVICTION_BONUS = 8    # Points added when pre-pump confidence is HIGH
+PRE_PUMP_MEDIUM_CONVICTION_BONUS = 3  # Points added when pre-pump confidence is MEDIUM
 
 # -- Setup sub-weights (within the 40% setup allocation) -----------
 SETUP_WEIGHTS = {
