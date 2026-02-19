@@ -1,0 +1,303 @@
+Penny Stock Analyzer v3.1.1
+Run type: pick
+Timestamp: 2026-02-19 10:50:50
+======================================================================
+
+============================================================
+PICKING TOP PENNY STOCKS (v3.1.1: MEGA-ALGORITHM)
+Using algorithm from 2026-02-19 10:17:12
+Weights: setup=25% tech=20% pre_pump=35% fund=10% cat=10%
+============================================================
+Discovering current penny stocks...
+Found 218 stocks. Running Stage 1 technical screen...
+  Stage 1: 25/218 ~222s remaining
+  Stage 1: 50/218 ~110s remaining
+  Stage 1: 75/218 ~70s remaining
+  Stage 1: 100/218 ~48s remaining
+  Stage 1: 125/218 ~33s remaining
+  Stage 1: 150/218 ~22s remaining
+  Stage 1: 175/218 ~13s remaining
+  Stage 1: 200/218 ~5s remaining
+Stage 1 done: 217 stocks scored
+Pre-downloading Reddit posts (bulk mode)...
+Stage 2: Deep analysis on top 50 stocks...
+  Running LAYER 1 kill filters + LAYER 2 scoring...
+  KILLED SOPA: RECENT SPIKE: Stock had a 400% spike (high/low range) in the last 20 trading day...
+  KILLED AGL: RECENT SPIKE: Stock had a 203% spike (high/low range) in the last 20 trading day...
+  PENALTY SKIN: -12pts (1 issue(s))
+  KILLED DXST: RECENT SPIKE: Stock had a 1431% spike (high/low range) in the last 20 trading da...
+  KILLED SLQT: RECENT SPIKE: Stock had a 112% spike (high/low range) in the last 20 trading day...
+  KILLED RPGL: RECENT SPIKE: Stock had a 671% spike (high/low range) in the last 20 trading day...
+  PENALTY PDSB: -12pts (1 issue(s))
+  KILLED LASE: RECENT SPIKE: Stock had a 611% spike (high/low range) in the last 20 trading day...
+  KILLED AZI: RECENT SPIKE: Stock had a 871% spike (high/low range) in the last 20 trading day...
+  KILLED FFAI: RECENT SPIKE: Stock had a 133% spike (high/low range) in the last 20 trading day...
+  KILLED ONCO: RECENT SPIKE: Stock had a 200% spike (high/low range) in the last 20 trading day...
+  KILLED ABP: RECENT SPIKE: Stock had a 516% spike (high/low range) in the last 20 trading day...
+  KILLED MYNZ: RECENT SPIKE: Stock had a 171% spike (high/low range) in the last 20 trading day...
+  KILLED CANG: RECENT SPIKE: Stock had a 86% spike (high/low range) in the last 20 trading days...
+  KILLED OSRH: RECENT SPIKE: Stock had a 104% spike (high/low range) in the last 20 trading day...
+  KILLED ALIT: RECENT SPIKE: Stock had a 134% spike (high/low range) in the last 20 trading day...
+  KILLED UPXI: RECENT SPIKE: Stock had a 229% spike (high/low range) in the last 20 trading day...
+  KILLED POAS: RECENT SPIKE: Stock had a 1295% spike (high/low range) in the last 20 trading da...
+  KILLED AIIO: RECENT SPIKE: Stock had a 193% spike (high/low range) in the last 20 trading day...
+  KILLED ELPW: RECENT SPIKE: Stock had a 5296% spike (high/low range) in the last 20 trading da...
+  KILLED HCWB: RECENT SPIKE: Stock had a 212% spike (high/low range) in the last 20 trading day...
+  KILLED IVDA: RECENT SPIKE: Stock had a 368% spike (high/low range) in the last 20 trading day...
+  KILLED CLGN: RECENT SPIKE: Stock had a 243% spike (high/low range) in the last 20 trading day...
+  KILLED OPTT: RECENT SPIKE: Stock had a 89% spike (high/low range) in the last 20 trading days...
+  PENALTY BARK: -27pts (2 issue(s))
+  Stage 2: 25/50 (22 killed, 3 scored)
+  PENALTY FURY: -47pts (3 issue(s))
+  KILLED WWR: PUMP-AND-DUMP AFTERMATH: Stock spiked 2x in 4 trading days (peak $3.48), then cr...
+  KILLED ZNB: RECENT SPIKE: Stock had a 537% spike (high/low range) in the last 20 trading day...
+  PENALTY GETY: -15pts (1 issue(s))
+  PENALTY FSP: -12pts (1 issue(s))
+  Stage 2: 30/50 (24 killed, 6 scored)
+  KILLED LHSW: RECENT SPIKE: Stock had a 578% spike (high/low range) in the last 20 trading day...
+  KILLED GPRO: PUMP-AND-DUMP AFTERMATH: Stock spiked 2x in 20 trading days (peak $2.88), then c...
+  KILLED ZONE: RECENT SPIKE: Stock had a 81% spike (high/low range) in the last 20 trading days...
+  KILLED ATON: RECENT SPIKE: Stock had a 129% spike (high/low range) in the last 20 trading day...
+  KILLED GTBP: RECENT SPIKE: Stock had a 85% spike (high/low range) in the last 20 trading days...
+  KILLED NXXT: CASH DEATH SPIRAL: Only 0.6 months of cash remaining ($653,869 cash / $1,166,927...
+  KILLED CAN: PUMP-AND-DUMP AFTERMATH: Stock spiked 2x in 14 trading days (peak $2.05), then c...
+  KILLED ERNA: RECENT SPIKE: Stock had a 374% spike (high/low range) in the last 20 trading day...
+  KILLED LIMN: RECENT SPIKE: Stock had a 1158% spike (high/low range) in the last 20 trading da...
+  KILLED IMTE: RECENT SPIKE: Stock had a 90% spike (high/low range) in the last 20 trading days...
+  KILLED QNCX: RECENT SPIKE: Stock had a 2660% spike (high/low range) in the last 20 trading da...
+  KILLED ZSPC: RECENT SPIKE: Stock had a 144% spike (high/low range) in the last 20 trading day...
+  PENALTY QSI: -27pts (2 issue(s))
+  KILLED AIOS: RECENT SPIKE: Stock had a 274% spike (high/low range) in the last 20 trading day...
+  KILLED BRTX: RECENT SPIKE: Stock had a 444% spike (high/low range) in the last 20 trading day...
+  KILLED BHAT: RECENT SPIKE: Stock had a 227% spike (high/low range) in the last 20 trading day...
+  KILLED DKI: RECENT SPIKE: Stock had a 270% spike (high/low range) in the last 20 trading day...
+  KILLED HAIN: RECENT SPIKE: Stock had a 80% spike (high/low range) in the last 20 trading days...
+  PENALTY PMCB: -32pts (2 issue(s))
+  KILLED SMTK: RECENT SPIKE: Stock had a 391% spike (high/low range) in the last 20 trading day...
+============================================================
+RESULTS: 42 stocks KILLED by quality filters, 8 survived scoring
+  6 stocks scored below minimum threshold (40pts) and were excluded
+TOP 2 PICKS (found in 238s)
+============================================================
+  #1. GETY - $0.76 (Score: 50.8, Confidence: MEDIUM)
+      Getty Images Holdings Inc
+      Setup:69 Tech:48 PrePump:72 Fund:54 Cat:55
+      Float: 194,930,301 | Insider: 106% | 52w Pos: 0.0 | P/B: 0.497 | RSI: 18.733168372772752 | StochRSI: 0.0
+      Pre-Pump: confluence=4/7 confidence=MEDIUM SI-change=-12.3% float-rot=0.009
+      Bullish Pre-Pump: compliance_risk(70) | supply_lock(75) | squeeze_setup(85) | beaten_down(85)
+      Tech Signals: SQUEEZE-SETUP
+      ADX: 50.77787322271 | MFI: 26.569328655951622
+      Stop: $0.5524 (27.3% risk)
+      Penalties: -15pts (1 issue(s))
+        EXCESSIVE FLOAT (-15pts): 194.9M shares float (> 100M max). Harder to squeeze but not impossible wit
+  #2. SKIN - $0.92 (Score: 45.5, Confidence: LOW)
+      Beauty Health Company
+      Setup:46 Tech:56 PrePump:63 Fund:42 Cat:55
+      Float: 82,576,081 | Insider: 12% | 52w Pos: 0.073 | P/B: 1.781 | RSI: 5.962151015513101 | StochRSI: 0.0
+      Pre-Pump: confluence=3/7 confidence=MEDIUM SI-change=-3.8% float-rot=0.008
+      Bullish Pre-Pump: compliance_risk(70) | squeeze_setup(80) | beaten_down(85)
+      Tech Signals: SQUEEZE-SETUP | DILUTION-RISK(100)
+      ADX: 57.88753336319581 | MFI: 27.644713039520568
+      Stop: $0.7406 (19.5% risk)
+      Penalties: -12pts (1 issue(s))
+        GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in 
+============================================================
+
+
+======================================================================
+DETAILED RESULTS (JSON)
+======================================================================
+[
+  {
+    "ticker": "GETY",
+    "final_score": 50.8,
+    "company": "Getty Images Holdings Inc",
+    "price": 0.76,
+    "sub_scores": {
+      "setup": 69.0,
+      "technical": 47.6,
+      "pre_pump": 72.0,
+      "fundamental": 54.0,
+      "catalyst": 55,
+      "sentiment": 50.0,
+      "market": 47.0
+    },
+    "key_indicators": {
+      "float_shares": 194930301,
+      "insider_pct": 1.05682,
+      "position_52w": 0.0,
+      "price_to_book": 0.497,
+      "rsi": 18.733168372772752,
+      "stochrsi": 0.0,
+      "volume_spike": 0.22773555721509212,
+      "revenue_growth": -0.002,
+      "short_pct_float": 0.32279998,
+      "sentiment": 0.0,
+      "adx": 50.77787322271,
+      "mfi": 26.569328655951622,
+      "bb_squeeze": "False",
+      "consolidating": "False",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": true,
+      "dilution_filings": 0,
+      "atr": 0.1038,
+      "pre_pump_confluence": 4,
+      "pre_pump_confidence": "MEDIUM",
+      "si_change_pct": -12.3,
+      "float_rotation": 0.009,
+      "supply_lock_score": 75
+    },
+    "penalty_deduction": 15,
+    "pre_pump_detail": {
+      "score": 72.0,
+      "signals": {
+        "short_interest_change": {
+          "score": 55,
+          "change_pct": -12.3,
+          "shares_short": 10726452,
+          "shares_short_prior": 12233008,
+          "signal": "neutral"
+        },
+        "float_rotation": {
+          "score": 25,
+          "rotation": 0.009,
+          "volume": 1758760,
+          "float": 194930301,
+          "signal": "normal"
+        },
+        "compliance_risk": {
+          "score": 70,
+          "below_dollar": true,
+          "price": 0.7601,
+          "signal": "normal"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 1.14,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 75,
+          "insider_pct": 105.7,
+          "float_shares": 194930301,
+          "signal": "locked"
+        },
+        "squeeze_setup": {
+          "score": 85,
+          "short_pct_float": 32.3,
+          "days_to_cover": 8.3,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 85,
+          "position_52w": 0.0,
+          "price": 0.7601,
+          "52w_low": 0.7591,
+          "52w_high": 3.21,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 4,
+      "total_signals": 7,
+      "confidence": "MEDIUM"
+    }
+  },
+  {
+    "ticker": "SKIN",
+    "final_score": 45.5,
+    "company": "Beauty Health Company",
+    "price": 0.92,
+    "sub_scores": {
+      "setup": 46.5,
+      "technical": 56.4,
+      "pre_pump": 62.8,
+      "fundamental": 41.7,
+      "catalyst": 55,
+      "sentiment": 50.0,
+      "market": 45.8
+    },
+    "key_indicators": {
+      "float_shares": 82576081,
+      "insider_pct": 0.116569996,
+      "position_52w": 0.073,
+      "price_to_book": 1.781,
+      "rsi": 5.962151015513101,
+      "stochrsi": 0.0,
+      "volume_spike": 0.328374656671263,
+      "revenue_growth": -0.103,
+      "short_pct_float": 0.2768,
+      "sentiment": 0.0,
+      "adx": 57.88753336319581,
+      "mfi": 27.644713039520568,
+      "bb_squeeze": "False",
+      "consolidating": "False",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": true,
+      "dilution_filings": 100,
+      "atr": 0.0897,
+      "pre_pump_confluence": 3,
+      "pre_pump_confidence": "MEDIUM",
+      "si_change_pct": -3.8,
+      "float_rotation": 0.008,
+      "supply_lock_score": 50
+    },
+    "penalty_deduction": 12,
+    "pre_pump_detail": {
+      "score": 62.8,
+      "signals": {
+        "short_interest_change": {
+          "score": 55,
+          "change_pct": -3.8,
+          "shares_short": 16045337,
+          "shares_short_prior": 16683970,
+          "signal": "neutral"
+        },
+        "float_rotation": {
+          "score": 25,
+          "rotation": 0.008,
+          "volume": 701770,
+          "float": 82576081,
+          "signal": "normal"
+        },
+        "compliance_risk": {
+          "score": 70,
+          "below_dollar": true,
+          "price": 0.9191,
+          "signal": "normal"
+        },
+        "volume_acceleration": {
+          "score": 55,
+          "ratio": 1.25,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 50,
+          "insider_pct": 11.7,
+          "float_shares": 82576081,
+          "signal": "normal"
+        },
+        "squeeze_setup": {
+          "score": 80,
+          "short_pct_float": 27.7,
+          "days_to_cover": 43.0,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 85,
+          "position_52w": 0.073,
+          "price": 0.9191,
+          "52w_low": 0.78,
+          "52w_high": 2.69,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 3,
+      "total_signals": 7,
+      "confidence": "MEDIUM"
+    }
+  }
+]
