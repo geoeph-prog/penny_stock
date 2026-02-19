@@ -1,9 +1,10 @@
 """
 PyQt6 GUI for the Penny Stock Analyzer.
 
-Two tabs:
+Three tabs:
   Tab 1 - Build Algorithm: Learn from recent winners vs losers
   Tab 2 - Pick Stocks: Apply algorithm to find today's top 5
+  Tab 3 - Analyze Stock: Comprehensive deep dive on a single ticker
 """
 
 import sys
@@ -13,11 +14,13 @@ from PyQt6.QtCore import Qt, QThread, pyqtSignal
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QTabWidget, QWidget, QVBoxLayout,
     QHBoxLayout, QPushButton, QTextEdit, QTableWidget, QTableWidgetItem,
-    QProgressBar, QLabel, QHeaderView,
+    QProgressBar, QLabel, QHeaderView, QLineEdit, QScrollArea, QFrame,
+    QGridLayout, QSplitter, QSizePolicy,
 )
 from PyQt6.QtGui import QFont, QColor
 
 from pennystock import __version__
+from pennystock.config import ALGORITHM_VERSION
 from pennystock.algorithm import build_algorithm, pick_stocks, load_algorithm
 
 
@@ -102,6 +105,18 @@ QLabel {
     color: #cdd6f4;
     font-size: 13px;
 }
+QLineEdit {
+    background-color: #11111b;
+    color: #cdd6f4;
+    border: 1px solid #45475a;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+}
+QLineEdit:focus {
+    border: 2px solid #89b4fa;
+}
 """
 
 
@@ -118,8 +133,12 @@ class Worker(QThread):
         self.kwargs = kwargs
 
     def run(self):
-        result = self.func(*self.args, progress_callback=self.progress.emit, **self.kwargs)
-        self.finished.emit(result)
+        try:
+            result = self.func(*self.args, progress_callback=self.progress.emit, **self.kwargs)
+            self.finished.emit(result)
+        except Exception as e:
+            self.progress.emit(f"\nERROR: {e}")
+            self.finished.emit(None)
 
 
 # ── Tab 1: Build Algorithm ──────────────────────────────────────────
@@ -345,17 +364,293 @@ class PickStocksTab(QWidget):
             return QColor("#f38ba8")   # Red
 
 
+# ── Tab 3: Analyze Stock (Deep Dive) ──────────────────────────────
+class AnalyzeStockTab(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.worker = None
+        self.current_result = None
+        layout = QVBoxLayout()
+
+        # Header
+        header = QLabel("Analyze Stock  —  Deep Dive")
+        header.setStyleSheet("font-size: 18px; font-weight: bold; color: #f5c2e7; padding: 10px;")
+        layout.addWidget(header)
+
+        desc = QLabel(
+            "Enter a ticker for comprehensive analysis: price action, fundamentals, "
+            "pre-pump signals, technicals, sentiment, news, and full algorithm scoring."
+        )
+        desc.setStyleSheet("color: #a6adc8; padding: 0 10px 5px 10px;")
+        layout.addWidget(desc)
+
+        # Ticker input row
+        input_row = QHBoxLayout()
+        ticker_label = QLabel("Ticker:")
+        ticker_label.setStyleSheet("font-size: 14px; font-weight: bold; padding-left: 10px;")
+        input_row.addWidget(ticker_label)
+
+        self.ticker_input = QLineEdit()
+        self.ticker_input.setPlaceholderText("e.g. GETY")
+        self.ticker_input.setMaximumWidth(150)
+        self.ticker_input.setStyleSheet("font-size: 16px; font-weight: bold;")
+        self.ticker_input.returnPressed.connect(self._start_analyze)
+        input_row.addWidget(self.ticker_input)
+
+        self.analyze_btn = QPushButton("Analyze")
+        self.analyze_btn.clicked.connect(self._start_analyze)
+        input_row.addWidget(self.analyze_btn)
+
+        self.refresh_btn = QPushButton("Refresh")
+        self.refresh_btn.setStyleSheet(
+            "QPushButton { background-color: #a6e3a1; padding: 12px 20px; }"
+            "QPushButton:hover { background-color: #94e2d5; }"
+            "QPushButton:disabled { background-color: #585b70; color: #6c7086; }"
+        )
+        self.refresh_btn.clicked.connect(self._start_analyze)
+        self.refresh_btn.setVisible(False)
+        input_row.addWidget(self.refresh_btn)
+
+        self.status_label = QLabel("")
+        input_row.addWidget(self.status_label)
+        input_row.addStretch()
+        layout.addLayout(input_row)
+
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setRange(0, 0)
+        self.progress_bar.setVisible(False)
+        layout.addWidget(self.progress_bar)
+
+        # Main content area: summary cards on top, full report below
+        self.summary_frame = QFrame()
+        self.summary_frame.setStyleSheet(
+            "QFrame { background-color: #181825; border: 1px solid #45475a; border-radius: 6px; padding: 10px; }"
+        )
+        self.summary_frame.setVisible(False)
+        self.summary_layout = QGridLayout()
+        self.summary_frame.setLayout(self.summary_layout)
+        layout.addWidget(self.summary_frame)
+
+        # Full report text area
+        self.report = QTextEdit()
+        self.report.setReadOnly(True)
+        self.report.setStyleSheet(
+            "QTextEdit { background-color: #11111b; color: #cdd6f4; "
+            "border: 1px solid #45475a; font-family: 'Consolas', 'Courier New', monospace; "
+            "font-size: 12px; padding: 8px; }"
+        )
+        layout.addWidget(self.report)
+
+        self.setLayout(layout)
+
+    def _start_analyze(self):
+        ticker = self.ticker_input.text().strip().upper()
+        if not ticker:
+            self.status_label.setText("Enter a ticker symbol")
+            self.status_label.setStyleSheet("color: #f38ba8;")
+            return
+
+        self.ticker_input.setText(ticker)
+        self.analyze_btn.setEnabled(False)
+        self.refresh_btn.setVisible(False)
+        self.progress_bar.setVisible(True)
+        self.summary_frame.setVisible(False)
+        self.report.clear()
+        self.status_label.setText(f"Analyzing {ticker}...")
+        self.status_label.setStyleSheet("color: #89b4fa;")
+
+        from pennystock.analysis.deep_dive import run_deep_dive
+        self.worker = Worker(run_deep_dive, ticker)
+        self.worker.progress.connect(self._append_report)
+        self.worker.finished.connect(self._analyze_done)
+        self.worker.start()
+
+    def _append_report(self, msg):
+        self.report.append(msg)
+        scrollbar = self.report.verticalScrollBar()
+        scrollbar.setValue(scrollbar.maximum())
+
+    def _analyze_done(self, result):
+        self.progress_bar.setVisible(False)
+        self.analyze_btn.setEnabled(True)
+        self.refresh_btn.setVisible(True)
+        self.current_result = result
+
+        if not result:
+            self.status_label.setText("Analysis failed - check log")
+            self.status_label.setStyleSheet("color: #f38ba8; font-weight: bold;")
+            return
+
+        ticker = result.get("ticker", "")
+        score = result.get("final_score", 0)
+        confidence = result.get("confidence", "LOW")
+        killed = result.get("killed", False)
+
+        if killed:
+            self.status_label.setText(f"{ticker}: KILLED by quality filter")
+            self.status_label.setStyleSheet("color: #f38ba8; font-weight: bold;")
+        elif confidence == "HIGH":
+            self.status_label.setText(f"{ticker}: {score:.1f} pts — HIGH confidence")
+            self.status_label.setStyleSheet("color: #a6e3a1; font-weight: bold;")
+        elif confidence == "MEDIUM":
+            self.status_label.setText(f"{ticker}: {score:.1f} pts — MEDIUM confidence")
+            self.status_label.setStyleSheet("color: #f9e2af; font-weight: bold;")
+        else:
+            self.status_label.setText(f"{ticker}: {score:.1f} pts — LOW confidence")
+            self.status_label.setStyleSheet("color: #f38ba8; font-weight: bold;")
+
+        # Build summary cards
+        self._build_summary(result)
+
+    def _build_summary(self, result):
+        """Build the summary card grid at the top."""
+        # Clear existing widgets
+        while self.summary_layout.count():
+            child = self.summary_layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+
+        ss = result.get("sub_scores", {})
+        pp = result.get("pre_pump", {})
+        info = result.get("info", {})
+        movements = result.get("price_movements", {})
+        gate = result.get("quality_gate", {})
+
+        # Row 0: Price and score headline
+        price = result.get("price", 0)
+        score = result.get("final_score", 0)
+        confidence = result.get("confidence", "LOW")
+        company = result.get("company", "")
+
+        headline = QLabel(f"  {result.get('ticker', '')}  —  ${price:.4f}  —  Score: {score:.1f} ({confidence})")
+        headline.setStyleSheet(
+            f"font-size: 16px; font-weight: bold; padding: 5px; "
+            f"color: {'#a6e3a1' if confidence == 'HIGH' else '#f9e2af' if confidence == 'MEDIUM' else '#f38ba8'};"
+        )
+        self.summary_layout.addWidget(headline, 0, 0, 1, 6)
+
+        company_label = QLabel(f"  {company}")
+        company_label.setStyleSheet("color: #a6adc8; font-size: 12px; padding-left: 5px;")
+        self.summary_layout.addWidget(company_label, 1, 0, 1, 6)
+
+        # Row 2: Price movements
+        movements_text = ""
+        for label, key in [("1D", "1d"), ("1W", "1w"), ("1M", "1m"), ("3M", "3m"), ("6M", "6m"), ("1Y", "1y")]:
+            val = movements.get(key)
+            if val is not None:
+                color = "#a6e3a1" if val >= 0 else "#f38ba8"
+                movements_text += f'<span style="color:#a6adc8">{label}:</span> <span style="color:{color}">{val:+.1f}%</span>  '
+        if movements_text:
+            mv_label = QLabel(f"  {movements_text}")
+            mv_label.setTextFormat(Qt.TextFormat.RichText)
+            mv_label.setStyleSheet("font-size: 12px; padding: 3px 5px;")
+            self.summary_layout.addWidget(mv_label, 2, 0, 1, 6)
+
+        # Row 3: Sub-score cards
+        col = 0
+        for name, key in [("Setup", "setup"), ("Technical", "technical"), ("Pre-Pump", "pre_pump"),
+                           ("Fundamental", "fundamental"), ("Catalyst", "catalyst")]:
+            val = ss.get(key, 0)
+            card = self._make_score_card(name, val)
+            self.summary_layout.addWidget(card, 3, col)
+            col += 1
+
+        # Add penalty card
+        penalty = gate.get("total_penalty", 0)
+        if penalty > 0:
+            pen_card = self._make_card("Penalties", f"-{penalty}pts", "#f38ba8")
+            self.summary_layout.addWidget(pen_card, 3, col)
+
+        # Row 4: Key stats
+        col = 0
+        float_shares = info.get("float_shares", 0) or 0
+        insider = (info.get("insider_percent_held", 0) or 0) * 100
+        si_pct = (info.get("short_percent_of_float", 0) or 0) * 100
+
+        for label, value in [
+            ("Float", f"{float_shares/1e6:.1f}M" if float_shares > 1e6 else f"{float_shares:,.0f}"),
+            ("Insider", f"{insider:.0f}%"),
+            ("SI%", f"{si_pct:.1f}%"),
+            ("Pre-Pump", f"{pp.get('confluence_count', 0)}/7 {pp.get('confidence', 'LOW')}"),
+            ("52w Pos", f"{(movements.get('1y_low', 0) or 0):.2f} - {(movements.get('1y_high', 0) or 0):.2f}"),
+        ]:
+            stat = self._make_card(label, value, "#cdd6f4")
+            self.summary_layout.addWidget(stat, 4, col)
+            col += 1
+
+        self.summary_frame.setVisible(True)
+
+    def _make_score_card(self, label, score):
+        """Create a colored score card widget."""
+        if score >= 70:
+            color = "#a6e3a1"
+        elif score >= 50:
+            color = "#f9e2af"
+        else:
+            color = "#f38ba8"
+        return self._make_card(label, f"{score:.0f}", color)
+
+    @staticmethod
+    def _make_card(label, value, color):
+        """Create a small info card widget."""
+        card = QFrame()
+        card.setStyleSheet(
+            "QFrame { background-color: #1e1e2e; border: 1px solid #45475a; "
+            "border-radius: 4px; padding: 4px; margin: 2px; }"
+        )
+        card_layout = QVBoxLayout()
+        card_layout.setSpacing(2)
+        card_layout.setContentsMargins(6, 4, 6, 4)
+
+        val_label = QLabel(str(value))
+        val_label.setStyleSheet(f"color: {color}; font-size: 14px; font-weight: bold; border: none;")
+        val_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        card_layout.addWidget(val_label)
+
+        name_label = QLabel(label)
+        name_label.setStyleSheet("color: #6c7086; font-size: 10px; border: none;")
+        name_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        card_layout.addWidget(name_label)
+
+        card.setLayout(card_layout)
+        return card
+
+
 # ── Main Window ─────────────────────────────────────────────────────
 class PennyStockGUI(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle(f"Penny Stock Analyzer v{__version__}")
-        self.setMinimumSize(950, 700)
+        self.setWindowTitle(f"Penny Stock Analyzer v{ALGORITHM_VERSION}")
+        self.setMinimumSize(1050, 750)
 
+        # Central widget with main layout
+        central = QWidget()
+        main_layout = QVBoxLayout()
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
+
+        # Tabs
         tabs = QTabWidget()
         tabs.addTab(BuildAlgorithmTab(), "  Build Algorithm  ")
         tabs.addTab(PickStocksTab(), "  Pick Stocks  ")
-        self.setCentralWidget(tabs)
+        tabs.addTab(AnalyzeStockTab(), "  Analyze Stock  ")
+        main_layout.addWidget(tabs)
+
+        # Version bar at the bottom
+        version_bar = QLabel(
+            f"  Penny Stock Analyzer v{ALGORITHM_VERSION}  |  "
+            f"Weights: pre_pump {35}% setup {25}% tech {20}% fund {10}% cat {10}%  |  "
+            f"12 kill filters  |  7 pre-pump signals"
+        )
+        version_bar.setStyleSheet(
+            "background-color: #11111b; color: #585b70; font-size: 11px; "
+            "padding: 4px 8px; border-top: 1px solid #313244;"
+        )
+        version_bar.setFixedHeight(24)
+        main_layout.addWidget(version_bar)
+
+        central.setLayout(main_layout)
+        self.setCentralWidget(central)
 
 
 def launch_gui():

@@ -32,19 +32,25 @@ from pennystock.analysis.quality_gate import run_kill_filters
 # MAIN ENTRY POINT
 # ────────────────────────────────────────────────────────────────────
 
-def run_deep_dive(ticker: str) -> dict:
+def run_deep_dive(ticker: str, progress_callback=None) -> dict:
     """
     Run a comprehensive analysis on a single stock and return all data.
     Also prints a formatted report to stdout.
+
+    Args:
+        ticker: Stock ticker symbol.
+        progress_callback: Optional callable for GUI progress updates.
     """
     ticker = ticker.upper().strip()
     start = time.time()
     lines = []
 
     def p(msg=""):
-        """Print and capture."""
+        """Print, capture, and notify GUI."""
         print(msg)
         lines.append(msg)
+        if progress_callback:
+            progress_callback(msg)
 
     p(f"\n{'═' * 72}")
     p(f"  DEEP DIVE: {ticker}  |  Penny Stock Analyzer v{ALGORITHM_VERSION}")
