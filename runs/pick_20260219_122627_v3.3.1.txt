@@ -1,0 +1,628 @@
+Penny Stock Analyzer v3.3.1
+Run type: pick
+Timestamp: 2026-02-19 12:29:46
+======================================================================
+
+============================================================
+PICKING TOP PENNY STOCKS (v3.3.1: MEGA-ALGORITHM)
+Using algorithm from 2026-02-19 12:22:33
+Weights: setup=25% tech=20% pre_pump=35% fund=10% cat=10%
+============================================================
+Discovering current penny stocks...
+Found 282 stocks. Running Stage 1 technical screen...
+  Stage 1: 25/282 ~289s remaining
+  Stage 1: 50/282 ~146s remaining
+  Stage 1: 75/282 ~96s remaining
+  Stage 1: 100/282 ~70s remaining
+  Stage 1: 125/282 ~52s remaining
+  Stage 1: 150/282 ~40s remaining
+  Stage 1: 175/282 ~30s remaining
+  Stage 1: 200/282 ~21s remaining
+  Stage 1: 225/282 ~14s remaining
+  Stage 1: 250/282 ~7s remaining
+  Stage 1: 275/282 ~2s remaining
+Stage 1 done: 281 stocks scored
+Pre-downloading Reddit posts (bulk mode)...
+Stage 2: Deep analysis on top 50 stocks...
+  Running LAYER 1 kill filters + LAYER 2 scoring...
+  PENALTY VRME: -12pts (1 issue(s))
+  KILLED IVF: RECENT SPIKE: Stock had a 147% spike (high/low range) in the last 20 trading day...
+  PENALTY BARK: -27pts (2 issue(s))
+  PENALTY FURY: -47pts (3 issue(s))
+  PENALTY PDSB: -12pts (1 issue(s))
+  Stage 2: 5/50 (1 killed, 4 scored)
+  KILLED OPTT: RECENT SPIKE: Stock had a 89% spike (high/low range) in the last 20 trading days...
+  KILLED KWM: PUMP-AND-DUMP AFTERMATH: Stock spiked 2x in 2 trading days (peak $7.29), then cr...
+  PENALTY RNXT: -12pts (1 issue(s))
+  KILLED YYAI: RECENT SPIKE: Stock had a 94% spike (high/low range) in the last 20 trading days...
+  KILLED ELBM: PUMP-AND-DUMP AFTERMATH: Stock spiked 4x in 1 trading days (peak $7.02), then cr...
+  KILLED WWR: PUMP-AND-DUMP AFTERMATH: Stock spiked 2x in 4 trading days (peak $3.48), then cr...
+  KILLED SGMO: CASH DEATH SPIRAL: Only 4.7 months of cash remaining ($29,616,000 cash / $6,346,...
+  PENALTY FSP: -12pts (1 issue(s))
+  KILLED NVX: PUMP-AND-DUMP AFTERMATH: Stock spiked 2x in 6 trading days (peak $2.94), then cr...
+  PENALTY XPL: -20pts (1 issue(s))
+  Stage 2: 15/50 (8 killed, 7 scored)
+  KILLED LFWD: CASH DEATH SPIRAL: Only 1.4 months of cash remaining ($1,956,000 cash / $1,436,6...
+  PENALTY INVZ: -27pts (2 issue(s))
+  KILLED PRPL: NEGATIVE EQUITY: Book value per share is $-0.25. Balance sheet is underwater....
+  KILLED PRSO: CASH DEATH SPIRAL: Only 4.3 months of cash remaining ($1,865,000 cash / $436,833...
+  PENALTY XTNT: -12pts (1 issue(s))
+  Stage 2: 20/50 (11 killed, 9 scored)
+  PENALTY SKIN: -12pts (1 issue(s))
+  KILLED CLIR: EXTREME LOSSES: Profit margin -295% (< -200% threshold). Company is losing money...
+  PENALTY MAPS: -12pts (1 issue(s))
+  PENALTY MYO: -27pts (2 issue(s))
+  KILLED BYND: NEGATIVE EQUITY: Book value per share is $-10.22. Balance sheet is underwater....
+  KILLED AGL: RECENT SPIKE: Stock had a 203% spike (high/low range) in the last 20 trading day...
+  KILLED IMTE: RECENT SPIKE: Stock had a 90% spike (high/low range) in the last 20 trading days...
+  PENALTY SKYE: -27pts (2 issue(s))
+  PENALTY BZFD: -12pts (1 issue(s))
+  KILLED GUTS: RECENT SPIKE: Stock had a 510% spike (high/low range) in the last 20 trading day...
+  KILLED RPGL: RECENT SPIKE: Stock had a 671% spike (high/low range) in the last 20 trading day...
+  PENALTY MVIS: -27pts (2 issue(s))
+  KILLED KAPA: PUMP-AND-DUMP AFTERMATH: Stock spiked 2x in 20 trading days (peak $1.97), then c...
+  PENALTY ICCM: -12pts (1 issue(s))
+  Stage 2: 35/50 (18 killed, 17 scored)
+  KILLED OSRH: RECENT SPIKE: Stock had a 104% spike (high/low range) in the last 20 trading day...
+  KILLED ZONE: RECENT SPIKE: Stock had a 81% spike (high/low range) in the last 20 trading days...
+  KILLED NCPL: PUMP-AND-DUMP AFTERMATH: Stock spiked 2x in 5 trading days (peak $8.64), then cr...
+  KILLED KXIN: RECENT SPIKE: Stock had a 4362% spike (high/low range) in the last 20 trading da...
+  PENALTY SKK: -12pts (1 issue(s))
+  Stage 2: 40/50 (22 killed, 18 scored)
+  KILLED CISO: PUMP-AND-DUMP AFTERMATH: Stock spiked 2x in 7 trading days (peak $1.42), then cr...
+  KILLED SOPA: RECENT SPIKE: Stock had a 400% spike (high/low range) in the last 20 trading day...
+  KILLED MRNO: RECENT SPIKE: Stock had a 375% spike (high/low range) in the last 20 trading day...
+  KILLED IXHL: PUMP-AND-DUMP AFTERMATH: Stock spiked 3x in 4 trading days (peak $1.63), then cr...
+  PENALTY QSI: -27pts (2 issue(s))
+  Stage 2: 45/50 (26 killed, 19 scored)
+  KILLED DXST: RECENT SPIKE: Stock had a 1431% spike (high/low range) in the last 20 trading da...
+  KILLED DKI: RECENT SPIKE: Stock had a 270% spike (high/low range) in the last 20 trading day...
+  KILLED VERO: RECENT SPIKE: Stock had a 595% spike (high/low range) in the last 20 trading day...
+  KILLED GPUS: PUMP-AND-DUMP AFTERMATH: Stock spiked 6x in 4 trading days (peak $7.90), then cr...
+  KILLED GLMD: SHELL COMPANY: Revenue $0 (< $100,000) and market cap $3,751,392 (< $5,000,000)...
+============================================================
+RESULTS: 31 stocks KILLED by quality filters, 19 survived scoring
+  12 stocks scored below minimum threshold (40pts) and were excluded
+TOP 5 PICKS (found in 198s)
+============================================================
+  #1. VRME - $0.96 (Score: 56.5, Confidence: MEDIUM)
+      VerifyMe Inc
+      Setup:64 Tech:64 PrePump:76 Fund:48 Cat:55
+      Float: 9,731,056 | Insider: 19% | 52w Pos: 0.419 | P/B: 1.049 | RSI: 27.48382325069646 | StochRSI: 4.523020157062006
+      Pre-Pump: confluence=4/7 confidence=MEDIUM SI-change=-43.6% float-rot=0.277
+      Bullish Pre-Pump: short_interest_change(85) | float_rotation(70) | compliance_risk(95) | supply_lock(68)
+      Tech Signals: BB-SQUEEZE | CONSOLIDATING
+      ADX: 18.76567209872136 | MFI: 4.459385420684839
+      Stop: $0.6946 (27.6% risk)
+      Penalties: -12pts (1 issue(s))
+        GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in 
+  #2. SKK - $0.30 (Score: 55.8, Confidence: MEDIUM)
+      SKK Holdings Ltd
+      Setup:90 Tech:52 PrePump:58 Fund:62 Cat:52
+      Float: 6,581,094 | Insider: 58% | 52w Pos: 0.056 | P/B: 0.637 | RSI: 40.835721087392116 | StochRSI: 98.41859766256366
+      Pre-Pump: confluence=3/7 confidence=MEDIUM SI-change=20.6% float-rot=0.013
+      Bullish Pre-Pump: compliance_risk(95) | supply_lock(80) | beaten_down(85)
+      Tech Signals: CONSOLIDATING
+      ADX: 34.97967570656894 | MFI: 70.53678678985096
+      Stop: $0.2268 (24.4% risk)
+      Penalties: -12pts (1 issue(s))
+        GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in 
+  #3. ICCM - $0.59 (Score: 48.8, Confidence: LOW)
+      Icecure Medical Ltd
+      Setup:62 Tech:49 PrePump:63 Fund:48 Cat:55
+      Float: 41,088,281 | Insider: 40% | 52w Pos: 0.037 | P/B: 4.304 | RSI: 39.91911532505349 | StochRSI: 100.0
+      Pre-Pump: confluence=3/7 confidence=MEDIUM SI-change=-43.3% float-rot=0.005
+      Bullish Pre-Pump: short_interest_change(85) | compliance_risk(80) | beaten_down(85)
+      Tech Signals: CONSOLIDATING
+      ADX: 35.75989262914718 | MFI: 47.920912928101615
+      Stop: $0.5427 (8.0% risk)
+      Penalties: -12pts (1 issue(s))
+        GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in 
+  #4. IFRX - $0.86 (Score: 47.6, Confidence: LOW)
+      InflaRx N.V
+      Setup:44 Tech:52 PrePump:48 Fund:41 Cat:55
+      Float: 55,490,997 | Insider: 6% | 52w Pos: 0.112 | P/B: 1.08 | RSI: 43.57842565473919 | StochRSI: 79.83649697484498
+      Pre-Pump: confluence=2/7 confidence=LOW SI-change=17.1% float-rot=0.007
+      Bullish Pre-Pump: compliance_risk(70) | beaten_down(75)
+      Tech Signals: CONSOLIDATING
+      ADX: 22.259977445971458 | MFI: 41.31268271769856
+      Stop: $0.8032 (6.6% risk)
+  #5. BZFD - $0.81 (Score: 45.7, Confidence: LOW)
+      BuzzFeed Inc
+      Setup:74 Tech:53 PrePump:55 Fund:43 Cat:52
+      Float: 20,892,221 | Insider: 33% | 52w Pos: 0.019 | P/B: 0.397 | RSI: 34.58263371537144 | StochRSI: 59.054004049708375
+      Pre-Pump: confluence=2/7 confidence=LOW SI-change=-3.4% float-rot=0.009
+      Bullish Pre-Pump: compliance_risk(80) | beaten_down(85)
+      Tech Signals: CONSOLIDATING
+      ADX: 54.754160216165076 | MFI: 34.73754370238849
+      Stop: $0.7799 (3.7% risk)
+      Penalties: -12pts (1 issue(s))
+        GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in 
+============================================================
+
+
+======================================================================
+DETAILED RESULTS (JSON)
+======================================================================
+[
+  {
+    "ticker": "VRME",
+    "final_score": 56.5,
+    "company": "VerifyMe Inc",
+    "price": 0.96,
+    "sub_scores": {
+      "setup": 63.5,
+      "technical": 63.7,
+      "pre_pump": 75.8,
+      "fundamental": 48.3,
+      "catalyst": 55,
+      "sentiment": 50.0,
+      "market": 53.2
+    },
+    "key_indicators": {
+      "float_shares": 9731056,
+      "insider_pct": 0.19352,
+      "position_52w": 0.419,
+      "price_to_book": 1.049,
+      "rsi": 27.48382325069646,
+      "stochrsi": 4.523020157062006,
+      "volume_spike": 0.017052383153403967,
+      "revenue_growth": -0.074,
+      "short_pct_float": 0.015,
+      "sentiment": 0.0,
+      "adx": 18.76567209872136,
+      "mfi": 4.459385420684839,
+      "bb_squeeze": "True",
+      "consolidating": "True",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 0,
+      "atr": 0.1327,
+      "pre_pump_confluence": 4,
+      "pre_pump_confidence": "MEDIUM",
+      "si_change_pct": -43.6,
+      "float_rotation": 0.277,
+      "supply_lock_score": 68
+    },
+    "penalty_deduction": 12,
+    "pre_pump_detail": {
+      "score": 75.8,
+      "signals": {
+        "short_interest_change": {
+          "score": 85,
+          "change_pct": -43.6,
+          "shares_short": 160599,
+          "shares_short_prior": 284761,
+          "signal": "bullish_covering"
+        },
+        "float_rotation": {
+          "score": 70,
+          "rotation": 0.277,
+          "volume": 2695520,
+          "float": 9731056,
+          "signal": "high_rotation"
+        },
+        "compliance_risk": {
+          "score": 95,
+          "below_dollar": true,
+          "price": 0.95,
+          "signal": "compliance_pump_candidate"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.63,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 68,
+          "insider_pct": 19.4,
+          "float_shares": 9731056,
+          "signal": "normal"
+        },
+        "squeeze_setup": {
+          "score": 45,
+          "short_pct_float": 1.5,
+          "days_to_cover": 0.0,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 45,
+          "position_52w": 0.419,
+          "price": 0.95,
+          "52w_low": 0.5469,
+          "52w_high": 1.5099,
+          "signal": "normal"
+        }
+      },
+      "confluence_count": 4,
+      "total_signals": 7,
+      "confidence": "MEDIUM"
+    }
+  },
+  {
+    "ticker": "SKK",
+    "final_score": 55.8,
+    "company": "SKK Holdings Ltd",
+    "price": 0.3,
+    "sub_scores": {
+      "setup": 89.8,
+      "technical": 52.1,
+      "pre_pump": 58.5,
+      "fundamental": 62.1,
+      "catalyst": 52,
+      "sentiment": 50.0,
+      "market": 53.2
+    },
+    "key_indicators": {
+      "float_shares": 6581094,
+      "insider_pct": 0.57881,
+      "position_52w": 0.056,
+      "price_to_book": 0.637,
+      "rsi": 40.835721087392116,
+      "stochrsi": 98.41859766256366,
+      "volume_spike": 0.6170487076929324,
+      "revenue_growth": 0.54,
+      "short_pct_float": 0.0058,
+      "sentiment": 0.0,
+      "adx": 34.97967570656894,
+      "mfi": 70.53678678985096,
+      "bb_squeeze": "False",
+      "consolidating": "True",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 0,
+      "atr": 0.0366,
+      "pre_pump_confluence": 3,
+      "pre_pump_confidence": "MEDIUM",
+      "si_change_pct": 20.6,
+      "float_rotation": 0.013,
+      "supply_lock_score": 80
+    },
+    "penalty_deduction": 12,
+    "pre_pump_detail": {
+      "score": 58.5,
+      "signals": {
+        "short_interest_change": {
+          "score": 25,
+          "change_pct": 20.6,
+          "shares_short": 46146,
+          "shares_short_prior": 38270,
+          "signal": "bearish_buildup"
+        },
+        "float_rotation": {
+          "score": 25,
+          "rotation": 0.013,
+          "volume": 84510,
+          "float": 6581094,
+          "signal": "normal"
+        },
+        "compliance_risk": {
+          "score": 95,
+          "below_dollar": true,
+          "price": 0.2937,
+          "signal": "compliance_pump_candidate"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.87,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 80,
+          "insider_pct": 57.9,
+          "float_shares": 6581094,
+          "signal": "locked"
+        },
+        "squeeze_setup": {
+          "score": 45,
+          "short_pct_float": 0.6,
+          "days_to_cover": 0.5,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 85,
+          "position_52w": 0.056,
+          "price": 0.2937,
+          "52w_low": 0.247,
+          "52w_high": 1.08,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 3,
+      "total_signals": 7,
+      "confidence": "MEDIUM"
+    }
+  },
+  {
+    "ticker": "ICCM",
+    "final_score": 48.8,
+    "company": "Icecure Medical Ltd",
+    "price": 0.59,
+    "sub_scores": {
+      "setup": 62.2,
+      "technical": 49.2,
+      "pre_pump": 63.1,
+      "fundamental": 48.4,
+      "catalyst": 55,
+      "sentiment": 50.0,
+      "market": 47.0
+    },
+    "key_indicators": {
+      "float_shares": 41088281,
+      "insider_pct": 0.4042,
+      "position_52w": 0.037,
+      "price_to_book": 4.304,
+      "rsi": 39.91911532505349,
+      "stochrsi": 100.0,
+      "volume_spike": 0.27046841302403873,
+      "revenue_growth": 0.284,
+      "short_pct_float": 0.038599998,
+      "sentiment": 0.0,
+      "adx": 35.75989262914718,
+      "mfi": 47.920912928101615,
+      "bb_squeeze": "False",
+      "consolidating": "True",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 0,
+      "atr": 0.0346,
+      "pre_pump_confluence": 3,
+      "pre_pump_confidence": "MEDIUM",
+      "si_change_pct": -43.3,
+      "float_rotation": 0.005,
+      "supply_lock_score": 62
+    },
+    "penalty_deduction": 12,
+    "pre_pump_detail": {
+      "score": 63.1,
+      "signals": {
+        "short_interest_change": {
+          "score": 85,
+          "change_pct": -43.3,
+          "shares_short": 548029,
+          "shares_short_prior": 966250,
+          "signal": "bullish_covering"
+        },
+        "float_rotation": {
+          "score": 25,
+          "rotation": 0.005,
+          "volume": 194960,
+          "float": 41088281,
+          "signal": "normal"
+        },
+        "compliance_risk": {
+          "score": 80,
+          "below_dollar": true,
+          "price": 0.581,
+          "signal": "normal"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.61,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 62,
+          "insider_pct": 40.4,
+          "float_shares": 41088281,
+          "signal": "normal"
+        },
+        "squeeze_setup": {
+          "score": 30,
+          "short_pct_float": 3.9,
+          "days_to_cover": 1.8,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 85,
+          "position_52w": 0.037,
+          "price": 0.581,
+          "52w_low": 0.54,
+          "52w_high": 1.66,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 3,
+      "total_signals": 7,
+      "confidence": "MEDIUM"
+    }
+  },
+  {
+    "ticker": "IFRX",
+    "final_score": 47.6,
+    "company": "InflaRx N.V",
+    "price": 0.86,
+    "sub_scores": {
+      "setup": 44.0,
+      "technical": 52.4,
+      "pre_pump": 47.5,
+      "fundamental": 40.9,
+      "catalyst": 55,
+      "sentiment": 50.0,
+      "market": 47.0
+    },
+    "key_indicators": {
+      "float_shares": 55490997,
+      "insider_pct": 0.0638,
+      "position_52w": 0.112,
+      "price_to_book": 1.08,
+      "rsi": 43.57842565473919,
+      "stochrsi": 79.83649697484498,
+      "volume_spike": 0.14082015789510552,
+      "revenue_growth": -0.808,
+      "short_pct_float": 0.0502,
+      "sentiment": 0.0,
+      "adx": 22.259977445971458,
+      "mfi": 41.31268271769856,
+      "bb_squeeze": "False",
+      "consolidating": "True",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 0,
+      "atr": 0.0707,
+      "pre_pump_confluence": 2,
+      "pre_pump_confidence": "LOW",
+      "si_change_pct": 17.1,
+      "float_rotation": 0.007,
+      "supply_lock_score": 50
+    },
+    "penalty_deduction": 0,
+    "pre_pump_detail": {
+      "score": 47.5,
+      "signals": {
+        "short_interest_change": {
+          "score": 40,
+          "change_pct": 17.1,
+          "shares_short": 3181515,
+          "shares_short_prior": 2717670,
+          "signal": "bearish_buildup"
+        },
+        "float_rotation": {
+          "score": 25,
+          "rotation": 0.007,
+          "volume": 392100,
+          "float": 55490997,
+          "signal": "normal"
+        },
+        "compliance_risk": {
+          "score": 70,
+          "below_dollar": true,
+          "price": 0.8576,
+          "signal": "normal"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.59,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 50,
+          "insider_pct": 6.4,
+          "float_shares": 55490997,
+          "signal": "normal"
+        },
+        "squeeze_setup": {
+          "score": 48,
+          "short_pct_float": 5.0,
+          "days_to_cover": 4.8,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 75,
+          "position_52w": 0.112,
+          "price": 0.8576,
+          "52w_low": 0.711,
+          "52w_high": 2.02,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 2,
+      "total_signals": 7,
+      "confidence": "LOW"
+    }
+  },
+  {
+    "ticker": "BZFD",
+    "final_score": 45.7,
+    "company": "BuzzFeed Inc",
+    "price": 0.81,
+    "sub_scores": {
+      "setup": 74.0,
+      "technical": 53.1,
+      "pre_pump": 54.6,
+      "fundamental": 43.2,
+      "catalyst": 52,
+      "sentiment": 50.0,
+      "market": 47.0
+    },
+    "key_indicators": {
+      "float_shares": 20892221,
+      "insider_pct": 0.33015,
+      "position_52w": 0.019,
+      "price_to_book": 0.397,
+      "rsi": 34.58263371537144,
+      "stochrsi": 59.054004049708375,
+      "volume_spike": 0.39871400150214714,
+      "revenue_growth": -0.166,
+      "short_pct_float": 0.050300002,
+      "sentiment": 0.0,
+      "adx": 54.754160216165076,
+      "mfi": 34.73754370238849,
+      "bb_squeeze": "False",
+      "consolidating": "True",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 0,
+      "atr": 0.05,
+      "pre_pump_confluence": 2,
+      "pre_pump_confidence": "LOW",
+      "si_change_pct": -3.4,
+      "float_rotation": 0.009,
+      "supply_lock_score": 55
+    },
+    "penalty_deduction": 12,
+    "pre_pump_detail": {
+      "score": 54.6,
+      "signals": {
+        "short_interest_change": {
+          "score": 55,
+          "change_pct": -3.4,
+          "shares_short": 1528928,
+          "shares_short_prior": 1582619,
+          "signal": "neutral"
+        },
+        "float_rotation": {
+          "score": 25,
+          "rotation": 0.009,
+          "volume": 191280,
+          "float": 20892221,
+          "signal": "normal"
+        },
+        "compliance_risk": {
+          "score": 80,
+          "below_dollar": true,
+          "price": 0.8105,
+          "signal": "normal"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.53,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 55,
+          "insider_pct": 33.0,
+          "float_shares": 20892221,
+          "signal": "normal"
+        },
+        "squeeze_setup": {
+          "score": 56,
+          "short_pct_float": 5.0,
+          "days_to_cover": 5.0,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 85,
+          "position_52w": 0.019,
+          "price": 0.8105,
+          "52w_low": 0.774,
+          "52w_high": 2.68,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 2,
+      "total_signals": 7,
+      "confidence": "LOW"
+    }
+  }
+]
