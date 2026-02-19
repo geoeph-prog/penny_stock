@@ -91,9 +91,50 @@ def score_texts(texts: list, analyzer=None) -> dict:
     }
 
 
-def analyze(ticker: str) -> dict:
+def _build_search_aliases(ticker: str, company_name: str) -> list:
+    """
+    Build search aliases from company name for social media matching.
+
+    'Getty Images Holdings, Inc.' → ['Getty Images']
+    'GameStop Corp.' → ['GameStop']
+    """
+    import re
+
+    if not company_name:
+        return []
+
+    # Suffixes to strip (order matters -- longer first)
+    suffixes = [
+        r",?\s*Inc\.?$", r",?\s*Corp\.?$", r",?\s*Corporation$",
+        r",?\s*Holdings$", r",?\s*Holding$", r",?\s*Ltd\.?$",
+        r",?\s*Limited$", r",?\s*Group$", r",?\s*Co\.?$",
+        r",?\s*LLC$", r",?\s*LP$", r",?\s*PLC$", r",?\s*N\.?V\.?$",
+        r",?\s*S\.?A\.?$", r",?\s*SE$", r"\s*\(.*?\)$",
+        r",?\s*Class\s+[A-Z]$", r",?\s*Common\s+Stock$",
+    ]
+
+    name = company_name.strip()
+    for suffix in suffixes:
+        name = re.sub(suffix, "", name, flags=re.IGNORECASE).strip()
+    # Second pass in case of stacked suffixes like "Holdings, Inc."
+    for suffix in suffixes:
+        name = re.sub(suffix, "", name, flags=re.IGNORECASE).strip()
+
+    # Don't return aliases that are the same as the ticker or too short
+    if not name or len(name) <= 2 or name.upper() == ticker.upper():
+        return []
+
+    return [name]
+
+
+def analyze(ticker: str, company_name: str = "") -> dict:
     """
     Run full sentiment analysis for a ticker across all sources.
+
+    Args:
+        ticker: Stock ticker symbol.
+        company_name: Full company name from Yahoo (e.g. 'Getty Images Holdings, Inc.').
+                      Used to also search for posts mentioning the company by name.
 
     Returns:
         {
@@ -107,13 +148,15 @@ def analyze(ticker: str) -> dict:
         }
     """
     analyzer = _get_vader()
+    aliases = _build_search_aliases(ticker, company_name)
 
     # ── Reddit (uses bulk cache if available, zero API calls) ──────
-    reddit_data = reddit_scraper.get_ticker_mentions(ticker, use_bulk=True)
+    reddit_data = reddit_scraper.get_ticker_mentions(ticker, use_bulk=True, aliases=aliases)
     reddit_texts = [f"{p['title']} {p['text']}" for p in reddit_data["posts"]]
     reddit_sentiment = score_texts(reddit_texts, analyzer)
 
     # ── StockTwits (respects rate limits) ───────────────────────────
+    # StockTwits is a structured API — always uses ticker, no aliases needed
     st_data = stocktwits_client.get_messages(ticker)
     st_texts = [m["body"] for m in st_data["messages"]]
     st_sentiment = score_texts(st_texts, analyzer)
@@ -123,7 +166,7 @@ def analyze(ticker: str) -> dict:
     st_label_score = (st_data["bullish_count"] - st_data["bearish_count"]) / st_total
 
     # ── Twitter (optional, respects rate limits) ────────────────────
-    tw_data = twitter_scraper.get_cashtag_tweets(ticker)
+    tw_data = twitter_scraper.get_cashtag_tweets(ticker, aliases=aliases)
     tw_texts = [t["text"] for t in tw_data["tweets"]]
     tw_sentiment = score_texts(tw_texts, analyzer)
 
@@ -177,6 +220,7 @@ def analyze(ticker: str) -> dict:
         "total_mentions": total_mentions,
         "buzz_score": round(buzz, 1),
         "has_data": total_mentions > 0,
+        "search_aliases": aliases,
         "reddit": {
             "mentions": reddit_data["total_mentions"],
             "avg_sentiment": round(reddit_sentiment["avg_sentiment"], 3),

@@ -182,7 +182,10 @@ def build_algorithm(progress_callback=None):
     for j, (ticker, group) in enumerate(analyze_tickers):
         try:
             # Sentiment (only include if there's actual data)
-            sent = analyze_sentiment(ticker)
+            # Fetch company name so we also match posts by company name
+            _info = get_stock_info(ticker)
+            _company = _info.get("company_name") or _info.get("short_name") or ""
+            sent = analyze_sentiment(ticker, company_name=_company)
             if sent.get("has_data", False):
                 sentiment_features[group].append({
                     "reddit_mentions": sent.get("reddit", {}).get("mentions", 0),
@@ -519,7 +522,8 @@ def pick_stocks(top_n=5, progress_callback=None):
 
             # F. Sentiment (informational, not in primary weights,
             #    but used as a small adjustment)
-            sent = analyze_sentiment(ticker)
+            company_name = info.get("company_name") or info.get("short_name") or ""
+            sent = analyze_sentiment(ticker, company_name=company_name)
             has_sentiment_data = sent.get("has_data", False)
             if has_sentiment_data and sent_factors:
                 sent_features = {
