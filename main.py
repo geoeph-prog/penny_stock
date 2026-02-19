@@ -6,6 +6,7 @@ Usage:
     python main.py              # Launch GUI (default)
     python main.py --cli build  # Build algorithm from CLI
     python main.py --cli pick   # Pick stocks from CLI
+    python main.py analyze GETY # Deep dive analysis on a single stock
     python main.py --cli history  # View past picks
 """
 
@@ -61,6 +62,15 @@ def cmd_pick(args):
     print("=" * 70)
 
 
+def cmd_analyze(args):
+    from pennystock.analysis.deep_dive import run_deep_dive
+    if not args.ticker:
+        print("\nUsage: python main.py analyze TICKER")
+        print("Example: python main.py analyze GETY")
+        return
+    run_deep_dive(args.ticker)
+
+
 def cmd_history(args):
     from pennystock.storage.db import Database
     db = Database()
@@ -88,6 +98,9 @@ def main():
     pick_p = subparsers.add_parser("pick", help="Pick top penny stocks")
     pick_p.add_argument("-n", "--top-n", type=int, default=5)
 
+    analyze_p = subparsers.add_parser("analyze", help="Deep dive analysis on a single stock")
+    analyze_p.add_argument("ticker", type=str, nargs="?", help="Stock ticker to analyze (e.g. GETY)")
+
     hist_p = subparsers.add_parser("history", help="View past picks")
     hist_p.add_argument("-n", type=int, default=10)
 
@@ -96,7 +109,7 @@ def main():
 
     if args.cli or args.command:
         # CLI mode
-        commands = {"build": cmd_build, "pick": cmd_pick, "history": cmd_history}
+        commands = {"build": cmd_build, "pick": cmd_pick, "analyze": cmd_analyze, "history": cmd_history}
         func = commands.get(args.command)
         if func:
             func(args)
