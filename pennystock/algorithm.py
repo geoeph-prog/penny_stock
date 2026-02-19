@@ -1,16 +1,20 @@
 """
 The ONE algorithm for penny stock prediction.
+v3.0: MEGA-ALGORITHM with pre-pump detection.
 
 Two-layer architecture:
   LAYER 1: Kill Filters  - Instantly disqualify broken stocks (quality_gate.py)
-  LAYER 2: Positive Score - Rank survivors by setup + technical + fundamental + catalyst
+  LAYER 2: Positive Score - Rank survivors by setup + technical + pre_pump + fundamental + catalyst
 
 Scoring formula (Layer 2):
-  final_score = setup(40%) + technical(25%) + fundamental(25%) + catalyst(10%)
+  final_score = setup(25%) + technical(20%) + pre_pump(35%) + fundamental(10%) + catalyst(10%)
+                + conviction_bonus (up to +8 for HIGH pre-pump confidence)
 
-  Setup (40%):     float_tightness(35%) + insider_own(25%) + proximity_low(25%) + P/B(15%)
-  Technical (25%): RSI(20%) + MACD(20%) + StochRSI(20%) + volume(15%) + OBV(10%) + BB(5%) + trend(10%)
-  Fundamental(25%): revenue_growth(40%) + short_interest(30%) + cash_position(30%)
+  Setup (25%):     float_tightness(35%) + insider_own(25%) + proximity_low(25%) + P/B(15%)
+  Technical (20%): RSI(20%) + MACD(20%) + StochRSI(20%) + volume(15%) + OBV(10%) + BB(5%) + trend(10%)
+  Pre-Pump (35%):  short_interest_change(20%) + supply_lock(20%) + float_rotation(15%)
+                   + squeeze_setup(15%) + compliance_risk(10%) + volume_accel(10%) + beaten_down(10%)
+  Fundamental(10%): revenue_growth(40%) + short_interest(30%) + cash_position(30%)
   Catalyst (10%):  news-based positive/negative catalyst detection
 
 Functions:
@@ -27,7 +31,10 @@ import numpy as np
 import pandas as pd
 from loguru import logger
 
-from pennystock.config import WEIGHTS, MIN_RECOMMENDATION_SCORE
+from pennystock.config import (
+    WEIGHTS, MIN_RECOMMENDATION_SCORE, ALGORITHM_VERSION,
+    PRE_PUMP_HIGH_CONVICTION_BONUS, PRE_PUMP_MEDIUM_CONVICTION_BONUS,
+)
 from pennystock.data.finviz_client import get_penny_stocks, get_high_gainers
 from pennystock.data.yahoo_client import get_price_history, get_stock_info
 from pennystock.analysis.technical import extract_features as extract_tech_features
@@ -40,9 +47,11 @@ from pennystock.analysis.fundamental import score_setup, score_fundamentals
 from pennystock.analysis.catalyst import analyze as analyze_catalyst
 from pennystock.analysis.market_context import analyze as analyze_market
 from pennystock.analysis.quality_gate import run_kill_filters
+from pennystock.analysis.pre_pump import score_pre_pump
 from pennystock.storage.db import Database
 
 ALGORITHM_FILE = "algorithm.json"
+RUNS_DIR = "runs"
 
 
 # ════════════════════════════════════════════════════════════════════
@@ -63,8 +72,10 @@ def build_algorithm(progress_callback=None):
       7. Build one unified scoring algorithm from the most discriminative features
       8. Save algorithm permanently to algorithm.json
     """
+    run_log, finalize_log = _create_run_logger("build")
+
     def _log(msg):
-        logger.info(msg)
+        run_log(msg)
         if progress_callback:
             progress_callback(msg)
 
@@ -301,11 +312,15 @@ def build_algorithm(progress_callback=None):
     db = Database()
     db.save_run({
         "type": "build_algorithm",
+        "version": ALGORITHM_VERSION,
         "winners": len(winners),
         "losers": len(losers),
         "factors": len(all_factors),
         "elapsed_sec": round(elapsed),
     })
+
+    # Save run log to file
+    finalize_log()
 
     return algorithm
 
@@ -333,18 +348,20 @@ def pick_stocks(top_n=5, progress_callback=None):
         - Extreme profit margin losses (<-200%) -> KILL (hemorrhaging money)
 
       Scoring Penalties (reduce score, don't kill):
-        - Going concern in SEC filings -> PENALTY (-25pts)
+        - Going concern in SEC filings -> PENALTY (-12pts)
         - Delisting / compliance notice -> PENALTY (-30pts)
         - Extreme price decay (85%+ from 52w high) -> PENALTY (-15 to -30pts scaled)
         - Recent reverse split -> PENALTY (-20 to -35pts scaled for extreme ratios)
         - Excessive float (>100M shares) -> PENALTY (-15pts)
         - Micro-employees (<10 FTEs) -> PENALTY (-20pts)
 
-    LAYER 2: Positive Scoring
-      - Setup quality (40%): float, insider ownership, proximity-to-low, P/B
-      - Technical (25%): RSI, MACD, StochRSI, volume, OBV, BB, trend
-      - Fundamental (25%): revenue growth, short interest, cash position
+    LAYER 2: Positive Scoring (v3.0 MEGA-ALGORITHM)
+      - Setup quality (25%): float, insider ownership, proximity-to-low, P/B
+      - Technical (20%): RSI, MACD, StochRSI, volume, OBV, BB, trend
+      - Pre-Pump (35%): SI change, float rotation, supply lock, squeeze, compliance, vol accel
+      - Fundamental (10%): revenue growth, short interest, cash position
       - Catalyst (10%): news-based catalyst detection
+      + Conviction bonus: +8pts for HIGH pre-pump confidence, +3pts for MEDIUM
 
     Steps:
       1. Load saved algorithm
@@ -355,8 +372,10 @@ def pick_stocks(top_n=5, progress_callback=None):
          b. Score survivors -- rank by composite score minus penalties
       5. Return top N picks with full breakdown
     """
+    run_log, finalize_log = _create_run_logger("pick")
+
     def _log(msg):
-        logger.info(msg)
+        run_log(msg)
         if progress_callback:
             progress_callback(msg)
 
@@ -367,8 +386,11 @@ def pick_stocks(top_n=5, progress_callback=None):
 
     start = time.time()
     _log("=" * 60)
-    _log("PICKING TOP PENNY STOCKS (v3: Kill Filters + Setup Scoring)")
+    _log(f"PICKING TOP PENNY STOCKS (v{ALGORITHM_VERSION}: MEGA-ALGORITHM)")
     _log(f"Using algorithm from {algorithm.get('built_date', 'unknown')}")
+    _log(f"Weights: setup={WEIGHTS['setup']:.0%} tech={WEIGHTS['technical']:.0%} "
+         f"pre_pump={WEIGHTS['pre_pump']:.0%} fund={WEIGHTS['fundamental']:.0%} "
+         f"cat={WEIGHTS['catalyst']:.0%}")
     _log("=" * 60)
 
     # ── Get current penny stocks ────────────────────────────────────
@@ -480,7 +502,22 @@ def pick_stocks(top_n=5, progress_callback=None):
             cat_result = analyze_catalyst(ticker)
             cat_score = cat_result.get("score", 50)
 
-            # E. Sentiment (informational, not in primary weights,
+            # E. Pre-Pump Signal Detection (25% of total) -- NEW in v3.0
+            # Combines 7 independent signals that historically precede pumps:
+            # short interest collapse, float rotation, compliance risk,
+            # volume acceleration, supply lock, squeeze setup, beaten-down reversal
+            pre_pump_result = score_pre_pump(
+                ticker, info=info,
+                tech_features={
+                    "multiday_unusual_vol_days": (
+                        tech_analysis.get("multiday_unusual_volume", {}).get("unusual_days", 0)
+                        if tech_analysis.get("valid") else 0
+                    ),
+                },
+            )
+            pre_pump_score = pre_pump_result["score"]
+
+            # F. Sentiment (informational, not in primary weights,
             #    but used as a small adjustment)
             sent = analyze_sentiment(ticker)
             has_sentiment_data = sent.get("has_data", False)
@@ -499,18 +536,29 @@ def pick_stocks(top_n=5, progress_callback=None):
             else:
                 sent_score = 50.0
 
-            # Market context (small adjustment only)
+            # G. Market context (small adjustment only)
             mkt_result = analyze_market(candidate.get("sector", ""))
             mkt_score = mkt_result.get("score", 50)
 
             # ── Composite Score ──────────────────────────────────
-            # Primary: setup(40%) + technical(25%) + fundamental(25%) + catalyst(10%)
+            # Primary: setup(30%) + technical(25%) + pre_pump(25%) + fundamental(10%) + catalyst(10%)
             base_score = (
                 setup_score * WEIGHTS["setup"] +
                 tech_score * WEIGHTS["technical"] +
+                pre_pump_score * WEIGHTS["pre_pump"] +
                 fund_score * WEIGHTS["fundamental"] +
                 cat_score * WEIGHTS["catalyst"]
             )
+
+            # Pre-pump conviction bonus: when multiple independent
+            # pre-pump signals agree, trust the setup more.
+            pp_confidence = pre_pump_result.get("confidence", "LOW")
+            if pp_confidence == "HIGH":
+                conviction_bonus = PRE_PUMP_HIGH_CONVICTION_BONUS
+            elif pp_confidence == "MEDIUM":
+                conviction_bonus = PRE_PUMP_MEDIUM_CONVICTION_BONUS
+            else:
+                conviction_bonus = 0
 
             # Secondary adjustments: sentiment + market context
             # These are small nudges, not primary drivers.
@@ -525,7 +573,9 @@ def pick_stocks(top_n=5, progress_callback=None):
             # reduce the score but don't kill outright.
             penalty_adj = -penalty_deduction
 
-            final_score = max(0, min(100, base_score + sent_adj + mkt_adj + penalty_adj))
+            final_score = max(0, min(100,
+                base_score + conviction_bonus + sent_adj + mkt_adj + penalty_adj
+            ))
 
             final_results.append({
                 "ticker": ticker,
@@ -539,12 +589,14 @@ def pick_stocks(top_n=5, progress_callback=None):
                 "sub_scores": {
                     "setup": round(setup_score, 1),
                     "technical": round(tech_score, 1),
+                    "pre_pump": round(pre_pump_score, 1),
                     "fundamental": round(fund_score, 1),
                     "catalyst": round(cat_score, 1),
                     "sentiment": round(sent_score, 1),
                     "market": round(mkt_score, 1),
                 },
                 "setup_detail": setup_result,
+                "pre_pump_detail": pre_pump_result,
                 "fundamental_detail": fund_result,
                 "key_indicators": {
                     "float_shares": info.get("float_shares", 0),
@@ -566,6 +618,12 @@ def pick_stocks(top_n=5, progress_callback=None):
                     "squeeze_setup": fund_result.get("squeeze_composite", {}).get("is_squeeze_setup", False),
                     "dilution_filings": fund_result.get("dilution_risk", {}).get("dilution_filings_6m", 0),
                     "atr": tech_analysis.get("atr", 0) if tech_analysis.get("valid") else 0,
+                    # Pre-pump signals
+                    "pre_pump_confluence": pre_pump_result.get("confluence_count", 0),
+                    "pre_pump_confidence": pre_pump_result.get("confidence", "LOW"),
+                    "si_change_pct": pre_pump_result.get("signals", {}).get("short_interest_change", {}).get("change_pct", 0),
+                    "float_rotation": pre_pump_result.get("signals", {}).get("float_rotation", {}).get("rotation", 0),
+                    "supply_lock_score": pre_pump_result.get("signals", {}).get("supply_lock", {}).get("score", 0),
                 },
                 "risk_management": _compute_risk_management(
                     candidate.get("price", 0),
@@ -614,14 +672,29 @@ def pick_stocks(top_n=5, progress_callback=None):
              f"(Score: {pick['final_score']:.1f}, Confidence: {confidence})")
         _log(f"      {pick['company']}")
         _log(f"      Setup:{ss['setup']:.0f} Tech:{ss['technical']:.0f} "
-             f"Fund:{ss['fundamental']:.0f} Cat:{ss['catalyst']:.0f}")
+             f"PrePump:{ss['pre_pump']:.0f} Fund:{ss['fundamental']:.0f} "
+             f"Cat:{ss['catalyst']:.0f}")
         _log(f"      Float: {ki.get('float_shares', 'N/A'):,.0f} | "
              f"Insider: {(ki.get('insider_pct') or 0)*100:.0f}% | "
              f"52w Pos: {ki.get('position_52w', 'N/A')} | "
              f"P/B: {ki.get('price_to_book', 'N/A')} | "
              f"RSI: {ki.get('rsi', 'N/A')} | "
              f"StochRSI: {ki.get('stochrsi', 'N/A')}")
-        # New indicators summary
+        # Pre-pump signals summary
+        _log(f"      Pre-Pump: confluence={ki.get('pre_pump_confluence', 0)}/7 "
+             f"confidence={ki.get('pre_pump_confidence', 'N/A')} "
+             f"SI-change={ki.get('si_change_pct', 0):.1f}% "
+             f"float-rot={ki.get('float_rotation', 0):.3f}")
+        # Pre-pump signal breakdown
+        pp_detail = pick.get("pre_pump_detail", {})
+        pp_signals = pp_detail.get("signals", {})
+        bullish_signals = []
+        for sig_name, sig_data in pp_signals.items():
+            if sig_data.get("score", 0) >= 65:
+                bullish_signals.append(f"{sig_name}({sig_data['score']})")
+        if bullish_signals:
+            _log(f"      Bullish Pre-Pump: {' | '.join(bullish_signals)}")
+        # Other signals
         signals = []
         if ki.get("bb_squeeze"):
             signals.append("BB-SQUEEZE")
@@ -634,7 +707,7 @@ def pick_stocks(top_n=5, progress_callback=None):
         if ki.get("dilution_filings", 0) > 0:
             signals.append(f"DILUTION-RISK({ki['dilution_filings']})")
         if signals:
-            _log(f"      Signals: {' | '.join(signals)}")
+            _log(f"      Tech Signals: {' | '.join(signals)}")
         # ADX/MFI
         _log(f"      ADX: {ki.get('adx', 'N/A')} | "
              f"MFI: {ki.get('mfi', 'N/A')}")
@@ -656,13 +729,19 @@ def pick_stocks(top_n=5, progress_callback=None):
         db.save_pick(pick)
     db.save_run({
         "type": "pick_stocks",
+        "version": ALGORITHM_VERSION,
         "total_screened": len(stocks),
         "stage1_passed": len(stage1_results),
         "killed_by_filters": killed_count,
         "final_scored": len(final_results),
+        "below_threshold": below_threshold,
         "final_picks": len(picks),
         "elapsed_sec": round(elapsed),
     })
+
+    # Save run log to file for future reference
+    run_file = finalize_log()
+    _save_run_results(run_file, picks, final_results)
 
     return picks
 
@@ -670,6 +749,60 @@ def pick_stocks(top_n=5, progress_callback=None):
 # ════════════════════════════════════════════════════════════════════
 # INTERNAL HELPERS
 # ════════════════════════════════════════════════════════════════════
+
+def _create_run_logger(run_type: str):
+    """
+    Create a run logger that captures all output to a timestamped file.
+    Returns (log_func, finalize_func).
+    log_func(msg) writes to both loguru and the run file.
+    finalize_func() closes the file and returns the path.
+    """
+    os.makedirs(RUNS_DIR, exist_ok=True)
+    timestamp = time.strftime("%Y%m%d_%H%M%S")
+    run_file = os.path.join(RUNS_DIR, f"{run_type}_{timestamp}_v{ALGORITHM_VERSION}.txt")
+    lines = []
+
+    def log_func(msg):
+        logger.info(msg)
+        lines.append(msg)
+
+    def finalize_func():
+        with open(run_file, "w") as f:
+            f.write(f"Penny Stock Analyzer v{ALGORITHM_VERSION}\n")
+            f.write(f"Run type: {run_type}\n")
+            f.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write("=" * 70 + "\n\n")
+            for line in lines:
+                f.write(line + "\n")
+        logger.info(f"Run log saved to {run_file}")
+        return run_file
+
+    return log_func, finalize_func
+
+
+def _save_run_results(run_file: str, picks: list, all_results: list = None):
+    """Append detailed JSON results to the run log file."""
+    with open(run_file, "a") as f:
+        f.write("\n\n" + "=" * 70 + "\n")
+        f.write("DETAILED RESULTS (JSON)\n")
+        f.write("=" * 70 + "\n")
+        # Save picks as simplified JSON (remove non-serializable objects)
+        safe_picks = []
+        for pick in picks:
+            safe = {
+                "ticker": pick["ticker"],
+                "final_score": pick["final_score"],
+                "company": pick.get("company", ""),
+                "price": pick.get("price", 0),
+                "sub_scores": pick.get("sub_scores", {}),
+                "key_indicators": pick.get("key_indicators", {}),
+                "penalty_deduction": pick.get("penalty_deduction", 0),
+                "pre_pump_detail": pick.get("pre_pump_detail", {}),
+            }
+            safe_picks.append(safe)
+        f.write(json.dumps(safe_picks, indent=2, default=str))
+        f.write("\n")
+
 
 def _compare_groups(winner_features: list, loser_features: list) -> list:
     """
