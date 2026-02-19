@@ -5,17 +5,19 @@ Three tabs:
   Tab 1 - Build Algorithm: Learn from recent winners vs losers
   Tab 2 - Pick Stocks: Apply algorithm to find today's top 5
   Tab 3 - Analyze Stock: Comprehensive deep dive on a single ticker
+  Tab 4 - Backtest: Run the algorithm on a past date and check results
 """
 
 import sys
 import threading
+from datetime import date
 
-from PyQt6.QtCore import Qt, QThread, pyqtSignal
+from PyQt6.QtCore import Qt, QThread, pyqtSignal, QDate
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QTabWidget, QWidget, QVBoxLayout,
     QHBoxLayout, QPushButton, QTextEdit, QTableWidget, QTableWidgetItem,
     QProgressBar, QLabel, QHeaderView, QLineEdit, QScrollArea, QFrame,
-    QGridLayout, QSplitter, QSizePolicy,
+    QGridLayout, QSplitter, QSizePolicy, QDateEdit, QComboBox,
 )
 from PyQt6.QtGui import QFont, QColor
 
@@ -616,6 +618,214 @@ class AnalyzeStockTab(QWidget):
         return card
 
 
+# ── Tab 4: Backtest ────────────────────────────────────────────────
+class BacktestTab(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.worker = None
+        self.current_result = None
+        layout = QVBoxLayout()
+
+        # Header
+        header = QLabel("Backtest  —  Historical Validation")
+        header.setStyleSheet("font-size: 18px; font-weight: bold; color: #f5c2e7; padding: 10px;")
+        layout.addWidget(header)
+
+        desc = QLabel(
+            "Run the algorithm on a past date and see what would have happened.\n"
+            "Picks are scored using historical price data; forward returns show actual results.\n"
+            "Note: fundamentals (insider%, float, SI) use current data as proxy."
+        )
+        desc.setStyleSheet("color: #a6adc8; padding: 0 10px 5px 10px;")
+        layout.addWidget(desc)
+
+        # Input row: date picker + run button
+        input_row = QHBoxLayout()
+
+        date_label = QLabel("Target Date:")
+        date_label.setStyleSheet("font-size: 14px; font-weight: bold; padding-left: 10px;")
+        input_row.addWidget(date_label)
+
+        self.date_edit = QDateEdit()
+        self.date_edit.setCalendarPopup(True)
+        self.date_edit.setDisplayFormat("yyyy-MM-dd")
+        self.date_edit.setDate(QDate(2025, 8, 1))
+        self.date_edit.setMaximumDate(QDate.currentDate().addDays(-15))
+        self.date_edit.setMinimumDate(QDate(2024, 1, 1))
+        self.date_edit.setStyleSheet(
+            "QDateEdit { background-color: #11111b; color: #cdd6f4; "
+            "border: 1px solid #45475a; border-radius: 4px; padding: 8px 12px; "
+            "font-size: 14px; font-weight: bold; }"
+            "QDateEdit:focus { border: 2px solid #89b4fa; }"
+        )
+        self.date_edit.setMaximumWidth(180)
+        input_row.addWidget(self.date_edit)
+
+        self.run_btn = QPushButton("Run Backtest")
+        self.run_btn.clicked.connect(self._start_backtest)
+        input_row.addWidget(self.run_btn)
+
+        self.status_label = QLabel("")
+        input_row.addWidget(self.status_label)
+        input_row.addStretch()
+        layout.addLayout(input_row)
+
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setRange(0, 0)
+        self.progress_bar.setVisible(False)
+        layout.addWidget(self.progress_bar)
+
+        # Results table
+        self.table = QTableWidget()
+        self.table.setColumnCount(10)
+        self.table.setHorizontalHeaderLabels([
+            "Rank", "Ticker", "Entry $", "Score",
+            "Setup", "Tech", "PrePump", "5d Ret", "10d Ret", "14d Ret",
+        ])
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.table.setVisible(False)
+        layout.addWidget(self.table)
+
+        # Summary frame
+        self.summary_frame = QFrame()
+        self.summary_frame.setStyleSheet(
+            "QFrame { background-color: #181825; border: 1px solid #45475a; "
+            "border-radius: 6px; padding: 10px; }"
+        )
+        self.summary_frame.setVisible(False)
+        self.summary_layout = QVBoxLayout()
+        self.summary_frame.setLayout(self.summary_layout)
+        layout.addWidget(self.summary_frame)
+
+        # Full log
+        self.log = QTextEdit()
+        self.log.setReadOnly(True)
+        layout.addWidget(self.log)
+
+        self.setLayout(layout)
+
+    def _start_backtest(self):
+        target_date = self.date_edit.date().toString("yyyy-MM-dd")
+
+        self.run_btn.setEnabled(False)
+        self.progress_bar.setVisible(True)
+        self.table.setVisible(False)
+        self.summary_frame.setVisible(False)
+        self.log.clear()
+        self.status_label.setText(f"Running backtest for {target_date}...")
+        self.status_label.setStyleSheet("color: #89b4fa;")
+
+        from pennystock.backtest.historical import run_historical_backtest
+        self.worker = Worker(run_historical_backtest, target_date)
+        self.worker.progress.connect(self._append_log)
+        self.worker.finished.connect(self._backtest_done)
+        self.worker.start()
+
+    def _append_log(self, msg):
+        self.log.append(msg)
+        scrollbar = self.log.verticalScrollBar()
+        scrollbar.setValue(scrollbar.maximum())
+
+    def _backtest_done(self, result):
+        self.progress_bar.setVisible(False)
+        self.run_btn.setEnabled(True)
+        self.current_result = result
+
+        if not result or not result.get("picks"):
+            self.status_label.setText("Backtest failed or no picks found")
+            self.status_label.setStyleSheet("color: #f38ba8; font-weight: bold;")
+            return
+
+        picks = result["picks"]
+        target = result["target_date"]
+        summary = result.get("summary", {})
+
+        # Status
+        top_wr = summary.get("top_picks_14d", {}).get("win_rate", 0)
+        self.status_label.setText(
+            f"{target}: {len(picks)} picks | 14d Win Rate: {top_wr:.0f}%"
+        )
+        color = "#a6e3a1" if top_wr > 50 else "#f9e2af" if top_wr >= 40 else "#f38ba8"
+        self.status_label.setStyleSheet(f"color: {color}; font-weight: bold;")
+
+        # Populate table
+        self.table.setRowCount(len(picks))
+        hold_keys = ["5d", "10d", "14d"]
+
+        for row, p in enumerate(picks):
+            ss = p.get("sub_scores", {})
+            fr = p.get("forward_returns", {})
+
+            items = [
+                (f"#{row+1}", None),
+                (p["ticker"], None),
+                (f"${p['entry_price']:.4f}", None),
+                (f"{p['score']:.1f}", self._score_color(p["score"])),
+                (f"{ss.get('setup', 0):.0f}", None),
+                (f"{ss.get('technical', 0):.0f}", None),
+                (f"{ss.get('pre_pump', 0):.0f}", None),
+            ]
+            for key in hold_keys:
+                r = fr.get(key, {}).get("return_pct")
+                if r is not None:
+                    text = f"{r:+.1f}%"
+                    c = QColor("#a6e3a1") if r > 0 else QColor("#f38ba8")
+                    items.append((text, c))
+                else:
+                    items.append(("N/A", None))
+
+            for col, (text, color) in enumerate(items):
+                item = QTableWidgetItem(text)
+                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                if color:
+                    item.setForeground(color)
+                self.table.setItem(row, col, item)
+
+        self.table.setVisible(True)
+
+        # Build summary
+        self._build_summary(summary)
+
+    def _build_summary(self, summary):
+        """Build summary statistics display."""
+        while self.summary_layout.count():
+            child = self.summary_layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+
+        for group, label in [("top_picks", "Top Picks"), ("all_scored", "All Scored Stocks")]:
+            for horizon in ["5d", "10d", "14d"]:
+                key = f"{group}_{horizon}"
+                s = summary.get(key, {})
+                if s.get("count", 0) == 0:
+                    continue
+
+                wr = s["win_rate"]
+                wr_color = "#a6e3a1" if wr > 50 else "#f9e2af" if wr >= 40 else "#f38ba8"
+                text = (
+                    f"<b>{label} @ {horizon}</b>: "
+                    f"<span style='color:{wr_color}'>{wr:.0f}% win rate</span> | "
+                    f"Avg: {s['avg_return']:+.1f}% | "
+                    f"Best: {s['best']:+.1f}% | Worst: {s['worst']:+.1f}% | "
+                    f"n={s['count']}"
+                )
+                lbl = QLabel(text)
+                lbl.setTextFormat(Qt.TextFormat.RichText)
+                lbl.setStyleSheet("font-size: 12px; padding: 2px 5px; border: none;")
+                self.summary_layout.addWidget(lbl)
+
+        self.summary_frame.setVisible(True)
+
+    @staticmethod
+    def _score_color(score):
+        if score >= 65:
+            return QColor("#a6e3a1")
+        elif score >= 50:
+            return QColor("#f9e2af")
+        else:
+            return QColor("#f38ba8")
+
+
 # ── Main Window ─────────────────────────────────────────────────────
 class PennyStockGUI(QMainWindow):
     def __init__(self):
@@ -634,6 +844,7 @@ class PennyStockGUI(QMainWindow):
         tabs.addTab(BuildAlgorithmTab(), "  Build Algorithm  ")
         tabs.addTab(PickStocksTab(), "  Pick Stocks  ")
         tabs.addTab(AnalyzeStockTab(), "  Analyze Stock  ")
+        tabs.addTab(BacktestTab(), "  Backtest  ")
         main_layout.addWidget(tabs)
 
         # Version bar at the bottom

@@ -6,7 +6,8 @@ Usage:
     python main.py              # Launch GUI (default)
     python main.py --cli build  # Build algorithm from CLI
     python main.py --cli pick   # Pick stocks from CLI
-    python main.py analyze GETY # Deep dive analysis on a single stock
+    python main.py analyze GETY   # Deep dive analysis on a single stock
+    python main.py backtest 2025-08-01  # Backtest algorithm on a past date
     python main.py --cli history  # View past picks
 """
 
@@ -71,6 +72,14 @@ def cmd_analyze(args):
     run_deep_dive(args.ticker)
 
 
+def cmd_backtest(args):
+    from pennystock.backtest.historical import run_historical_backtest
+    if not args.target_date:
+        print("\nUsage: python main.py backtest 2025-08-01")
+        return
+    run_historical_backtest(args.target_date, top_n=args.top_n)
+
+
 def cmd_history(args):
     from pennystock.storage.db import Database
     db = Database()
@@ -101,6 +110,10 @@ def main():
     analyze_p = subparsers.add_parser("analyze", help="Deep dive analysis on a single stock")
     analyze_p.add_argument("ticker", type=str, nargs="?", help="Stock ticker to analyze (e.g. GETY)")
 
+    bt_p = subparsers.add_parser("backtest", help="Backtest algorithm on a historical date")
+    bt_p.add_argument("target_date", type=str, nargs="?", help="Date to backtest (e.g. 2025-08-01)")
+    bt_p.add_argument("-n", "--top-n", type=int, default=5)
+
     hist_p = subparsers.add_parser("history", help="View past picks")
     hist_p.add_argument("-n", type=int, default=10)
 
@@ -109,7 +122,8 @@ def main():
 
     if args.cli or args.command:
         # CLI mode
-        commands = {"build": cmd_build, "pick": cmd_pick, "analyze": cmd_analyze, "history": cmd_history}
+        commands = {"build": cmd_build, "pick": cmd_pick, "analyze": cmd_analyze,
+                    "backtest": cmd_backtest, "history": cmd_history}
         func = commands.get(args.command)
         if func:
             func(args)
