@@ -771,7 +771,7 @@ def _create_run_logger(run_type: str):
         lines.append(msg)
 
     def finalize_func():
-        with open(run_file, "w") as f:
+        with open(run_file, "w", encoding="utf-8") as f:
             f.write(f"Penny Stock Analyzer v{ALGORITHM_VERSION}\n")
             f.write(f"Run type: {run_type}\n")
             f.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")

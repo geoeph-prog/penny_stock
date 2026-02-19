@@ -607,9 +607,11 @@ def _print_catalyst(p, cat, news_list):
     if news_list:
         p(f"\n  Recent News ({len(news_list)} articles):")
         for article in news_list[:10]:
-            title = article.get("title", "N/A")
-            pub = article.get("publisher", "")
+            title = article.get("title", "") or ""
+            pub = article.get("publisher", "") or ""
             ts = article.get("published", 0)
+            if not title:
+                continue  # Skip articles with no title
             date_str = ""
             if ts:
                 try:
@@ -738,7 +740,7 @@ def _save_report(ticker: str, lines: list):
     os.makedirs("runs", exist_ok=True)
     timestamp = time.strftime("%Y%m%d_%H%M%S")
     path = os.path.join("runs", f"analyze_{ticker}_{timestamp}_v{ALGORITHM_VERSION}.txt")
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         for line in lines:
             f.write(line + "\n")
     print(f"\n  Report saved to {path}")
