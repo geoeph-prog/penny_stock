@@ -1,0 +1,9 @@
+{
+  "ALERT_ENABLED": true,
+  "ALERT_EMAIL_SMTP_SERVER": "smtp.gmail.com",
+  "ALERT_EMAIL_SMTP_PORT": 587,
+  "ALERT_EMAIL_SENDER": "pgstockpicker@gmail.com",
+  "ALERT_EMAIL_PASSWORD": "oqdj nbaf kirn idjz",
+  "ALERT_EMAIL_RECIPIENT": "pgstockpicker@gmail.com",
+  "ALERT_PRICE_CHECK_MINUTES": 15
+}
