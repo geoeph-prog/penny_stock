@@ -16,6 +16,7 @@ Usage:
 
 import argparse
 import sys
+import time
 
 from loguru import logger
 
@@ -157,6 +158,68 @@ def cmd_simulate(args):
         print("Usage: python main.py simulate {status|trade|refresh|reset|learn}")
 
 
+def cmd_alerts(args):
+    from pennystock.alerts.monitor import AlertMonitor
+
+    if args.alert_action == "status":
+        monitor = AlertMonitor()
+        status = monitor.get_status()
+        print(f"\n  Alert Monitor: {'RUNNING' if status['running'] else 'STOPPED'}")
+        print(f"  Alerts Sent: {status['alerts_sent']} "
+              f"(buy:{status['buy_alerts']} sell:{status['sell_alerts']} summary:{status['summary_alerts']})")
+        if status['last_scan']:
+            print(f"  Last Scan: {status['last_scan'][:19]}")
+        if status['last_price_check']:
+            print(f"  Last Price Check: {status['last_price_check'][:19]}")
+        if status['last_daily_summary']:
+            print(f"  Last Summary: {status['last_daily_summary'][:19]}")
+        history = status.get("history", [])
+        if history:
+            print(f"\n  Recent alerts:")
+            for h in history[-10:]:
+                print(f"    [{h['time'][:16]}] {h['type']}: {h['detail']}")
+
+    elif args.alert_action == "start":
+        from pennystock.config import ALERT_ENABLED
+        if not ALERT_ENABLED:
+            print("\nAlerts not enabled. Set ALERT_ENABLED=True in config.py")
+            print("and configure ALERT_EMAIL_SENDER, ALERT_EMAIL_PASSWORD, ALERT_EMAIL_RECIPIENT")
+            return
+        monitor = AlertMonitor()
+        print("Starting alert monitor (Ctrl+C to stop)...")
+        print(f"  Price check: every {monitor.state.get('price_interval', 15)} min")
+        monitor.start(log_callback=print)
+        try:
+            while monitor.is_running:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            monitor.stop()
+            print("\nMonitor stopped.")
+
+    elif args.alert_action == "check":
+        monitor = AlertMonitor()
+        monitor._log_callback = print
+        monitor.run_once()
+
+    elif args.alert_action == "test":
+        from pennystock.alerts.email_sender import send_test_email
+        from pennystock.config import ALERT_EMAIL_SENDER, ALERT_EMAIL_RECIPIENT
+        if not ALERT_EMAIL_SENDER or not ALERT_EMAIL_RECIPIENT:
+            print("\nEmail not configured. Set these in config.py:")
+            print("  ALERT_EMAIL_SENDER = 'you@gmail.com'")
+            print("  ALERT_EMAIL_PASSWORD = 'your-app-password'")
+            print("  ALERT_EMAIL_RECIPIENT = 'you@gmail.com'")
+            return
+        print(f"Sending test email to {ALERT_EMAIL_RECIPIENT}...")
+        if send_test_email():
+            print("Test email sent successfully!")
+        else:
+            print("Failed to send test email. Check config and logs.")
+
+    else:
+        print("Usage: python main.py alerts {status|start|check|test}")
+
+
 def cmd_history(args):
     from pennystock.storage.db import Database
     db = Database()
@@ -198,6 +261,11 @@ def main():
                        choices=["status", "trade", "refresh", "reset", "learn"],
                        help="Simulation action (default: status)")
 
+    alert_p = subparsers.add_parser("alerts", help="Email alert monitor")
+    alert_p.add_argument("alert_action", type=str, nargs="?", default="status",
+                         choices=["status", "start", "check", "test"],
+                         help="Alert action (default: status)")
+
     hist_p = subparsers.add_parser("history", help="View past picks")
     hist_p.add_argument("-n", type=int, default=10)
 
@@ -208,7 +276,8 @@ def main():
         # CLI mode
         commands = {"build": cmd_build, "pick": cmd_pick, "analyze": cmd_analyze,
                     "backtest": cmd_backtest, "optimize": cmd_optimize,
-                    "simulate": cmd_simulate, "history": cmd_history}
+                    "simulate": cmd_simulate, "alerts": cmd_alerts,
+                    "history": cmd_history}
         func = commands.get(args.command)
         if func:
             func(args)

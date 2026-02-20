@@ -3,7 +3,7 @@
 # ── Algorithm Version ─────────────────────────────────────────────
 # Bump on every change. Major.Minor.Patch
 # Major = new strategy/architecture, Minor = new signals, Patch = tuning
-ALGORITHM_VERSION = "5.0.1"
+ALGORITHM_VERSION = "5.1.0"
 
 # ── Price & Volume Filters ──────────────────────────────────────────
 MIN_PRICE = 0.50   # Expanded from $0.10 to include more reputable sub-$5 stocks
@@ -424,6 +424,21 @@ SIMULATION_MAX_POSITIONS = 10     # Match STAGE2_RETURN_TOP_N
 SIMULATION_STATE_FILE = "simulation_state.json"
 SIMULATION_MIN_TRADES_FOR_LEARNING = 10  # Need N trades before adjusting sizing
 
+# ── Email Alerts ──────────────────────────────────────────────────────
+# Free email alerts via SMTP. Works with Gmail (App Password), Outlook, Yahoo.
+# Gmail setup: enable 2FA -> create App Password -> use that as ALERT_EMAIL_PASSWORD
+ALERT_ENABLED = False                       # Master switch
+ALERT_EMAIL_SMTP_SERVER = "smtp.gmail.com"  # Gmail default
+ALERT_EMAIL_SMTP_PORT = 587                 # TLS port
+ALERT_EMAIL_SENDER = ""                     # Your email (e.g. you@gmail.com)
+ALERT_EMAIL_PASSWORD = ""                   # App password (NOT your login password)
+ALERT_EMAIL_RECIPIENT = ""                  # Where to send alerts (can be same as sender)
+ALERT_PRICE_CHECK_MINUTES = 15              # Check prices every N minutes
+ALERT_SCAN_HOURS = 4                        # Run full pick scan every N hours
+ALERT_ON_BUY = True                         # Email when new picks found
+ALERT_ON_SELL = True                         # Email when sell triggers hit
+ALERT_DAILY_SUMMARY = True                  # Email portfolio summary at market close
+
 # ── Caching ─────────────────────────────────────────────────────────
 CACHE_DIR = ".cache"
 CACHE_TTL_HOURS = 1  # Re-fetch after this many hours
@@ -457,5 +472,24 @@ if _os.path.exists(_opt_path):
         ]:
             if _key in _opt:
                 globals()[_key] = _opt[_key]
+    except Exception:
+        pass
+
+# ── Alert Config Override ─────────────────────────────────────────
+# If alert_config.json exists, load saved email settings from GUI Tab 7
+_alert_path = _os.path.join(_os.path.dirname(__file__), "..", "alert_config.json")
+_alert_path = _os.path.normpath(_alert_path)
+if _os.path.exists(_alert_path):
+    try:
+        with open(_alert_path, "r", encoding="utf-8") as _f:
+            _acfg = _json.load(_f)
+        for _key in [
+            "ALERT_ENABLED", "ALERT_EMAIL_SMTP_SERVER", "ALERT_EMAIL_SMTP_PORT",
+            "ALERT_EMAIL_SENDER", "ALERT_EMAIL_PASSWORD", "ALERT_EMAIL_RECIPIENT",
+            "ALERT_PRICE_CHECK_MINUTES", "ALERT_SCAN_HOURS",
+            "ALERT_ON_BUY", "ALERT_ON_SELL", "ALERT_DAILY_SUMMARY",
+        ]:
+            if _key in _acfg:
+                globals()[_key] = _acfg[_key]
     except Exception:
         pass

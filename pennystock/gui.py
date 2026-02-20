@@ -1,18 +1,20 @@
 """
 PyQt6 GUI for the Stock Analyzer ($0.50-$5.00).
 
-Six tabs:
+Seven tabs:
   Tab 1 - Build Algorithm: Learn from recent winners vs losers
   Tab 2 - Pick Stocks: Apply algorithm to find today's top 5
   Tab 3 - Analyze Stock: Comprehensive deep dive on a single ticker
   Tab 4 - Backtest: Run the algorithm on a past date and check results
   Tab 5 - Backtest Algorithm: Full 3-year optimization of sell strategy + weights
   Tab 6 - Simulation: Paper trading sandbox with self-learning
+  Tab 7 - Alerts: Email notifications for buy/sell signals
 """
 
+import os
 import sys
 import threading
-from datetime import date
+from datetime import date, datetime
 
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QDate, QTimer
 from PyQt6.QtWidgets import (
@@ -1647,6 +1649,336 @@ class SimulationTab(QWidget):
         self._load_and_display()
 
 
+# ── Tab 7: Email Alerts ─────────────────────────────────────────────
+class AlertsTab(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.monitor = None
+        layout = QVBoxLayout()
+
+        # Header
+        header = QLabel("Email Alerts  —  Real-Time Buy/Sell Notifications")
+        header.setStyleSheet("font-size: 18px; font-weight: bold; color: #f5c2e7; padding: 10px;")
+        layout.addWidget(header)
+
+        desc = QLabel(
+            "Monitors positions during market hours. Sends email alerts when\n"
+            "sell triggers hit (SL/TP/trailing/max hold), new picks are found, and daily summaries."
+        )
+        desc.setStyleSheet("color: #a6adc8; padding: 0 10px 5px 10px;")
+        layout.addWidget(desc)
+
+        # ── Config Summary ──────────────────────────────────
+        self.config_frame = QFrame()
+        self.config_frame.setStyleSheet(
+            "QFrame { background-color: #181825; border: 1px solid #45475a; "
+            "border-radius: 6px; padding: 10px; }"
+        )
+        config_grid = QGridLayout()
+
+        # Row 0: SMTP
+        config_grid.addWidget(self._label("SMTP Server:"), 0, 0)
+        self.smtp_input = QLineEdit()
+        self.smtp_input.setPlaceholderText("smtp.gmail.com")
+        config_grid.addWidget(self.smtp_input, 0, 1)
+
+        config_grid.addWidget(self._label("Port:"), 0, 2)
+        self.port_input = QLineEdit()
+        self.port_input.setPlaceholderText("587")
+        self.port_input.setMaximumWidth(80)
+        config_grid.addWidget(self.port_input, 0, 3)
+
+        # Row 1: Sender
+        config_grid.addWidget(self._label("Sender Email:"), 1, 0)
+        self.sender_input = QLineEdit()
+        self.sender_input.setPlaceholderText("you@gmail.com")
+        config_grid.addWidget(self.sender_input, 1, 1)
+
+        config_grid.addWidget(self._label("App Password:"), 1, 2)
+        self.password_input = QLineEdit()
+        self.password_input.setPlaceholderText("xxxx xxxx xxxx xxxx")
+        self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
+        config_grid.addWidget(self.password_input, 1, 3)
+
+        # Row 2: Recipient + intervals
+        config_grid.addWidget(self._label("Recipient:"), 2, 0)
+        self.recipient_input = QLineEdit()
+        self.recipient_input.setPlaceholderText("you@gmail.com (can be same as sender)")
+        config_grid.addWidget(self.recipient_input, 2, 1)
+
+        config_grid.addWidget(self._label("Check (min):"), 2, 2)
+        self.interval_input = QLineEdit()
+        self.interval_input.setPlaceholderText("15")
+        self.interval_input.setMaximumWidth(80)
+        config_grid.addWidget(self.interval_input, 2, 3)
+
+        self.config_frame.setLayout(config_grid)
+        layout.addWidget(self.config_frame)
+
+        # ── Button Row ──────────────────────────────────────
+        btn_row = QHBoxLayout()
+
+        self.save_btn = QPushButton("Save Config")
+        self.save_btn.setStyleSheet(
+            "QPushButton { background-color: #89b4fa; padding: 10px 20px; }"
+            "QPushButton:hover { background-color: #74c7ec; }"
+        )
+        self.save_btn.clicked.connect(self._save_config)
+        btn_row.addWidget(self.save_btn)
+
+        self.test_btn = QPushButton("Send Test Email")
+        self.test_btn.setStyleSheet(
+            "QPushButton { background-color: #f9e2af; color: #1e1e2e; padding: 10px 20px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #fab387; }"
+        )
+        self.test_btn.clicked.connect(self._send_test)
+        btn_row.addWidget(self.test_btn)
+
+        self.start_btn = QPushButton("Start Monitor")
+        self.start_btn.setStyleSheet(
+            "QPushButton { background-color: #a6e3a1; color: #1e1e2e; "
+            "padding: 10px 20px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #94e2d5; }"
+        )
+        self.start_btn.clicked.connect(self._toggle_monitor)
+        btn_row.addWidget(self.start_btn)
+
+        self.check_btn = QPushButton("Check Now")
+        self.check_btn.setStyleSheet(
+            "QPushButton { background-color: #cba6f7; color: #1e1e2e; padding: 10px 20px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #b4befe; }"
+        )
+        self.check_btn.clicked.connect(self._check_now)
+        btn_row.addWidget(self.check_btn)
+
+        self.status_label = QLabel("")
+        btn_row.addWidget(self.status_label)
+        btn_row.addStretch()
+        layout.addLayout(btn_row)
+
+        # ── Status Cards ────────────────────────────────────
+        self.status_frame = QFrame()
+        self.status_frame.setStyleSheet(
+            "QFrame { background-color: #181825; border: 1px solid #45475a; "
+            "border-radius: 6px; padding: 10px; }"
+        )
+        self.status_grid = QGridLayout()
+        self._status_labels = {}
+        self._build_status_cards()
+        self.status_frame.setLayout(self.status_grid)
+        layout.addWidget(self.status_frame)
+
+        # ── Alert Log ───────────────────────────────────────
+        log_label = QLabel("Alert Log")
+        log_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #f5c2e7; padding: 8px 10px 2px 10px;")
+        layout.addWidget(log_label)
+
+        self.log_output = QTextEdit()
+        self.log_output.setReadOnly(True)
+        self.log_output.setStyleSheet(
+            "QTextEdit { background-color: #11111b; border: 1px solid #45475a; "
+            "border-radius: 4px; padding: 8px; font-family: monospace; font-size: 12px; }"
+        )
+        layout.addWidget(self.log_output)
+
+        # ── Alert History Table ─────────────────────────────
+        hist_label = QLabel("Alert History")
+        hist_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #f5c2e7; padding: 8px 10px 2px 10px;")
+        layout.addWidget(hist_label)
+
+        self.history_table = QTableWidget()
+        self.history_table.setColumnCount(3)
+        self.history_table.setHorizontalHeaderLabels(["Time", "Type", "Detail"])
+        self.history_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.history_table.setMaximumHeight(180)
+        layout.addWidget(self.history_table)
+
+        self.setLayout(layout)
+
+        # Load saved config into fields
+        self._load_config_fields()
+        self._refresh_status()
+
+    def _label(self, text):
+        lbl = QLabel(text)
+        lbl.setStyleSheet("color: #a6adc8; font-weight: bold;")
+        return lbl
+
+    def _build_status_cards(self):
+        cards = [
+            ("monitor", "Monitor", "STOPPED"),
+            ("alerts_sent", "Total Alerts", "0"),
+            ("buy_alerts", "Buy Alerts", "0"),
+            ("sell_alerts", "Sell Alerts", "0"),
+            ("last_check", "Last Check", "Never"),
+            ("last_scan", "Last Scan", "Never"),
+        ]
+        for i, (key, title, default) in enumerate(cards):
+            title_lbl = QLabel(title)
+            title_lbl.setStyleSheet("color: #585b70; font-size: 10px;")
+            val_lbl = QLabel(default)
+            val_lbl.setStyleSheet("color: #cdd6f4; font-size: 16px; font-weight: bold;")
+            self.status_grid.addWidget(title_lbl, 0, i)
+            self.status_grid.addWidget(val_lbl, 1, i)
+            self._status_labels[key] = val_lbl
+
+    def _load_config_fields(self):
+        from pennystock.config import (
+            ALERT_EMAIL_SMTP_SERVER, ALERT_EMAIL_SMTP_PORT,
+            ALERT_EMAIL_SENDER, ALERT_EMAIL_PASSWORD,
+            ALERT_EMAIL_RECIPIENT, ALERT_PRICE_CHECK_MINUTES,
+        )
+        self.smtp_input.setText(ALERT_EMAIL_SMTP_SERVER)
+        self.port_input.setText(str(ALERT_EMAIL_SMTP_PORT))
+        self.sender_input.setText(ALERT_EMAIL_SENDER)
+        self.password_input.setText(ALERT_EMAIL_PASSWORD)
+        self.recipient_input.setText(ALERT_EMAIL_RECIPIENT)
+        self.interval_input.setText(str(ALERT_PRICE_CHECK_MINUTES))
+
+    def _save_config(self):
+        """Save email config to alert_config.json (loaded at runtime, not modifying config.py)."""
+        import json
+        config = {
+            "ALERT_ENABLED": True,
+            "ALERT_EMAIL_SMTP_SERVER": self.smtp_input.text().strip(),
+            "ALERT_EMAIL_SMTP_PORT": int(self.port_input.text().strip() or "587"),
+            "ALERT_EMAIL_SENDER": self.sender_input.text().strip(),
+            "ALERT_EMAIL_PASSWORD": self.password_input.text().strip(),
+            "ALERT_EMAIL_RECIPIENT": self.recipient_input.text().strip(),
+            "ALERT_PRICE_CHECK_MINUTES": int(self.interval_input.text().strip() or "15"),
+        }
+
+        import pennystock.config as cfg
+        for key, val in config.items():
+            setattr(cfg, key, val)
+
+        config_path = os.path.join(os.path.dirname(__file__), "..", "alert_config.json")
+        config_path = os.path.normpath(config_path)
+        with open(config_path, "w", encoding="utf-8") as f:
+            json.dump(config, f, indent=2)
+
+        self.status_label.setText("Config saved!")
+        self.status_label.setStyleSheet("color: #a6e3a1; font-weight: bold;")
+        self._append_log("Email configuration saved to alert_config.json")
+
+    def _send_test(self):
+        self._apply_config_to_module()
+        from pennystock.alerts.email_sender import send_test_email
+        self._append_log("Sending test email...")
+        if send_test_email():
+            self.status_label.setText("Test email sent!")
+            self.status_label.setStyleSheet("color: #a6e3a1; font-weight: bold;")
+            self._append_log("Test email sent successfully!")
+        else:
+            self.status_label.setText("Send failed — check log")
+            self.status_label.setStyleSheet("color: #f38ba8; font-weight: bold;")
+            self._append_log("Test email FAILED. Check SMTP settings and app password.")
+
+    def _apply_config_to_module(self):
+        """Push GUI field values into the config module at runtime."""
+        import pennystock.config as cfg
+        cfg.ALERT_ENABLED = True
+        cfg.ALERT_EMAIL_SMTP_SERVER = self.smtp_input.text().strip()
+        cfg.ALERT_EMAIL_SMTP_PORT = int(self.port_input.text().strip() or "587")
+        cfg.ALERT_EMAIL_SENDER = self.sender_input.text().strip()
+        cfg.ALERT_EMAIL_PASSWORD = self.password_input.text().strip()
+        cfg.ALERT_EMAIL_RECIPIENT = self.recipient_input.text().strip()
+        cfg.ALERT_PRICE_CHECK_MINUTES = int(self.interval_input.text().strip() or "15")
+
+    def _toggle_monitor(self):
+        if self.monitor and self.monitor.is_running:
+            self.monitor.stop()
+            self.start_btn.setText("Start Monitor")
+            self.start_btn.setStyleSheet(
+                "QPushButton { background-color: #a6e3a1; color: #1e1e2e; "
+                "padding: 10px 20px; font-weight: bold; }"
+            )
+            self._status_labels["monitor"].setText("STOPPED")
+            self._status_labels["monitor"].setStyleSheet("color: #f38ba8; font-size: 16px; font-weight: bold;")
+            self._append_log("Monitor stopped")
+        else:
+            self._apply_config_to_module()
+            sender = self.sender_input.text().strip()
+            recipient = self.recipient_input.text().strip()
+            password = self.password_input.text().strip()
+            if not sender or not recipient or not password:
+                self.status_label.setText("Configure email first!")
+                self.status_label.setStyleSheet("color: #f38ba8; font-weight: bold;")
+                return
+            from pennystock.alerts.monitor import AlertMonitor
+            self.monitor = AlertMonitor()
+            self.monitor.start(log_callback=self._append_log)
+            self.start_btn.setText("Stop Monitor")
+            self.start_btn.setStyleSheet(
+                "QPushButton { background-color: #f38ba8; color: #1e1e2e; "
+                "padding: 10px 20px; font-weight: bold; }"
+            )
+            self._status_labels["monitor"].setText("RUNNING")
+            self._status_labels["monitor"].setStyleSheet("color: #a6e3a1; font-size: 16px; font-weight: bold;")
+            self._append_log("Monitor started — checking every "
+                           f"{self.interval_input.text().strip() or '15'} min")
+
+            # Start a timer to refresh status periodically
+            if not hasattr(self, '_status_timer'):
+                self._status_timer = QTimer()
+                self._status_timer.timeout.connect(self._refresh_status)
+                self._status_timer.start(30000)  # Refresh status every 30s
+
+    def _check_now(self):
+        """Run a single check cycle immediately."""
+        self._apply_config_to_module()
+        from pennystock.alerts.monitor import AlertMonitor
+        monitor = self.monitor or AlertMonitor()
+        monitor._log_callback = self._append_log
+        self._append_log("Running manual check...")
+        try:
+            monitor.run_once()
+            self._append_log("Manual check complete")
+        except Exception as e:
+            self._append_log(f"Check failed: {e}")
+        self._refresh_status()
+
+    def _refresh_status(self):
+        """Update status cards and history table."""
+        from pennystock.alerts.monitor import AlertMonitor
+        monitor = self.monitor or AlertMonitor()
+        status = monitor.get_status()
+
+        running = self.monitor.is_running if self.monitor else False
+        self._status_labels["monitor"].setText("RUNNING" if running else "STOPPED")
+        self._status_labels["monitor"].setStyleSheet(
+            f"color: {'#a6e3a1' if running else '#f38ba8'}; font-size: 16px; font-weight: bold;"
+        )
+        self._status_labels["alerts_sent"].setText(str(status["alerts_sent"]))
+        self._status_labels["buy_alerts"].setText(str(status["buy_alerts"]))
+        self._status_labels["sell_alerts"].setText(str(status["sell_alerts"]))
+        self._status_labels["last_check"].setText(
+            status["last_price_check"][:16] if status["last_price_check"] else "Never"
+        )
+        self._status_labels["last_scan"].setText(
+            status["last_scan"][:16] if status["last_scan"] else "Never"
+        )
+
+        # Populate history table
+        history = status.get("history", [])
+        self.history_table.setRowCount(len(history))
+        for row, h in enumerate(reversed(history)):
+            self.history_table.setItem(row, 0, QTableWidgetItem(h["time"][:16]))
+            type_item = QTableWidgetItem(h["type"])
+            if h["type"] == "BUY":
+                type_item.setForeground(QColor("#a6e3a1"))
+            elif h["type"] == "SELL":
+                type_item.setForeground(QColor("#f38ba8"))
+            else:
+                type_item.setForeground(QColor("#f9e2af"))
+            self.history_table.setItem(row, 1, type_item)
+            self.history_table.setItem(row, 2, QTableWidgetItem(h["detail"]))
+
+    def _append_log(self, text):
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        self.log_output.append(f"[{timestamp}] {text}")
+
+
 # ── Main Window ─────────────────────────────────────────────────────
 class PennyStockGUI(QMainWindow):
     def __init__(self):
@@ -1668,6 +2000,7 @@ class PennyStockGUI(QMainWindow):
         tabs.addTab(BacktestTab(), "  Backtest  ")
         tabs.addTab(OptimizeAlgorithmTab(), "  Backtest Algorithm  ")
         tabs.addTab(SimulationTab(), "  Simulation  ")
+        tabs.addTab(AlertsTab(), "  Alerts  ")
         main_layout.addWidget(tabs)
 
         # Version bar at the bottom
