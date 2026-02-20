@@ -184,7 +184,7 @@ class AlgorithmOptimizer:
     # ─────────────────────────────────────────────────────────
 
     def _fetch_data(self):
-        self._log("  Fetching penny stock universe from Finviz...")
+        self._log("  Fetching stock universe from Finviz...")
         self.stocks = get_penny_stocks()
         self._log(f"  Found {len(self.stocks)} stocks in universe")
 

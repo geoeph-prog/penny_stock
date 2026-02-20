@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Penny Stock Analyzer
+Stock Analyzer ($0.50-$5.00)
 
 Usage:
     python main.py              # Launch GUI (default)
@@ -46,7 +46,7 @@ def cmd_pick(args):
         return
 
     print("\n" + "=" * 70)
-    print(f"  TOP {len(picks)} PENNY STOCK PICKS (v{ALGORITHM_VERSION} MEGA-ALGORITHM)")
+    print(f"  TOP {len(picks)} STOCK PICKS (v{ALGORITHM_VERSION} MEGA-ALGORITHM)")
     print("=" * 70)
     for i, pick in enumerate(picks, 1):
         ss = pick.get("sub_scores", {})
@@ -173,7 +173,7 @@ def cmd_history(args):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Penny Stock Analyzer")
+    parser = argparse.ArgumentParser(description="Stock Analyzer ($0.50-$5.00)")
     parser.add_argument("-v", "--verbose", action="store_true")
     parser.add_argument("--cli", action="store_true", help="Run in CLI mode instead of GUI")
 
@@ -181,7 +181,7 @@ def main():
 
     subparsers.add_parser("build", help="Build algorithm from recent winners vs losers")
 
-    pick_p = subparsers.add_parser("pick", help="Pick top penny stocks")
+    pick_p = subparsers.add_parser("pick", help="Pick top stocks ($0.50-$5.00)")
     pick_p.add_argument("-n", "--top-n", type=int, default=5)
 
     analyze_p = subparsers.add_parser("analyze", help="Deep dive analysis on a single stock")

@@ -7,7 +7,7 @@ from pennystock.config import MIN_PRICE, MAX_PRICE, MIN_VOLUME
 
 def get_penny_stocks(min_price=None, max_price=None, min_volume=None):
     """
-    Screen Finviz for penny stocks matching our criteria.
+    Screen Finviz for stocks in our price range ($0.50-$5.00).
 
     Returns list of dicts with at least: ticker, price, volume, company, sector.
     Falls back to an empty list on failure (caller should handle fallback).
@@ -23,7 +23,7 @@ def get_penny_stocks(min_price=None, max_price=None, min_volume=None):
 
         # Finviz filter keys
         filters = {
-            "Price": "Under $1",
+            "Price": "Under $5",
             "Average Volume": "Over 50K",
         }
         foverview.set_filter(filters_dict=filters)
@@ -36,7 +36,7 @@ def get_penny_stocks(min_price=None, max_price=None, min_volume=None):
         # Normalize column names (finvizfinance uses title case)
         df.columns = [c.lower().replace(" ", "_") for c in df.columns]
 
-        # Apply exact price range filter (Finviz only does "Under $1")
+        # Apply exact price range filter (Finviz "Under $5" is broad)
         if "price" in df.columns:
             df["price"] = df["price"].astype(float)
             df = df[(df["price"] >= min_price) & (df["price"] <= max_price)]
@@ -58,7 +58,7 @@ def get_penny_stocks(min_price=None, max_price=None, min_volume=None):
                 "market_cap": row.get("market_cap", ""),
             })
 
-        logger.info(f"Finviz found {len(stocks)} penny stocks (${min_price}-${max_price}, vol>{min_volume:,})")
+        logger.info(f"Finviz found {len(stocks)} stocks (${min_price}-${max_price}, vol>{min_volume:,})")
         return stocks
 
     except ImportError:

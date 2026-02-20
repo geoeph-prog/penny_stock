@@ -1,5 +1,5 @@
 """
-PyQt6 GUI for the Penny Stock Analyzer.
+PyQt6 GUI for the Stock Analyzer ($0.50-$5.00).
 
 Six tabs:
   Tab 1 - Build Algorithm: Learn from recent winners vs losers
@@ -158,7 +158,7 @@ class BuildAlgorithmTab(QWidget):
         layout.addWidget(header)
 
         desc = QLabel(
-            "Analyzes all penny stocks ($0.05-$1.00) over the past 3 months.\n"
+            "Analyzes all stocks ($0.50-$5.00) over the past 3 months.\n"
             "Finds stocks that gained steadily over 2-4+ weeks (not pump & dumps).\n"
             "Compares winners vs losers on technical, sentiment, and fundamental factors.\n"
             "Builds ONE unified algorithm with kill filters + weighted scoring."
@@ -1651,7 +1651,7 @@ class SimulationTab(QWidget):
 class PennyStockGUI(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle(f"Penny Stock Analyzer v{ALGORITHM_VERSION}")
+        self.setWindowTitle(f"Stock Analyzer v{ALGORITHM_VERSION}")
         self.setMinimumSize(1100, 800)
 
         # Central widget with main layout
@@ -1672,7 +1672,7 @@ class PennyStockGUI(QMainWindow):
 
         # Version bar at the bottom
         version_bar = QLabel(
-            f"  Penny Stock Analyzer v{ALGORITHM_VERSION}  |  "
+            f"  Stock Analyzer v{ALGORITHM_VERSION}  |  $0.50-$5.00  |  "
             f"Weights: pre_pump {35}% setup {25}% tech {20}% fund {10}% cat {10}%  |  "
             f"12 kill filters  |  7 pre-pump signals"
         )

@@ -3,11 +3,11 @@
 # ── Algorithm Version ─────────────────────────────────────────────
 # Bump on every change. Major.Minor.Patch
 # Major = new strategy/architecture, Minor = new signals, Patch = tuning
-ALGORITHM_VERSION = "4.1.1"
+ALGORITHM_VERSION = "5.0.0"
 
 # ── Price & Volume Filters ──────────────────────────────────────────
-MIN_PRICE = 0.10   # Raised from 0.05 -- sub-dime stocks are untradeable garbage
-MAX_PRICE = 1.00
+MIN_PRICE = 0.50   # Expanded from $0.10 to include more reputable sub-$5 stocks
+MAX_PRICE = 5.00   # Expanded from $1.00 -- covers micro-cap/small-cap territory
 MIN_VOLUME = 50_000
 
 # ── Technical Analysis Parameters ───────────────────────────────────
@@ -96,9 +96,9 @@ KILL_PRE_REVENUE_MIN_BURN = -50_000_000     # Burning > $50M/year
 KILL_NEGATIVE_EQUITY = True
 # Would have killed: SMXT (-$11.78M equity), XPON (-$65M equity)
 
-# -- Kill: Sub-dime stock price (untradeable, manipulated) ----------
-KILL_MIN_PRICE = 0.10             # Stocks below $0.10 are garbage
-# Would have killed: BYAH ($0.05)
+# -- Kill: Sub-50-cent stock price (untradeable, manipulated) --------
+KILL_MIN_PRICE = 0.50             # Stocks below $0.50 are illiquid garbage
+# Would have killed: BYAH ($0.05), sub-dime stocks
 
 # -- Kill: Extreme profit margin losses (hemorrhaging money) --------
 KILL_EXTREME_LOSS_MARGIN = -2.0   # -200% profit margin = burning faster than revenue
@@ -136,13 +136,13 @@ KILL_PUMP_DUMP_DECLINE_PCT = 0.30    # Current price must be <30% of peak (was 2
 
 # ═══════════════════════════════════════════════════════════════════
 # SCORING PENALTIES (downgraded from hard kills)
-# These are "normal penny stock shadiness" -- bad signs that reduce
+# Common red flags in cheap stocks -- bad signs that reduce
 # the score but don't instantly disqualify. A stock can overcome
 # these with strong setup + technicals + fundamentals.
 # ═══════════════════════════════════════════════════════════════════
 
 # Going concern -> score penalty instead of kill
-# v3.0: Reduced from 25 to 12. Almost every penny stock has going concern.
+# v3.0: Reduced from 25 to 12. Many cheap stocks have going concern.
 # YIBO had going concern and pumped 60%. It's background noise, not a signal.
 PENALTY_GOING_CONCERN = 12          # Points deducted from final score (0-100)
 
@@ -178,8 +178,8 @@ PENALTY_MICRO_EMPLOYEES_THRESHOLD = 10  # < 10 FTEs = suspicious
 
 # -- Category-level weights (must sum to 1.0) ----------------------
 # v3.0: Rebalanced for pre-pump detection. Setup + pre-pump signals dominate.
-# Fundamentals matter less for penny stocks (they're ALL garbage companies).
-# The question is: will it pump? Not: is it a good company?
+# v5.0: Expanded to $0.50-$5.00. Fundamentals still secondary to setup signals,
+# but the wider range now includes more legitimate companies.
 WEIGHTS = {
     "setup":        0.25,   # Float, insider ownership, proximity-to-low, P/B
     "technical":    0.20,   # RSI, MACD, StochRSI, volume, price trend, ADX
@@ -260,7 +260,7 @@ PB_THRESHOLDS = [
     (0.50, 100),   # Below half of book value: deep value
     (1.00,  75),   # Below book: value territory
     (2.00,  50),   # Reasonable
-    (5.00,  30),   # Expensive for a penny stock
+    (5.00,  30),   # Getting expensive
     (float("inf"), 15),
 ]
 
@@ -282,7 +282,7 @@ SHORT_INTEREST_THRESHOLDS = [
     (0.00, 40),    # < 5%: minimal
 ]
 
-# RSI scoring for penny stocks (optimal is 30-50 oversold bounce zone)
+# RSI scoring (optimal is 30-50 oversold bounce zone)
 RSI_SCORE_MAP = {
     "30_50":  90,   # Oversold bounce zone (RIME was 42-47)
     "50_60":  70,   # Neutral with room to run

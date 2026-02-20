@@ -1,8 +1,10 @@
 """
-The ONE algorithm for penny stock prediction.
+The ONE algorithm for low-priced stock prediction ($0.50-$5.00).
 v3.0: MEGA-ALGORITHM with pre-pump detection.
 v4.1.1: Stage 1 now uses blended ranking (60% technical + 40% pre-pump hints)
         and analyzes top 100 instead of 50 to avoid missing setups.
+v5.0.0: Expanded from penny stocks ($0.10-$1.00) to $0.50-$5.00 range
+        for better coverage of legitimate cheap stocks.
 
 Two-layer architecture:
   LAYER 1: Kill Filters  - Instantly disqualify broken stocks (quality_gate.py)
@@ -66,7 +68,7 @@ def build_algorithm(progress_callback=None):
     Learn what predicts penny stock winners by analyzing the last 3 months.
 
     Steps:
-      1. Get ALL penny stocks from Finviz ($0.05-$1.00)
+      1. Get ALL stocks from Finviz ($0.50-$5.00)
       2. Get 3-month price history for each
       3. Classify: WINNER = gained >15% over 2 weeks AND >20% over 4 weeks
       4. Extract technical features for ALL stocks (fast)
@@ -84,11 +86,11 @@ def build_algorithm(progress_callback=None):
 
     start = time.time()
     _log("=" * 60)
-    _log("BUILDING ALGORITHM FROM RECENT PENNY STOCK DATA")
+    _log("BUILDING ALGORITHM FROM RECENT STOCK DATA ($0.50-$5.00)")
     _log("=" * 60)
 
-    # ── Step 1: Get all penny stocks ────────────────────────────────
-    _log("Step 1: Discovering penny stocks via Finviz...")
+    # ── Step 1: Get all stocks in range ───────────────────────────────
+    _log("Step 1: Discovering stocks via Finviz ($0.50-$5.00)...")
     stocks = get_penny_stocks()
     if not stocks:
         _log("ERROR: No stocks found. Check network connection.")
@@ -96,7 +98,7 @@ def build_algorithm(progress_callback=None):
 
     tickers = [s["ticker"] for s in stocks]
     stock_info = {s["ticker"]: s for s in stocks}
-    _log(f"  Found {len(tickers)} penny stocks")
+    _log(f"  Found {len(tickers)} stocks")
 
     # ── Step 2+3: Get history and classify winners vs losers ────────
     _log("Step 2: Downloading price history and classifying winners...")
@@ -390,11 +392,9 @@ def _stage1_pre_pump_hint(hist, price: float, market_cap_str: str = "") -> float
 
         # ── Signal 3: Compliance risk (price < $1) ────────────────
         # Stocks below $1 Nasdaq threshold have pump incentive.
+        # Only applies to the sub-$1 subset of our $0.50-$5.00 range.
         if price < 1.00:
             score += 8
-            # Extra boost for very low price + small cap
-            if price < 0.50:
-                score += 5
 
     except Exception:
         pass
@@ -421,7 +421,7 @@ def pick_stocks(top_n=5, progress_callback=None):
         - Cash runway exhaustion (<6 months) -> KILL
         - Pre-revenue massive burn -> KILL
         - Negative shareholder equity -> KILL (balance sheet underwater)
-        - Sub-dime price (<$0.10) -> KILL (untradeable garbage)
+        - Sub-$0.50 price -> KILL (illiquid garbage)
         - Extreme profit margin losses (<-200%) -> KILL (hemorrhaging money)
 
       Scoring Penalties (reduce score, don't kill):
@@ -465,7 +465,7 @@ def pick_stocks(top_n=5, progress_callback=None):
 
     start = time.time()
     _log("=" * 60)
-    _log(f"PICKING TOP PENNY STOCKS (v{ALGORITHM_VERSION}: MEGA-ALGORITHM)")
+    _log(f"PICKING TOP STOCKS $0.50-$5.00 (v{ALGORITHM_VERSION}: MEGA-ALGORITHM)")
     _log(f"Using algorithm from {algorithm.get('built_date', 'unknown')}")
     _log(f"Weights: setup={WEIGHTS['setup']:.0%} tech={WEIGHTS['technical']:.0%} "
          f"pre_pump={WEIGHTS['pre_pump']:.0%} fund={WEIGHTS['fundamental']:.0%} "
@@ -864,7 +864,7 @@ def _create_run_logger(run_type: str):
 
     def finalize_func():
         with open(run_file, "w", encoding="utf-8") as f:
-            f.write(f"Penny Stock Analyzer v{ALGORITHM_VERSION}\n")
+            f.write(f"Stock Analyzer v{ALGORITHM_VERSION}\n")
             f.write(f"Run type: {run_type}\n")
             f.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
             f.write("=" * 70 + "\n\n")

@@ -53,7 +53,7 @@ def run_deep_dive(ticker: str, progress_callback=None) -> dict:
             progress_callback(msg)
 
     p(f"\n{'═' * 72}")
-    p(f"  DEEP DIVE: {ticker}  |  Penny Stock Analyzer v{ALGORITHM_VERSION}")
+    p(f"  DEEP DIVE: {ticker}  |  Stock Analyzer v{ALGORITHM_VERSION}")
     p(f"  Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     p(f"{'═' * 72}")
 

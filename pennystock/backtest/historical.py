@@ -101,10 +101,10 @@ def run_historical_backtest(
     tech_factors = [f for f in algorithm["factors"] if f["category"] == "technical"]
     _log(f"  Loaded algorithm ({len(algorithm['factors'])} factors)")
 
-    # ── 2. Get current penny stock universe ────────────────────────
-    _log("\n  Fetching penny stock universe from Finviz...")
+    # ── 2. Get current stock universe ───────────────────────────────
+    _log("\n  Fetching stock universe from Finviz...")
     stocks = get_penny_stocks()
-    _log(f"  Found {len(stocks)} current penny stocks")
+    _log(f"  Found {len(stocks)} stocks in universe")
 
     # ── 3. Download extended price history ─────────────────────────
     _log(f"  Downloading 2-year price history (this takes a minute)...")

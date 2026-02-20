@@ -16,7 +16,7 @@ Strategies integrated:
 Key insight from YIBO (2/18/2026):
   - Short interest collapsed 74.9% (reported 5 days before pump)
   - Ultra-low float (7.13M) + 93% insider ownership
-  - Below $1 Nasdaq compliance + reverse split authority
+  - Below $1 Nasdaq compliance risk + reverse split authority
   - NO specific news catalyst -- pure setup/supply-demand play
   - Our algorithm found it as #1 but scored it too conservatively
 
@@ -65,9 +65,9 @@ def score_pre_pump(ticker: str, info: dict = None, tech_features: dict = None) -
     signals["float_rotation"] = fr_result
 
     # ── Signal 3: Nasdaq Compliance Risk ─────────────────────────
-    # Stocks below $1.00 with low floats are PRIME pump candidates
-    # because management has strong incentive to boost the price.
-    # Many Chinese IPOs pump specifically for compliance.
+    # Stocks below $1.00 with low floats have a strong compliance
+    # incentive to boost the price above $1 (Nasdaq listing threshold).
+    # Only applies to the sub-$1 subset of our $0.50-$5.00 range.
     nc_result = _score_compliance_risk(info)
     signals["compliance_risk"] = nc_result
 

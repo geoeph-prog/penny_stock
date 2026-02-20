@@ -17,7 +17,7 @@ HARD KILLS (instant disqualification, score 0):
   - Recent spike history (> 80% high/low range in 20 days = already had its move)
   - Pump-and-dump aftermath (>200% spike in <30 days then >70% crash)
   - Negative shareholder equity (balance sheet is underwater)
-  - Sub-dime price (< $0.10 = untradeable garbage)
+  - Sub-$0.50 price (illiquid, manipulated)
   - Extreme profit margin losses (< -200% = hemorrhaging money)
 
 SCORING PENALTIES (reduce score but don't kill):
@@ -269,14 +269,14 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
                 f"${book_value:.2f}. Balance sheet is underwater."
             )
 
-    # ── Kill 10: Sub-Dime Stock Price ────────────────────────────
-    # Stocks below $0.10 are untradeable penny garbage, usually
-    # manipulated or dying. Would have killed: BYAH ($0.05)
+    # ── Kill 10: Sub-$0.50 Stock Price ───────────────────────────
+    # Stocks below $0.50 are often illiquid, manipulated, or dying.
+    # Would have killed: BYAH ($0.05), sub-dime stocks
     if price > 0 and price < KILL_MIN_PRICE:
         kill_reasons.append(
-            f"SUB-DIME PRICE: Stock at ${price:.4f} "
+            f"BELOW MIN PRICE: Stock at ${price:.4f} "
             f"(< ${KILL_MIN_PRICE:.2f} minimum). "
-            f"Sub-dime stocks are untradeable, illiquid, and manipulated."
+            f"Stocks this cheap are often illiquid and manipulated."
         )
 
     # ── Kill 11: Extreme Profit Margin Losses ────────────────────
@@ -291,7 +291,7 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
         )
 
     # ═════════════════════════════════════════════════════════════════
-    # SCORING PENALTIES: Normal penny stock shadiness
+    # SCORING PENALTIES: Common red flags in cheap stocks
     # These reduce the final score but don't instantly disqualify.
     # A stock with strong setup/technicals/fundamentals can overcome these.
     # ═════════════════════════════════════════════════════════════════
@@ -304,7 +304,7 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
                 penalties.append(
                     f"GOING CONCERN (-{PENALTY_GOING_CONCERN}pts): Auditor doubt "
                     f"about company survival found in recent SEC filings. "
-                    f"Common in penny stock land but still a red flag."
+                    f"Common in low-priced stocks but still a red flag."
                 )
         except Exception as e:
             logger.debug(f"Going concern check failed for {ticker}: {e}")
