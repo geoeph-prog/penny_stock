@@ -8,6 +8,7 @@ Usage:
     python main.py --cli pick   # Pick stocks from CLI
     python main.py analyze GETY   # Deep dive analysis on a single stock
     python main.py backtest 2025-08-01  # Backtest algorithm on a past date
+    python main.py optimize     # Run full 3-year backtest optimization
     python main.py --cli history  # View past picks
 """
 
@@ -80,6 +81,33 @@ def cmd_backtest(args):
     run_historical_backtest(args.target_date, top_n=args.top_n)
 
 
+def cmd_optimize(args):
+    from pennystock.backtest.optimizer import run_algorithm_optimization, apply_optimized_config
+    result = run_algorithm_optimization()
+    if not result or "error" in result:
+        print("\nOptimization failed. Check log for details.")
+        return
+
+    recs = result.get("recommendations", {})
+    if not recs:
+        print("\nNo recommendations generated.")
+        return
+
+    # Ask user whether to apply
+    print("\nApply optimized config? (y/n): ", end="")
+    try:
+        answer = input().strip().lower()
+    except EOFError:
+        answer = "n"
+
+    if answer == "y":
+        path = apply_optimized_config(recs)
+        print(f"\nOptimized config saved to {path}")
+        print("The algorithm will use these settings on next run.")
+    else:
+        print("\nNot applied. You can apply later from the GUI (Tab 5).")
+
+
 def cmd_history(args):
     from pennystock.storage.db import Database
     db = Database()
@@ -114,6 +142,8 @@ def main():
     bt_p.add_argument("target_date", type=str, nargs="?", help="Date to backtest (e.g. 2025-08-01)")
     bt_p.add_argument("-n", "--top-n", type=int, default=5)
 
+    subparsers.add_parser("optimize", help="Run full 3-year backtest optimization")
+
     hist_p = subparsers.add_parser("history", help="View past picks")
     hist_p.add_argument("-n", type=int, default=10)
 
@@ -123,7 +153,8 @@ def main():
     if args.cli or args.command:
         # CLI mode
         commands = {"build": cmd_build, "pick": cmd_pick, "analyze": cmd_analyze,
-                    "backtest": cmd_backtest, "history": cmd_history}
+                    "backtest": cmd_backtest, "optimize": cmd_optimize,
+                    "history": cmd_history}
         func = commands.get(args.command)
         if func:
             func(args)

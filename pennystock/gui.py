@@ -1,11 +1,12 @@
 """
 PyQt6 GUI for the Penny Stock Analyzer.
 
-Three tabs:
+Five tabs:
   Tab 1 - Build Algorithm: Learn from recent winners vs losers
   Tab 2 - Pick Stocks: Apply algorithm to find today's top 5
   Tab 3 - Analyze Stock: Comprehensive deep dive on a single ticker
   Tab 4 - Backtest: Run the algorithm on a past date and check results
+  Tab 5 - Backtest Algorithm: Full 3-year optimization of sell strategy + weights
 """
 
 import sys
@@ -867,12 +868,362 @@ class BacktestTab(QWidget):
             return QColor("#f38ba8")
 
 
+# ── Tab 5: Backtest Algorithm (Optimizer) ─────────────────────────
+class OptimizeAlgorithmTab(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.worker = None
+        self.current_result = None
+        layout = QVBoxLayout()
+
+        # Header
+        header = QLabel("Backtest Algorithm  —  Full Optimization")
+        header.setStyleSheet(
+            "font-size: 18px; font-weight: bold; color: #f5c2e7; padding: 10px;"
+        )
+        layout.addWidget(header)
+
+        desc = QLabel(
+            "Runs the algorithm on 1st & 15th of every month for ~3 years (~70 dates).\n"
+            "Tests thousands of sell strategies (hold period, stop-loss, take-profit, trailing stop).\n"
+            "Finds optimal scoring weights and sell parameters to maximize returns.\n"
+            "This takes 15-30 minutes. Results are saved and can be applied to the live algorithm."
+        )
+        desc.setStyleSheet("color: #a6adc8; padding: 0 10px 5px 10px;")
+        layout.addWidget(desc)
+
+        # Button row
+        btn_row = QHBoxLayout()
+
+        self.run_btn = QPushButton("Run Full Optimization")
+        self.run_btn.setStyleSheet(
+            "QPushButton { background-color: #f5c2e7; color: #1e1e2e; "
+            "padding: 12px 30px; font-size: 14px; font-weight: bold; border-radius: 6px; }"
+            "QPushButton:hover { background-color: #f38ba8; }"
+            "QPushButton:disabled { background-color: #585b70; color: #6c7086; }"
+        )
+        self.run_btn.clicked.connect(self._start_optimization)
+        btn_row.addWidget(self.run_btn)
+
+        self.apply_btn = QPushButton("Apply Recommendations")
+        self.apply_btn.setStyleSheet(
+            "QPushButton { background-color: #a6e3a1; color: #1e1e2e; "
+            "padding: 12px 20px; font-size: 13px; font-weight: bold; border-radius: 6px; }"
+            "QPushButton:hover { background-color: #94e2d5; }"
+            "QPushButton:disabled { background-color: #585b70; color: #6c7086; }"
+        )
+        self.apply_btn.clicked.connect(self._apply_recommendations)
+        self.apply_btn.setVisible(False)
+        btn_row.addWidget(self.apply_btn)
+
+        self.reset_btn = QPushButton("Reset to Defaults")
+        self.reset_btn.setStyleSheet(
+            "QPushButton { background-color: #fab387; color: #1e1e2e; "
+            "padding: 12px 20px; font-size: 13px; font-weight: bold; border-radius: 6px; }"
+            "QPushButton:hover { background-color: #f38ba8; }"
+        )
+        self.reset_btn.clicked.connect(self._reset_config)
+        self.reset_btn.setVisible(False)
+        btn_row.addWidget(self.reset_btn)
+
+        self.status_label = QLabel("")
+        btn_row.addWidget(self.status_label)
+        btn_row.addStretch()
+        layout.addLayout(btn_row)
+
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setRange(0, 0)
+        self.progress_bar.setVisible(False)
+        layout.addWidget(self.progress_bar)
+
+        # Summary frame for recommendations
+        self.summary_frame = QFrame()
+        self.summary_frame.setStyleSheet(
+            "QFrame { background-color: #181825; border: 1px solid #45475a; "
+            "border-radius: 6px; padding: 10px; }"
+        )
+        self.summary_frame.setVisible(False)
+        self.summary_layout = QVBoxLayout()
+        self.summary_frame.setLayout(self.summary_layout)
+        layout.addWidget(self.summary_frame)
+
+        # Top strategies table
+        self.table = QTableWidget()
+        self.table.setColumnCount(10)
+        self.table.setHorizontalHeaderLabels([
+            "#", "Top N", "Hold", "Stop-Loss", "Take-Profit",
+            "Trail", "Win Rate", "Avg Ret", "Med Ret", "Trades",
+        ])
+        self.table.horizontalHeader().setSectionResizeMode(
+            QHeaderView.ResizeMode.Stretch
+        )
+        self.table.setVisible(False)
+        layout.addWidget(self.table)
+
+        # Full log
+        self.log = QTextEdit()
+        self.log.setReadOnly(True)
+        layout.addWidget(self.log)
+
+        self.setLayout(layout)
+
+        # Check if optimized_config.json exists
+        self._check_optimized_config()
+
+    def _check_optimized_config(self):
+        """Show reset button if optimized config exists."""
+        import os
+        opt_path = os.path.join(
+            os.path.dirname(__file__), "..", "optimized_config.json"
+        )
+        if os.path.exists(os.path.normpath(opt_path)):
+            self.reset_btn.setVisible(True)
+            self.status_label.setText("Optimized config active")
+            self.status_label.setStyleSheet("color: #a6e3a1; font-weight: bold;")
+
+    def _start_optimization(self):
+        self.run_btn.setEnabled(False)
+        self.progress_bar.setVisible(True)
+        self.apply_btn.setVisible(False)
+        self.summary_frame.setVisible(False)
+        self.table.setVisible(False)
+        self.log.clear()
+        self.status_label.setText("Running full optimization...")
+        self.status_label.setStyleSheet("color: #89b4fa;")
+
+        from pennystock.backtest.optimizer import run_algorithm_optimization
+        self.worker = Worker(run_algorithm_optimization)
+        self.worker.progress.connect(self._append_log)
+        self.worker.finished.connect(self._optimization_done)
+        self.worker.start()
+
+    def _append_log(self, msg):
+        self.log.append(msg)
+        scrollbar = self.log.verticalScrollBar()
+        scrollbar.setValue(scrollbar.maximum())
+
+    def _optimization_done(self, result):
+        self.progress_bar.setVisible(False)
+        self.run_btn.setEnabled(True)
+        self.current_result = result
+
+        if not result or "error" in result:
+            self.status_label.setText("Optimization failed — check log")
+            self.status_label.setStyleSheet("color: #f38ba8; font-weight: bold;")
+            return
+
+        recs = result.get("recommendations", {})
+        total = result.get("total_picks", 0)
+        dates = result.get("dates_tested", 0)
+
+        sell = recs.get("sell_strategy", {})
+        scoring = recs.get("scoring", {})
+        sell_wr = sell.get("expected_win_rate", 0)
+        sell_avg = sell.get("expected_avg_return", 0)
+
+        self.status_label.setText(
+            f"Done! {dates} dates, {total} picks | "
+            f"Best: {sell_wr:.0f}% win, {sell_avg:+.1f}% avg"
+        )
+        color = "#a6e3a1" if sell_wr > 50 else "#f9e2af"
+        self.status_label.setStyleSheet(f"color: {color}; font-weight: bold;")
+
+        # Show Apply button
+        self.apply_btn.setVisible(True)
+
+        # Build summary
+        self._build_summary(recs)
+
+        # Build top strategies table
+        self._build_strategies_table(result)
+
+    def _build_summary(self, recs):
+        """Build recommendation summary cards."""
+        while self.summary_layout.count():
+            child = self.summary_layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+
+        # Sell strategy
+        sell = recs.get("sell_strategy", {})
+        if sell:
+            hdr = QLabel("<b style='color:#f5c2e7; font-size:14px;'>"
+                         "Recommended Sell Strategy</b>")
+            hdr.setTextFormat(Qt.TextFormat.RichText)
+            hdr.setStyleSheet("border: none; padding: 4px 5px;")
+            self.summary_layout.addWidget(hdr)
+
+            hold = sell.get("SELL_MAX_HOLD_DAYS", "?")
+            sl = sell.get("SELL_STOP_LOSS_PCT", 0)
+            tp = sell.get("SELL_TAKE_PROFIT_PCT", 0)
+            ta = sell.get("SELL_TRAILING_STOP_ACTIVATE", 0)
+            td = sell.get("SELL_TRAILING_STOP_DISTANCE", 0)
+            top_n = sell.get("STAGE2_RETURN_TOP_N", 5)
+            wr = sell.get("expected_win_rate", 0)
+            ar = sell.get("expected_avg_return", 0)
+
+            sl_str = f"{sl}%" if sl != 0 else "disabled"
+            tp_str = f"+{tp}%" if tp != 0 else "disabled"
+            trail_str = (f"activate at +{ta}%, trail {td}% from peak"
+                         if ta > 0 else "disabled")
+            wr_color = "#a6e3a1" if wr > 50 else "#f9e2af" if wr >= 40 else "#f38ba8"
+
+            text = (
+                f"  Hold: <b>{hold}d</b> | "
+                f"Stop-Loss: <b>{sl_str}</b> | "
+                f"Take-Profit: <b>{tp_str}</b> | "
+                f"Trailing: <b>{trail_str}</b><br>"
+                f"  Top N: <b>{top_n}</b> | "
+                f"Expected: <span style='color:{wr_color}'><b>{wr:.0f}% win, "
+                f"{ar:+.1f}% avg return</b></span>"
+            )
+            lbl = QLabel(text)
+            lbl.setTextFormat(Qt.TextFormat.RichText)
+            lbl.setStyleSheet("font-size: 12px; padding: 2px 15px; border: none;")
+            self.summary_layout.addWidget(lbl)
+
+        # Scoring weights
+        scoring = recs.get("scoring", {})
+        if scoring:
+            hdr2 = QLabel("<b style='color:#f5c2e7; font-size:14px;'>"
+                          "Recommended Scoring Weights</b>")
+            hdr2.setTextFormat(Qt.TextFormat.RichText)
+            hdr2.setStyleSheet("border: none; padding: 8px 5px 4px 5px;")
+            self.summary_layout.addWidget(hdr2)
+
+            from pennystock.config import WEIGHTS as CUR_WEIGHTS, MIN_RECOMMENDATION_SCORE
+            new_w = scoring.get("weights", {})
+            new_min = scoring.get("MIN_RECOMMENDATION_SCORE", 40)
+            wr2 = scoring.get("expected_win_rate", 0)
+            ar2 = scoring.get("expected_avg_return", 0)
+
+            rows = ""
+            for k in ["setup", "technical", "pre_pump", "fundamental", "catalyst"]:
+                cur = CUR_WEIGHTS.get(k, 0) * 100
+                rec = new_w.get(k, 0) * 100
+                delta = rec - cur
+                d_color = "#a6e3a1" if delta > 0 else "#f38ba8" if delta < 0 else "#6c7086"
+                d_str = f"{delta:+.0f}%" if abs(delta) > 0.5 else "="
+                rows += (
+                    f"  {k}: {cur:.0f}% -> "
+                    f"<span style='color:{d_color}'><b>{rec:.0f}%</b></span> "
+                    f"({d_str}) | "
+                )
+
+            text2 = (
+                f"{rows}<br>"
+                f"  Min Score: {MIN_RECOMMENDATION_SCORE} -> <b>{new_min}</b> | "
+                f"Expected: <b>{wr2:.0f}% win, {ar2:+.1f}% avg</b>"
+            )
+            lbl2 = QLabel(text2)
+            lbl2.setTextFormat(Qt.TextFormat.RichText)
+            lbl2.setStyleSheet("font-size: 11px; padding: 2px 15px; border: none;")
+            lbl2.setWordWrap(True)
+            self.summary_layout.addWidget(lbl2)
+
+        # Correlations
+        corrs = recs.get("correlations", {})
+        if corrs:
+            hdr3 = QLabel("<b style='color:#f5c2e7; font-size:14px;'>"
+                          "Factor Predictiveness</b>")
+            hdr3.setTextFormat(Qt.TextFormat.RichText)
+            hdr3.setStyleSheet("border: none; padding: 8px 5px 4px 5px;")
+            self.summary_layout.addWidget(hdr3)
+
+            corr_text = ""
+            for k, v in sorted(corrs.items(),
+                                key=lambda x: abs(x[1]), reverse=True):
+                bar_len = int(abs(v) * 30)
+                color = "#a6e3a1" if v > 0 else "#f38ba8"
+                bar = f"<span style='color:{color}'>{'|' * bar_len}</span>"
+                corr_text += f"  {k}: r={v:+.4f} {bar}<br>"
+
+            lbl3 = QLabel(corr_text)
+            lbl3.setTextFormat(Qt.TextFormat.RichText)
+            lbl3.setStyleSheet("font-size: 11px; padding: 2px 15px; border: none; "
+                                "font-family: 'Consolas', monospace;")
+            self.summary_layout.addWidget(lbl3)
+
+        self.summary_frame.setVisible(True)
+
+    def _build_strategies_table(self, result):
+        """Populate the top 20 sell strategies table."""
+        top_20 = result.get("sell_optimization", {}).get("top_20", [])
+        if not top_20:
+            return
+
+        self.table.setRowCount(len(top_20))
+        for row, r in enumerate(top_20):
+            trail_str = (f"{r['trail_activate']}/{r['trail_distance']}"
+                         if r['trail_activate'] > 0 else "off")
+            sl_str = f"{r['stop_loss']}%" if r['stop_loss'] != 0 else "off"
+            tp_str = f"+{r['take_profit']}%" if r['take_profit'] != 0 else "off"
+
+            items = [
+                (f"#{row + 1}", None),
+                (str(r["top_n"]), None),
+                (f"{r['hold_days']}d", None),
+                (sl_str, None),
+                (tp_str, None),
+                (trail_str, None),
+                (f"{r['win_rate']:.0f}%",
+                 QColor("#a6e3a1") if r["win_rate"] > 50
+                 else QColor("#f38ba8")),
+                (f"{r['avg_return']:+.1f}%",
+                 QColor("#a6e3a1") if r["avg_return"] > 0
+                 else QColor("#f38ba8")),
+                (f"{r['median_return']:+.1f}%",
+                 QColor("#a6e3a1") if r["median_return"] > 0
+                 else QColor("#f38ba8")),
+                (str(r["total_trades"]), None),
+            ]
+
+            for col, (text, color) in enumerate(items):
+                item = QTableWidgetItem(text)
+                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                if color:
+                    item.setForeground(color)
+                self.table.setItem(row, col, item)
+
+        self.table.setVisible(True)
+
+    def _apply_recommendations(self):
+        """Save optimized config to JSON file."""
+        if not self.current_result:
+            return
+
+        recs = self.current_result.get("recommendations", {})
+        if not recs:
+            return
+
+        from pennystock.backtest.optimizer import apply_optimized_config
+        path = apply_optimized_config(recs)
+
+        self.status_label.setText(f"Applied! Saved to {path}")
+        self.status_label.setStyleSheet("color: #a6e3a1; font-weight: bold;")
+        self.apply_btn.setVisible(False)
+        self.reset_btn.setVisible(True)
+
+    def _reset_config(self):
+        """Delete optimized_config.json to revert to defaults."""
+        import os
+        opt_path = os.path.join(
+            os.path.dirname(__file__), "..", "optimized_config.json"
+        )
+        opt_path = os.path.normpath(opt_path)
+        if os.path.exists(opt_path):
+            os.remove(opt_path)
+            self.status_label.setText("Reset to defaults. Restart to take effect.")
+            self.status_label.setStyleSheet("color: #fab387; font-weight: bold;")
+            self.reset_btn.setVisible(False)
+
+
 # ── Main Window ─────────────────────────────────────────────────────
 class PennyStockGUI(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle(f"Penny Stock Analyzer v{ALGORITHM_VERSION}")
-        self.setMinimumSize(1050, 750)
+        self.setMinimumSize(1100, 800)
 
         # Central widget with main layout
         central = QWidget()
@@ -886,6 +1237,7 @@ class PennyStockGUI(QMainWindow):
         tabs.addTab(PickStocksTab(), "  Pick Stocks  ")
         tabs.addTab(AnalyzeStockTab(), "  Analyze Stock  ")
         tabs.addTab(BacktestTab(), "  Backtest  ")
+        tabs.addTab(OptimizeAlgorithmTab(), "  Backtest Algorithm  ")
         main_layout.addWidget(tabs)
 
         # Version bar at the bottom
