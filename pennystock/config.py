@@ -493,3 +493,29 @@ if _os.path.exists(_alert_path):
                 globals()[_key] = _acfg[_key]
     except Exception:
         pass
+
+# ── Environment Variable Override (highest priority) ──────────────
+# Used by GitHub Actions: store secrets as ALERT_EMAIL_SENDER, etc.
+# Environment vars override both config.py defaults and alert_config.json.
+_env_str_keys = [
+    "ALERT_EMAIL_SMTP_SERVER", "ALERT_EMAIL_SENDER",
+    "ALERT_EMAIL_PASSWORD", "ALERT_EMAIL_RECIPIENT",
+]
+_env_int_keys = ["ALERT_EMAIL_SMTP_PORT", "ALERT_PRICE_CHECK_MINUTES", "ALERT_SCAN_HOURS"]
+_env_bool_keys = ["ALERT_ENABLED", "ALERT_ON_BUY", "ALERT_ON_SELL", "ALERT_DAILY_SUMMARY"]
+
+for _key in _env_str_keys:
+    _val = _os.environ.get(_key)
+    if _val:
+        globals()[_key] = _val
+for _key in _env_int_keys:
+    _val = _os.environ.get(_key)
+    if _val:
+        try:
+            globals()[_key] = int(_val)
+        except ValueError:
+            pass
+for _key in _env_bool_keys:
+    _val = _os.environ.get(_key)
+    if _val is not None:
+        globals()[_key] = _val.lower() in ("true", "1", "yes")
