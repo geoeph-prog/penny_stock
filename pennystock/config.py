@@ -3,7 +3,7 @@
 # ── Algorithm Version ─────────────────────────────────────────────
 # Bump on every change. Major.Minor.Patch
 # Major = new strategy/architecture, Minor = new signals, Patch = tuning
-ALGORITHM_VERSION = "4.1.0"
+ALGORITHM_VERSION = "4.1.1"
 
 # ── Price & Volume Filters ──────────────────────────────────────────
 MIN_PRICE = 0.10   # Raised from 0.05 -- sub-dime stocks are untradeable garbage
@@ -22,7 +22,7 @@ STOCHASTIC_PERIOD = 14
 STOCHRSI_PERIOD = 14  # StochRSI lookback on RSI values
 
 # ── Screening ───────────────────────────────────────────────────────
-STAGE1_KEEP_TOP_N = 50        # Stocks to pass from Stage 1 -> Stage 2
+STAGE1_KEEP_TOP_N = 100       # Stocks to pass from Stage 1 -> Stage 2 (raised from 50)
 STAGE2_RETURN_TOP_N = 5       # Final picks returned to user
 MIN_RECOMMENDATION_SCORE = 40 # Don't recommend stocks scoring below this
 HISTORY_PERIOD = "6mo"        # Price history for technical analysis
