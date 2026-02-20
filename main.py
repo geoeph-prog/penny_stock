@@ -9,6 +9,8 @@ Usage:
     python main.py analyze GETY   # Deep dive analysis on a single stock
     python main.py backtest 2025-08-01  # Backtest algorithm on a past date
     python main.py optimize     # Run full 3-year backtest optimization
+    python main.py simulate       # Paper trading simulation status
+    python main.py simulate trade # Run auto-trade cycle
     python main.py --cli history  # View past picks
 """
 
@@ -108,6 +110,53 @@ def cmd_optimize(args):
         print("\nNot applied. You can apply later from the GUI (Tab 5).")
 
 
+def cmd_simulate(args):
+    from pennystock.simulation.engine import SimulationEngine
+    engine = SimulationEngine()
+
+    if args.sim_action == "status":
+        summary = engine.get_portfolio_summary()
+        print(f"\n  Portfolio Value: ${summary['total_value']:,.2f} ({summary['total_return_pct']:+.1f}%)")
+        print(f"  Cash: ${summary['cash']:,.2f}")
+        print(f"  Positions: {summary['num_positions']}/{5}")
+        print(f"  Trades: {summary['total_trades']} ({summary['win_rate']:.0f}% win rate)")
+        print(f"  Realized P&L: ${summary['realized_pnl']:+,.2f}")
+        print(f"  Unrealized P&L: ${summary['unrealized_pnl']:+,.2f}")
+        for pos in engine.state.get("positions", []):
+            entry = pos["entry_price"]
+            current = pos.get("current_price", entry)
+            pnl_pct = ((current - entry) / entry) * 100 if entry > 0 else 0
+            print(f"    {pos['ticker']}: {pos['shares']} shares @ ${entry:.4f} "
+                  f"-> ${current:.4f} ({pnl_pct:+.1f}%)")
+
+    elif args.sim_action == "trade":
+        engine.run_auto_cycle(progress_callback=print)
+
+    elif args.sim_action == "refresh":
+        engine.refresh_prices(progress_callback=print)
+        engine._save_state()
+        print("Prices refreshed.")
+
+    elif args.sim_action == "reset":
+        engine.reset()
+        print("Simulation reset to $5,000.")
+
+    elif args.sim_action == "learn":
+        learning = engine.get_learning_summary()
+        if not learning:
+            print("\nNo learning data yet. Run some trades first.")
+            return
+        print("\n  === Learning Summary ===")
+        for key in sorted(learning.keys()):
+            d = learning[key]
+            if "trades" in d:
+                print(f"  {key}: {d['win_rate']:.0f}%W, avg {d['avg_return']:+.1f}%, n={d['trades']}")
+            elif "count" in d:
+                print(f"  {key}: count={d['count']}")
+    else:
+        print("Usage: python main.py simulate {status|trade|refresh|reset|learn}")
+
+
 def cmd_history(args):
     from pennystock.storage.db import Database
     db = Database()
@@ -144,6 +193,11 @@ def main():
 
     subparsers.add_parser("optimize", help="Run full 3-year backtest optimization")
 
+    sim_p = subparsers.add_parser("simulate", help="Paper trading simulation")
+    sim_p.add_argument("sim_action", type=str, nargs="?", default="status",
+                       choices=["status", "trade", "refresh", "reset", "learn"],
+                       help="Simulation action (default: status)")
+
     hist_p = subparsers.add_parser("history", help="View past picks")
     hist_p.add_argument("-n", type=int, default=10)
 
@@ -154,7 +208,7 @@ def main():
         # CLI mode
         commands = {"build": cmd_build, "pick": cmd_pick, "analyze": cmd_analyze,
                     "backtest": cmd_backtest, "optimize": cmd_optimize,
-                    "history": cmd_history}
+                    "simulate": cmd_simulate, "history": cmd_history}
         func = commands.get(args.command)
         if func:
             func(args)

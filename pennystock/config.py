@@ -3,7 +3,7 @@
 # ── Algorithm Version ─────────────────────────────────────────────
 # Bump on every change. Major.Minor.Patch
 # Major = new strategy/architecture, Minor = new signals, Patch = tuning
-ALGORITHM_VERSION = "4.0.0"
+ALGORITHM_VERSION = "4.1.0"
 
 # ── Price & Volume Filters ──────────────────────────────────────────
 MIN_PRICE = 0.10   # Raised from 0.05 -- sub-dime stocks are untradeable garbage
@@ -408,12 +408,21 @@ BACKTEST_LOSER_THRESHOLD = -0.15         # 15% loss = loser
 # Set to 0 to disable stop-loss simulation
 BACKTEST_STOP_LOSS_PCT = -15.0  # -15% stop-loss (negative number)
 
-# ── Sell Strategy (defaults — overridden by optimizer) ──────────────
+# ── Sell Strategy (optimized by 3-year backtest v4.0.0) ──────────────
+# Trailing stop 10/5 was the standout finding: 63% win rate, +5.2% median.
+# SL and TP kept as safety rails despite "off" being marginally better for
+# avg return — protecting against catastrophic losses matters more.
 SELL_MAX_HOLD_DAYS = 7            # Max hold period (trading days)
 SELL_STOP_LOSS_PCT = -15.0        # Sell if price drops below this % from entry
 SELL_TAKE_PROFIT_PCT = 20.0       # Sell if price rises above this % from entry
-SELL_TRAILING_STOP_ACTIVATE = 0   # Activate trailing stop after X% gain (0=disabled)
-SELL_TRAILING_STOP_DISTANCE = 0   # Trail X% below peak once active (0=disabled)
+SELL_TRAILING_STOP_ACTIVATE = 10  # Activate trailing stop after +10% gain
+SELL_TRAILING_STOP_DISTANCE = 5   # Trail 5% below peak once active
+
+# ── Simulation ─────────────────────────────────────────────────────
+SIMULATION_INITIAL_CAPITAL = 5000.0
+SIMULATION_MAX_POSITIONS = 5
+SIMULATION_STATE_FILE = "simulation_state.json"
+SIMULATION_MIN_TRADES_FOR_LEARNING = 10  # Need N trades before adjusting sizing
 
 # ── Caching ─────────────────────────────────────────────────────────
 CACHE_DIR = ".cache"

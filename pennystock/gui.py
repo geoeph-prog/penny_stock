@@ -1,19 +1,20 @@
 """
 PyQt6 GUI for the Penny Stock Analyzer.
 
-Five tabs:
+Six tabs:
   Tab 1 - Build Algorithm: Learn from recent winners vs losers
   Tab 2 - Pick Stocks: Apply algorithm to find today's top 5
   Tab 3 - Analyze Stock: Comprehensive deep dive on a single ticker
   Tab 4 - Backtest: Run the algorithm on a past date and check results
   Tab 5 - Backtest Algorithm: Full 3-year optimization of sell strategy + weights
+  Tab 6 - Simulation: Paper trading sandbox with self-learning
 """
 
 import sys
 import threading
 from datetime import date
 
-from PyQt6.QtCore import Qt, QThread, pyqtSignal, QDate
+from PyQt6.QtCore import Qt, QThread, pyqtSignal, QDate, QTimer
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QTabWidget, QWidget, QVBoxLayout,
     QHBoxLayout, QPushButton, QTextEdit, QTableWidget, QTableWidgetItem,
@@ -1218,6 +1219,434 @@ class OptimizeAlgorithmTab(QWidget):
             self.reset_btn.setVisible(False)
 
 
+# ── Tab 6: Simulation (Paper Trading) ──────────────────────────────
+class SimulationTab(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.worker = None
+        self.engine = None
+        layout = QVBoxLayout()
+
+        # Header
+        header = QLabel("Simulation  —  Paper Trading Sandbox")
+        header.setStyleSheet("font-size: 18px; font-weight: bold; color: #f5c2e7; padding: 10px;")
+        layout.addWidget(header)
+
+        desc = QLabel(
+            "Virtual $5,000 portfolio. The algorithm auto-picks stocks, buys, and sells\n"
+            "based on the optimized sell strategy. Learns from every trade to improve."
+        )
+        desc.setStyleSheet("color: #a6adc8; padding: 0 10px 5px 10px;")
+        layout.addWidget(desc)
+
+        # ── Portfolio Summary Cards ───────────────────────────
+        self.summary_frame = QFrame()
+        self.summary_frame.setStyleSheet(
+            "QFrame { background-color: #181825; border: 1px solid #45475a; "
+            "border-radius: 6px; padding: 10px; }"
+        )
+        self.summary_grid = QGridLayout()
+        self.summary_frame.setLayout(self.summary_grid)
+        layout.addWidget(self.summary_frame)
+
+        # Placeholders for summary cards (built on refresh)
+        self._summary_labels = {}
+        self._build_summary_cards()
+
+        # ── Button Row ────────────────────────────────────────
+        btn_row = QHBoxLayout()
+
+        self.refresh_btn = QPushButton("Refresh Prices")
+        self.refresh_btn.setStyleSheet(
+            "QPushButton { background-color: #89b4fa; padding: 10px 20px; }"
+            "QPushButton:hover { background-color: #74c7ec; }"
+            "QPushButton:disabled { background-color: #585b70; color: #6c7086; }"
+        )
+        self.refresh_btn.clicked.connect(self._start_refresh)
+        btn_row.addWidget(self.refresh_btn)
+
+        self.auto_trade_btn = QPushButton("Auto-Trade Cycle")
+        self.auto_trade_btn.setStyleSheet(
+            "QPushButton { background-color: #a6e3a1; color: #1e1e2e; "
+            "padding: 10px 20px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #94e2d5; }"
+            "QPushButton:disabled { background-color: #585b70; color: #6c7086; }"
+        )
+        self.auto_trade_btn.clicked.connect(self._start_auto_trade)
+        btn_row.addWidget(self.auto_trade_btn)
+
+        self.reset_btn = QPushButton("Reset Portfolio")
+        self.reset_btn.setStyleSheet(
+            "QPushButton { background-color: #f38ba8; color: #1e1e2e; "
+            "padding: 10px 20px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #fab387; }"
+        )
+        self.reset_btn.clicked.connect(self._reset_portfolio)
+        btn_row.addWidget(self.reset_btn)
+
+        self.status_label = QLabel("")
+        btn_row.addWidget(self.status_label)
+        btn_row.addStretch()
+        layout.addLayout(btn_row)
+
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setRange(0, 0)
+        self.progress_bar.setVisible(False)
+        layout.addWidget(self.progress_bar)
+
+        # ── Positions Table ───────────────────────────────────
+        pos_label = QLabel("Open Positions")
+        pos_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #f5c2e7; padding: 8px 10px 2px 10px;")
+        layout.addWidget(pos_label)
+
+        self.pos_table = QTableWidget()
+        self.pos_table.setColumnCount(9)
+        self.pos_table.setHorizontalHeaderLabels([
+            "Ticker", "Company", "Shares", "Entry $", "Current $",
+            "P&L $", "P&L %", "Days Held", "Score",
+        ])
+        self.pos_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.pos_table.setMaximumHeight(220)
+        layout.addWidget(self.pos_table)
+
+        # ── Trade History & Learning split ─────────────────────
+        splitter = QSplitter(Qt.Orientation.Horizontal)
+
+        # Trade history table
+        history_widget = QWidget()
+        hist_layout = QVBoxLayout()
+        hist_layout.setContentsMargins(0, 0, 0, 0)
+        hist_label = QLabel("Trade History")
+        hist_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #f5c2e7; padding: 4px 0;")
+        hist_layout.addWidget(hist_label)
+
+        self.history_table = QTableWidget()
+        self.history_table.setColumnCount(7)
+        self.history_table.setHorizontalHeaderLabels([
+            "Date", "Action", "Ticker", "Shares", "Price", "P&L %", "Reason",
+        ])
+        self.history_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        hist_layout.addWidget(self.history_table)
+        history_widget.setLayout(hist_layout)
+        splitter.addWidget(history_widget)
+
+        # Learning insights panel
+        learn_widget = QWidget()
+        learn_layout = QVBoxLayout()
+        learn_layout.setContentsMargins(0, 0, 0, 0)
+        learn_label = QLabel("Self-Learning Insights")
+        learn_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #f5c2e7; padding: 4px 0;")
+        learn_layout.addWidget(learn_label)
+
+        self.insights_log = QTextEdit()
+        self.insights_log.setReadOnly(True)
+        self.insights_log.setStyleSheet(
+            "QTextEdit { background-color: #11111b; color: #cdd6f4; "
+            "border: 1px solid #45475a; font-family: 'Consolas', 'Courier New', monospace; "
+            "font-size: 11px; padding: 6px; }"
+        )
+        learn_layout.addWidget(self.insights_log)
+        learn_widget.setLayout(learn_layout)
+        splitter.addWidget(learn_widget)
+
+        layout.addWidget(splitter)
+
+        # ── Activity Log ──────────────────────────────────────
+        self.log = QTextEdit()
+        self.log.setReadOnly(True)
+        self.log.setMaximumHeight(140)
+        layout.addWidget(self.log)
+
+        self.setLayout(layout)
+
+        # Load engine and populate on tab creation
+        QTimer.singleShot(100, self._load_and_display)
+
+    def _get_engine(self):
+        if self.engine is None:
+            from pennystock.simulation.engine import SimulationEngine
+            self.engine = SimulationEngine()
+        return self.engine
+
+    def _load_and_display(self):
+        """Load state and populate all displays."""
+        engine = self._get_engine()
+        self._update_summary(engine.get_portfolio_summary())
+        self._update_positions(engine.state.get("positions", []))
+        self._update_history(engine.state.get("trade_history", []))
+        self._update_insights(engine)
+
+    def _build_summary_cards(self):
+        """Create the static summary card structure."""
+        cards = [
+            ("total_value", "Portfolio Value", "$5,000.00", "#cdd6f4"),
+            ("cash", "Cash", "$5,000.00", "#89b4fa"),
+            ("unrealized_pnl", "Unrealized P&L", "$0.00", "#cdd6f4"),
+            ("realized_pnl", "Realized P&L", "$0.00", "#cdd6f4"),
+            ("total_return_pct", "Total Return", "0.0%", "#cdd6f4"),
+            ("win_rate", "Win Rate", "0.0%", "#6c7086"),
+            ("total_trades", "Total Trades", "0", "#6c7086"),
+            ("num_positions", "Positions", "0/5", "#6c7086"),
+        ]
+        for col, (key, label, default, color) in enumerate(cards):
+            card = QFrame()
+            card.setStyleSheet(
+                "QFrame { background-color: #1e1e2e; border: 1px solid #45475a; "
+                "border-radius: 4px; padding: 4px; margin: 2px; }"
+            )
+            card_layout = QVBoxLayout()
+            card_layout.setSpacing(2)
+            card_layout.setContentsMargins(6, 4, 6, 4)
+
+            val_label = QLabel(default)
+            val_label.setStyleSheet(f"color: {color}; font-size: 14px; font-weight: bold; border: none;")
+            val_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            card_layout.addWidget(val_label)
+
+            name_label = QLabel(label)
+            name_label.setStyleSheet("color: #6c7086; font-size: 10px; border: none;")
+            name_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            card_layout.addWidget(name_label)
+
+            card.setLayout(card_layout)
+            self.summary_grid.addWidget(card, 0, col)
+            self._summary_labels[key] = val_label
+
+    def _update_summary(self, summary):
+        """Update portfolio summary cards from engine data."""
+        from pennystock.config import SIMULATION_MAX_POSITIONS
+
+        tv = summary["total_value"]
+        ret_pct = summary["total_return_pct"]
+        wr = summary["win_rate"]
+        ur = summary["unrealized_pnl"]
+        rr = summary["realized_pnl"]
+
+        self._summary_labels["total_value"].setText(f"${tv:,.2f}")
+        tv_color = "#a6e3a1" if ret_pct >= 0 else "#f38ba8"
+        self._summary_labels["total_value"].setStyleSheet(
+            f"color: {tv_color}; font-size: 14px; font-weight: bold; border: none;"
+        )
+
+        self._summary_labels["cash"].setText(f"${summary['cash']:,.2f}")
+        self._summary_labels["unrealized_pnl"].setText(f"${ur:+,.2f}")
+        ur_color = "#a6e3a1" if ur >= 0 else "#f38ba8"
+        self._summary_labels["unrealized_pnl"].setStyleSheet(
+            f"color: {ur_color}; font-size: 14px; font-weight: bold; border: none;"
+        )
+        self._summary_labels["realized_pnl"].setText(f"${rr:+,.2f}")
+        rr_color = "#a6e3a1" if rr >= 0 else "#f38ba8"
+        self._summary_labels["realized_pnl"].setStyleSheet(
+            f"color: {rr_color}; font-size: 14px; font-weight: bold; border: none;"
+        )
+        self._summary_labels["total_return_pct"].setText(f"{ret_pct:+.1f}%")
+        self._summary_labels["total_return_pct"].setStyleSheet(
+            f"color: {tv_color}; font-size: 14px; font-weight: bold; border: none;"
+        )
+        self._summary_labels["win_rate"].setText(f"{wr:.0f}%")
+        wr_color = "#a6e3a1" if wr > 50 else "#f9e2af" if wr >= 40 else "#f38ba8" if summary["total_trades"] > 0 else "#6c7086"
+        self._summary_labels["win_rate"].setStyleSheet(
+            f"color: {wr_color}; font-size: 14px; font-weight: bold; border: none;"
+        )
+        self._summary_labels["total_trades"].setText(str(summary["total_trades"]))
+        self._summary_labels["num_positions"].setText(
+            f"{summary['num_positions']}/{SIMULATION_MAX_POSITIONS}"
+        )
+
+    def _update_positions(self, positions):
+        """Populate the open positions table."""
+        self.pos_table.setRowCount(len(positions))
+        from datetime import datetime
+
+        for row, pos in enumerate(positions):
+            entry = pos["entry_price"]
+            current = pos.get("current_price", entry)
+            pnl = (current - entry) * pos["shares"]
+            pnl_pct = ((current - entry) / entry) * 100 if entry > 0 else 0
+
+            try:
+                entry_date = datetime.fromisoformat(pos["entry_date"])
+                days_held = (datetime.now() - entry_date).days
+            except Exception:
+                days_held = 0
+
+            pnl_color = QColor("#a6e3a1") if pnl >= 0 else QColor("#f38ba8")
+
+            items = [
+                (pos["ticker"], None),
+                (pos.get("company", "")[:20], None),
+                (str(pos["shares"]), None),
+                (f"${entry:.4f}", None),
+                (f"${current:.4f}", None),
+                (f"${pnl:+.2f}", pnl_color),
+                (f"{pnl_pct:+.1f}%", pnl_color),
+                (str(days_held), None),
+                (f"{pos.get('entry_score', 0):.0f}", None),
+            ]
+
+            for col, (text, color) in enumerate(items):
+                item = QTableWidgetItem(text)
+                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                if color:
+                    item.setForeground(color)
+                self.pos_table.setItem(row, col, item)
+
+    def _update_history(self, trade_history):
+        """Populate trade history table (most recent first)."""
+        trades = list(reversed(trade_history[-50:]))  # Last 50, newest first
+        self.history_table.setRowCount(len(trades))
+
+        for row, t in enumerate(trades):
+            is_buy = t["action"] == "BUY"
+            action_color = QColor("#89b4fa") if is_buy else (
+                QColor("#a6e3a1") if t.get("return_pct", 0) > 0 else QColor("#f38ba8")
+            )
+            pnl_str = f"{t.get('return_pct', 0):+.1f}%" if not is_buy else ""
+            reason = t.get("sell_reason", t.get("description", ""))
+
+            items = [
+                (t.get("date", "")[:16], None),
+                (t["action"], action_color),
+                (t["ticker"], None),
+                (str(t["shares"]), None),
+                (f"${t['price']:.4f}", None),
+                (pnl_str, action_color if not is_buy else None),
+                (reason, None),
+            ]
+
+            for col, (text, color) in enumerate(items):
+                item = QTableWidgetItem(text)
+                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                if color:
+                    item.setForeground(color)
+                self.history_table.setItem(row, col, item)
+
+    def _update_insights(self, engine):
+        """Display learning insights and performance data."""
+        self.insights_log.clear()
+
+        # Performance by category
+        learning = engine.get_learning_summary()
+        if learning:
+            self.insights_log.append("=== Performance by Category ===\n")
+
+            # Score buckets
+            score_data = {k: v for k, v in learning.items() if k.startswith("score_")}
+            if score_data:
+                self.insights_log.append("By Score Range:")
+                for k in sorted(score_data.keys()):
+                    d = score_data[k]
+                    self.insights_log.append(
+                        f"  {k.replace('score_', '')}: "
+                        f"{d['win_rate']:.0f}%W, avg {d['avg_return']:+.1f}%, "
+                        f"n={d['trades']}"
+                    )
+                self.insights_log.append("")
+
+            # Pre-pump confidence
+            pp_data = {k: v for k, v in learning.items() if k.startswith("pp_")}
+            if pp_data:
+                self.insights_log.append("By Pre-Pump Confidence:")
+                for k in sorted(pp_data.keys()):
+                    d = pp_data[k]
+                    self.insights_log.append(
+                        f"  {k.replace('pp_', '')}: "
+                        f"{d['win_rate']:.0f}%W, avg {d['avg_return']:+.1f}%, "
+                        f"n={d['trades']}"
+                    )
+                self.insights_log.append("")
+
+            # Sell reason
+            reason_data = {k: v for k, v in learning.items() if k.startswith("reason_")}
+            if reason_data:
+                self.insights_log.append("By Sell Reason:")
+                for k in sorted(reason_data.keys()):
+                    d = reason_data[k]
+                    self.insights_log.append(
+                        f"  {k.replace('reason_', '')}: "
+                        f"{d['win_rate']:.0f}%W, avg {d['avg_return']:+.1f}%, "
+                        f"n={d['trades']}"
+                    )
+                self.insights_log.append("")
+
+        # Recent insights
+        insights = engine.state.get("insights", [])
+        if insights:
+            self.insights_log.append("=== Recent Activity ===\n")
+            for ins in reversed(insights[-20:]):
+                self.insights_log.append(f"  [{ins['date'][:16]}] {ins['text']}")
+
+        if not learning and not insights:
+            self.insights_log.append("No trades yet. Run an Auto-Trade Cycle to get started!")
+
+    def _append_log(self, msg):
+        self.log.append(msg)
+        scrollbar = self.log.verticalScrollBar()
+        scrollbar.setValue(scrollbar.maximum())
+
+    def _start_refresh(self):
+        """Refresh prices for all positions."""
+        self.refresh_btn.setEnabled(False)
+        self.progress_bar.setVisible(True)
+        self.log.clear()
+        self.status_label.setText("Refreshing prices...")
+        self.status_label.setStyleSheet("color: #89b4fa;")
+
+        engine = self._get_engine()
+        self.worker = Worker(engine.refresh_prices)
+        self.worker.progress.connect(self._append_log)
+        self.worker.finished.connect(self._refresh_done)
+        self.worker.start()
+
+    def _refresh_done(self, _result):
+        self.progress_bar.setVisible(False)
+        self.refresh_btn.setEnabled(True)
+        self.status_label.setText("Prices updated")
+        self.status_label.setStyleSheet("color: #a6e3a1; font-weight: bold;")
+        self._load_and_display()
+
+    def _start_auto_trade(self):
+        """Run full auto-trade cycle: refresh -> sell -> buy."""
+        self.auto_trade_btn.setEnabled(False)
+        self.refresh_btn.setEnabled(False)
+        self.progress_bar.setVisible(True)
+        self.log.clear()
+        self.status_label.setText("Running auto-trade cycle...")
+        self.status_label.setStyleSheet("color: #89b4fa;")
+
+        engine = self._get_engine()
+        self.worker = Worker(engine.run_auto_cycle)
+        self.worker.progress.connect(self._append_log)
+        self.worker.finished.connect(self._auto_trade_done)
+        self.worker.start()
+
+    def _auto_trade_done(self, _result):
+        self.progress_bar.setVisible(False)
+        self.auto_trade_btn.setEnabled(True)
+        self.refresh_btn.setEnabled(True)
+
+        engine = self._get_engine()
+        summary = engine.get_portfolio_summary()
+        ret = summary["total_return_pct"]
+        color = "#a6e3a1" if ret >= 0 else "#f38ba8"
+        self.status_label.setText(
+            f"Cycle complete | ${summary['total_value']:,.2f} ({ret:+.1f}%)"
+        )
+        self.status_label.setStyleSheet(f"color: {color}; font-weight: bold;")
+        self._load_and_display()
+
+    def _reset_portfolio(self):
+        """Reset simulation to initial $5,000 state."""
+        engine = self._get_engine()
+        if engine.state.get("trade_history"):
+            # Confirm via log
+            self._append_log("Resetting portfolio to $5,000...")
+        engine.reset()
+        self.status_label.setText("Portfolio reset to $5,000")
+        self.status_label.setStyleSheet("color: #fab387; font-weight: bold;")
+        self._load_and_display()
+
+
 # ── Main Window ─────────────────────────────────────────────────────
 class PennyStockGUI(QMainWindow):
     def __init__(self):
@@ -1238,6 +1667,7 @@ class PennyStockGUI(QMainWindow):
         tabs.addTab(AnalyzeStockTab(), "  Analyze Stock  ")
         tabs.addTab(BacktestTab(), "  Backtest  ")
         tabs.addTab(OptimizeAlgorithmTab(), "  Backtest Algorithm  ")
+        tabs.addTab(SimulationTab(), "  Simulation  ")
         main_layout.addWidget(tabs)
 
         # Version bar at the bottom
