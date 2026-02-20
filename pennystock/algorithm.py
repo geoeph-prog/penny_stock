@@ -1,6 +1,8 @@
 """
 The ONE algorithm for penny stock prediction.
 v3.0: MEGA-ALGORITHM with pre-pump detection.
+v4.1.1: Stage 1 now uses blended ranking (60% technical + 40% pre-pump hints)
+        and analyzes top 100 instead of 50 to avoid missing setups.
 
 Two-layer architecture:
   LAYER 1: Kill Filters  - Instantly disqualify broken stocks (quality_gate.py)
@@ -34,6 +36,7 @@ from loguru import logger
 from pennystock.config import (
     WEIGHTS, MIN_RECOMMENDATION_SCORE, ALGORITHM_VERSION,
     PRE_PUMP_HIGH_CONVICTION_BONUS, PRE_PUMP_MEDIUM_CONVICTION_BONUS,
+    STAGE1_KEEP_TOP_N,
 )
 from pennystock.data.finviz_client import get_penny_stocks, get_high_gainers
 from pennystock.data.yahoo_client import get_price_history, get_stock_info
@@ -329,6 +332,77 @@ def build_algorithm(progress_callback=None):
 
 
 # ════════════════════════════════════════════════════════════════════
+# STAGE 1 PRE-PUMP PRE-SCREEN (lightweight, no extra API calls)
+# ════════════════════════════════════════════════════════════════════
+
+def _stage1_pre_pump_hint(hist, price: float, market_cap_str: str = "") -> float:
+    """
+    Compute a lightweight pre-pump hint score (0-100) using ONLY data
+    already available in Stage 1 (price history + Finviz basics).
+
+    Three cheap signals:
+      1. Beaten-down position: price near 52-week low = max upside
+      2. Volume acceleration: recent vol > historical vol = accumulation
+      3. Compliance risk: price < $1 + small cap = pump incentive
+
+    This ensures Stage 1 ranking considers setup potential, not just
+    technicals. A stock consolidating near its low with rising volume
+    will rank higher even if RSI/MACD are mediocre.
+    """
+    score = 50.0  # Neutral baseline
+
+    try:
+        close = hist["Close"]
+        high = hist["High"]
+        low = hist["Low"]
+        volume = hist["Volume"]
+
+        # ── Signal 1: Beaten-down position (from price history) ────
+        # Where is current price relative to the period high/low?
+        period_high = float(high.max())
+        period_low = float(low.min())
+        if period_high > period_low and period_low > 0:
+            position = (price - period_low) / (period_high - period_low)
+            if position <= 0.10:
+                score += 15   # Within 10% of low — max upside
+            elif position <= 0.25:
+                score += 10   # Near bottom quarter
+            elif position <= 0.40:
+                score += 5    # Lower half
+            elif position >= 0.85:
+                score -= 10   # Near high — chasing risk
+
+        # ── Signal 2: Volume acceleration (from price history) ─────
+        # Is recent volume (last 10 days) higher than historical (50 days)?
+        if len(volume) >= 20:
+            vol_10d = float(volume.iloc[-10:].mean())
+            vol_50d = float(volume.mean())
+            if vol_50d > 0:
+                vol_ratio = vol_10d / vol_50d
+                if vol_ratio >= 3.0:
+                    score += 15   # 3x volume acceleration
+                elif vol_ratio >= 2.0:
+                    score += 10   # 2x acceleration
+                elif vol_ratio >= 1.5:
+                    score += 5    # 50% increase
+                elif vol_ratio < 0.5:
+                    score -= 5    # Volume drying up
+
+        # ── Signal 3: Compliance risk (price < $1) ────────────────
+        # Stocks below $1 Nasdaq threshold have pump incentive.
+        if price < 1.00:
+            score += 8
+            # Extra boost for very low price + small cap
+            if price < 0.50:
+                score += 5
+
+    except Exception:
+        pass
+
+    return max(0, min(100, score))
+
+
+# ════════════════════════════════════════════════════════════════════
 # TAB 2: PICK STOCKS
 # ════════════════════════════════════════════════════════════════════
 
@@ -369,8 +443,10 @@ def pick_stocks(top_n=5, progress_callback=None):
     Steps:
       1. Load saved algorithm
       2. Get ALL current penny stocks from Finviz
-      3. Stage 1: Quick technical score (fast filter)
-      4. Stage 2: On top 50:
+      3. Stage 1: Blended score (60% technical + 40% pre-pump hints)
+         Pre-pump hints use price history only (no extra API calls):
+         beaten-down position, volume acceleration, compliance risk
+      4. Stage 2: On top 100 (STAGE1_KEEP_TOP_N):
          a. Run quality gate -- kill broken stocks, penalize sketchy ones
          b. Score survivors -- rank by composite score minus penalties
       5. Return top N picks with full breakdown
@@ -403,9 +479,14 @@ def pick_stocks(top_n=5, progress_callback=None):
         _log("ERROR: No stocks found.")
         return []
 
-    _log(f"Found {len(stocks)} stocks. Running Stage 1 technical screen...")
+    _log(f"Found {len(stocks)} stocks. Running Stage 1 screen (technical + pre-pump hints)...")
 
-    # ── Stage 1: Quick technical score ──────────────────────────────
+    # ── Stage 1: Technical score + lightweight pre-pump pre-screen ──
+    # Ranks by blended score: 60% technical + 40% pre-pump hint.
+    # Pre-pump hints use ONLY data already available (price history +
+    # Finviz basics) — no extra API calls. This ensures stocks
+    # consolidating near lows with rising volume rank higher, even if
+    # their RSI/MACD are mediocre.
     tech_factors = [f for f in algorithm["factors"] if f["category"] == "technical"]
     stage1_results = []
 
@@ -420,10 +501,21 @@ def pick_stocks(top_n=5, progress_callback=None):
             if not features:
                 continue
 
-            score = _score_features(features, tech_factors)
+            tech_score = _score_features(features, tech_factors)
+
+            # Lightweight pre-pump hint (no extra API calls)
+            pp_hint = _stage1_pre_pump_hint(
+                hist, stock.get("price", 0), stock.get("market_cap", "")
+            )
+
+            # Blended Stage 1 score: tech-dominant but setup-aware
+            stage1_score = tech_score * 0.6 + pp_hint * 0.4
+
             stage1_results.append({
                 "ticker": ticker,
-                "tech_score": score,
+                "tech_score": tech_score,
+                "pp_hint": pp_hint,
+                "stage1_score": stage1_score,
                 "features": features,
                 "price": stock.get("price", 0),
                 "volume": stock.get("volume", 0),
@@ -440,11 +532,11 @@ def pick_stocks(top_n=5, progress_callback=None):
                  f"~{(len(stocks)-i-1)/rate:.0f}s remaining")
         time.sleep(0.1)
 
-    stage1_results.sort(key=lambda x: x["tech_score"], reverse=True)
+    stage1_results.sort(key=lambda x: x["stage1_score"], reverse=True)
     _log(f"Stage 1 done: {len(stage1_results)} stocks scored")
 
-    # ── Stage 2: Deep analysis on top 50 ────────────────────────────
-    top_candidates = stage1_results[:50]
+    # ── Stage 2: Deep analysis on top candidates ────────────────────
+    top_candidates = stage1_results[:STAGE1_KEEP_TOP_N]
     sent_factors = [f for f in algorithm["factors"] if f["category"] == "sentiment"]
     fund_factors = [f for f in algorithm["factors"] if f["category"] == "fundamental"]
 
