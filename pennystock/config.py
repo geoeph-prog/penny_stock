@@ -3,7 +3,7 @@
 # ── Algorithm Version ─────────────────────────────────────────────
 # Bump on every change. Major.Minor.Patch
 # Major = new strategy/architecture, Minor = new signals, Patch = tuning
-ALGORITHM_VERSION = "5.0.0"
+ALGORITHM_VERSION = "5.0.1"
 
 # ── Price & Volume Filters ──────────────────────────────────────────
 MIN_PRICE = 0.50   # Expanded from $0.10 to include more reputable sub-$5 stocks
@@ -23,7 +23,7 @@ STOCHRSI_PERIOD = 14  # StochRSI lookback on RSI values
 
 # ── Screening ───────────────────────────────────────────────────────
 STAGE1_KEEP_TOP_N = 100       # Stocks to pass from Stage 1 -> Stage 2 (raised from 50)
-STAGE2_RETURN_TOP_N = 5       # Final picks returned to user
+STAGE2_RETURN_TOP_N = 10      # Final picks returned to user (expanded for wider $0.50-$5 range)
 MIN_RECOMMENDATION_SCORE = 40 # Don't recommend stocks scoring below this
 HISTORY_PERIOD = "6mo"        # Price history for technical analysis
 SHORT_HISTORY_PERIOD = "3mo"  # Shorter window for recent patterns
@@ -412,7 +412,7 @@ BACKTEST_STOP_LOSS_PCT = -15.0  # -15% stop-loss (negative number)
 # Trailing stop 10/5 was the standout finding: 63% win rate, +5.2% median.
 # SL and TP kept as safety rails despite "off" being marginally better for
 # avg return — protecting against catastrophic losses matters more.
-SELL_MAX_HOLD_DAYS = 7            # Max hold period (trading days)
+SELL_MAX_HOLD_DAYS = 10           # Max hold period (trading days) — extended from 7 for $0.50-$5.00 range
 SELL_STOP_LOSS_PCT = -15.0        # Sell if price drops below this % from entry
 SELL_TAKE_PROFIT_PCT = 20.0       # Sell if price rises above this % from entry
 SELL_TRAILING_STOP_ACTIVATE = 10  # Activate trailing stop after +10% gain
@@ -420,7 +420,7 @@ SELL_TRAILING_STOP_DISTANCE = 5   # Trail 5% below peak once active
 
 # ── Simulation ─────────────────────────────────────────────────────
 SIMULATION_INITIAL_CAPITAL = 5000.0
-SIMULATION_MAX_POSITIONS = 5
+SIMULATION_MAX_POSITIONS = 10     # Match STAGE2_RETURN_TOP_N
 SIMULATION_STATE_FILE = "simulation_state.json"
 SIMULATION_MIN_TRADES_FOR_LEARNING = 10  # Need N trades before adjusting sizing
 
