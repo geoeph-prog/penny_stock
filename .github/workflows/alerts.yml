@@ -1,0 +1,93 @@
+# Stock Analyzer — Cloud Alert Monitor
+#
+# Runs every 15 minutes during US market hours (9:30 AM - 4:15 PM ET).
+# Checks held positions for sell triggers, scans for new picks on schedule,
+# and sends email alerts via SMTP.
+#
+# Setup:
+#   1. Go to your repo → Settings → Secrets and variables → Actions
+#   2. Add these repository secrets:
+#        ALERT_EMAIL_SENDER    = your Gmail address
+#        ALERT_EMAIL_PASSWORD  = your Gmail App Password (16-char)
+#        ALERT_EMAIL_RECIPIENT = where to send alerts (can be same)
+#   3. Push this workflow — it runs automatically on weekdays during market hours
+#   4. To test: go to Actions tab → "Stock Alert Monitor" → "Run workflow"
+
+name: Stock Alert Monitor
+
+on:
+  schedule:
+    # Every 15 min during US market hours (UTC = ET + 5 during EST, ET + 4 during EDT)
+    # Covering 13:30-21:15 UTC to handle both EST and EDT
+    - cron: '*/15 13-21 * * 1-5'
+
+  # Allow manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Alert action to run'
+        required: false
+        default: 'check'
+        type: choice
+        options:
+          - check
+          - test
+          - status
+
+permissions:
+  contents: write   # Needed to commit state files back
+
+jobs:
+  alert-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      ALERT_ENABLED: 'true'
+      ALERT_EMAIL_SMTP_SERVER: 'smtp.gmail.com'
+      ALERT_EMAIL_SMTP_PORT: '587'
+      ALERT_EMAIL_SENDER: ${{ secrets.ALERT_EMAIL_SENDER }}
+      ALERT_EMAIL_PASSWORD: ${{ secrets.ALERT_EMAIL_PASSWORD }}
+      ALERT_EMAIL_RECIPIENT: ${{ secrets.ALERT_EMAIL_RECIPIENT }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install multitasking==0.0.11
+          pip install -r requirements.txt 2>/dev/null || pip install yfinance loguru finvizfinance vaderSentiment beautifulsoup4 requests
+
+      - name: Run alert check
+        run: |
+          ACTION="${{ github.event.inputs.action || 'check' }}"
+          echo "Running: python main.py alerts $ACTION"
+          python main.py alerts "$ACTION"
+
+      - name: Commit updated state files
+        # Only commit on scheduled runs (not manual test/status)
+        if: github.event_name == 'schedule' || github.event.inputs.action == 'check'
+        run: |
+          git config user.name "Stock Alert Bot"
+          git config user.email "alert-bot@users.noreply.github.com"
+
+          # Stage state files if they changed
+          git add -f simulation_state.json alert_state.json 2>/dev/null || true
+
+          # Only commit if there are actual changes
+          if git diff --cached --quiet; then
+            echo "No state changes to commit"
+          else
+            git commit -m "bot: update alert/simulation state [skip ci]"
+            git push
+          fi

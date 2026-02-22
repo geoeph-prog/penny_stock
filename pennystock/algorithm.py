@@ -1,0 +1,1050 @@
+"""
+The ONE algorithm for low-priced stock prediction ($0.50-$5.00).
+v3.0: MEGA-ALGORITHM with pre-pump detection.
+v4.1.1: Stage 1 now uses blended ranking (60% technical + 40% pre-pump hints)
+        and analyzes top 100 instead of 50 to avoid missing setups.
+v5.0.0: Expanded from penny stocks ($0.10-$1.00) to $0.50-$5.00 range
+        for better coverage of legitimate cheap stocks.
+
+Two-layer architecture:
+  LAYER 1: Kill Filters  - Instantly disqualify broken stocks (quality_gate.py)
+  LAYER 2: Positive Score - Rank survivors by setup + technical + pre_pump + fundamental + catalyst
+
+Scoring formula (Layer 2):
+  final_score = setup(25%) + technical(20%) + pre_pump(35%) + fundamental(10%) + catalyst(10%)
+                + conviction_bonus (up to +8 for HIGH pre-pump confidence)
+
+  Setup (25%):     float_tightness(35%) + insider_own(25%) + proximity_low(25%) + P/B(15%)
+  Technical (20%): RSI(20%) + MACD(20%) + StochRSI(20%) + volume(15%) + OBV(10%) + BB(5%) + trend(10%)
+  Pre-Pump (35%):  short_interest_change(20%) + supply_lock(20%) + float_rotation(15%)
+                   + squeeze_setup(15%) + compliance_risk(10%) + volume_accel(10%) + beaten_down(10%)
+  Fundamental(10%): revenue_growth(40%) + short_interest(30%) + cash_position(30%)
+  Catalyst (10%):  news-based positive/negative catalyst detection
+
+Functions:
+  build_algorithm()  - Tab 1: Learn what predicts winners from 3 months of data
+  pick_stocks()      - Tab 2: Apply the learned algorithm to find today's top 5
+"""
+
+import json
+import math
+import os
+import time
+
+import numpy as np
+import pandas as pd
+from loguru import logger
+
+from pennystock.config import (
+    WEIGHTS, MIN_RECOMMENDATION_SCORE, ALGORITHM_VERSION,
+    PRE_PUMP_HIGH_CONVICTION_BONUS, PRE_PUMP_MEDIUM_CONVICTION_BONUS,
+    STAGE1_KEEP_TOP_N,
+)
+from pennystock.data.finviz_client import get_penny_stocks, get_high_gainers
+from pennystock.data.yahoo_client import get_price_history, get_stock_info
+from pennystock.analysis.technical import extract_features as extract_tech_features
+from pennystock.analysis.technical import analyze as analyze_technical
+from pennystock.analysis.sentiment import analyze as analyze_sentiment
+from pennystock.analysis.sentiment import ensure_bulk_downloaded
+from pennystock.analysis.fundamental import extract_features as extract_fund_features
+from pennystock.analysis.fundamental import analyze as analyze_fundamental
+from pennystock.analysis.fundamental import score_setup, score_fundamentals
+from pennystock.analysis.catalyst import analyze as analyze_catalyst
+from pennystock.analysis.market_context import analyze as analyze_market
+from pennystock.analysis.quality_gate import run_kill_filters
+from pennystock.analysis.pre_pump import score_pre_pump
+from pennystock.storage.db import Database
+
+ALGORITHM_FILE = "algorithm.json"
+RUNS_DIR = "runs"
+
+
+# ════════════════════════════════════════════════════════════════════
+# TAB 1: BUILD THE ALGORITHM
+# ════════════════════════════════════════════════════════════════════
+
+def build_algorithm(progress_callback=None):
+    """
+    Learn what predicts penny stock winners by analyzing the last 3 months.
+
+    Steps:
+      1. Get ALL stocks from Finviz ($0.50-$5.00)
+      2. Get 3-month price history for each
+      3. Classify: WINNER = gained >15% over 2 weeks AND >20% over 4 weeks
+      4. Extract technical features for ALL stocks (fast)
+      5. Extract sentiment + fundamental features for winners + sample of losers
+      6. Statistically compare winners vs losers on every feature
+      7. Build one unified scoring algorithm from the most discriminative features
+      8. Save algorithm permanently to algorithm.json
+    """
+    run_log, finalize_log = _create_run_logger("build")
+
+    def _log(msg):
+        run_log(msg)
+        if progress_callback:
+            progress_callback(msg)
+
+    start = time.time()
+    _log("=" * 60)
+    _log("BUILDING ALGORITHM FROM RECENT STOCK DATA ($0.50-$5.00)")
+    _log("=" * 60)
+
+    # ── Step 1: Get all stocks in range ───────────────────────────────
+    _log("Step 1: Discovering stocks via Finviz ($0.50-$5.00)...")
+    stocks = get_penny_stocks()
+    if not stocks:
+        _log("ERROR: No stocks found. Check network connection.")
+        return None
+
+    tickers = [s["ticker"] for s in stocks]
+    stock_info = {s["ticker"]: s for s in stocks}
+    _log(f"  Found {len(tickers)} stocks")
+
+    # ── Step 2+3: Get history and classify winners vs losers ────────
+    _log("Step 2: Downloading price history and classifying winners...")
+    winners = []
+    losers = []
+    all_tech_features = {}
+
+    for i, ticker in enumerate(tickers):
+        try:
+            hist = get_price_history(ticker, period="3mo")
+            if hist is None or hist.empty or len(hist) < 30:
+                continue
+
+            close = hist["Close"]
+
+            # Check 2-week and 4-week gains at MULTIPLE points
+            # (not just end-of-period -- a stock could have won and come back)
+            is_winner = False
+            for offset in range(0, max(1, len(close) - 28), 7):
+                end_2w = offset + 10
+                end_4w = offset + 20
+                if end_4w >= len(close):
+                    break
+                start_price = close.iloc[offset]
+                if start_price <= 0:
+                    continue
+                gain_2w = (close.iloc[end_2w] - start_price) / start_price * 100
+                gain_4w = (close.iloc[end_4w] - start_price) / start_price * 100
+                if gain_2w >= 15 and gain_4w >= 20:
+                    is_winner = True
+                    break
+
+            # Extract technical features
+            tech = extract_tech_features(hist)
+            if tech:
+                tech["ticker"] = ticker
+                all_tech_features[ticker] = tech
+
+                if is_winner:
+                    winners.append(ticker)
+                else:
+                    losers.append(ticker)
+
+        except Exception as e:
+            logger.debug(f"Failed for {ticker}: {e}")
+
+        if (i + 1) % 25 == 0:
+            elapsed = time.time() - start
+            rate = (i + 1) / elapsed
+            _log(f"  Progress: {i+1}/{len(tickers)} "
+                 f"({len(winners)} winners, {len(losers)} losers) "
+                 f"~{(len(tickers)-i-1)/rate:.0f}s remaining")
+
+        time.sleep(0.1)
+
+    _log(f"  Classification done: {len(winners)} winners, {len(losers)} losers")
+
+    if len(winners) < 3:
+        _log("WARNING: Very few winners found. Algorithm may be unreliable.")
+    if not winners:
+        _log("ERROR: No winners found. Cannot build algorithm.")
+        return None
+
+    # ── Step 4: Compare technical features ──────────────────────────
+    _log("Step 3: Analyzing technical patterns...")
+    tech_comparison = _compare_groups(
+        [all_tech_features[t] for t in winners if t in all_tech_features],
+        [all_tech_features[t] for t in losers if t in all_tech_features],
+    )
+    _log(f"  Technical features analyzed: {len(tech_comparison)} factors")
+
+    # ── Step 5: Sentiment + fundamentals (winners + sample of losers)
+    _log("Step 4: Analyzing sentiment & fundamentals (winners + loser sample)...")
+
+    # Pre-download Reddit posts ONCE to avoid per-ticker rate limiting
+    _log("  Pre-downloading Reddit posts (bulk mode)...")
+    ensure_bulk_downloaded()
+
+    loser_sample = losers[:min(len(losers), len(winners) * 2)]  # 2:1 ratio
+
+    sentiment_features = {"winners": [], "losers": []}
+    fund_features = {"winners": [], "losers": []}
+
+    analyze_tickers = [(t, "winners") for t in winners] + [(t, "losers") for t in loser_sample]
+
+    for j, (ticker, group) in enumerate(analyze_tickers):
+        try:
+            # Sentiment (only include if there's actual data)
+            # Fetch company name so we also match posts by company name
+            _info = get_stock_info(ticker)
+            _company = _info.get("company_name") or _info.get("short_name") or ""
+            sent = analyze_sentiment(ticker, company_name=_company)
+            if sent.get("has_data", False):
+                sentiment_features[group].append({
+                    "reddit_mentions": sent.get("reddit", {}).get("mentions", 0),
+                    "reddit_sentiment": sent.get("reddit", {}).get("avg_sentiment", 0),
+                    "stocktwits_bullish_pct": (
+                        sent.get("stocktwits", {}).get("bullish", 0) /
+                        max(1, sent.get("stocktwits", {}).get("total", 1))
+                    ),
+                    "combined_sentiment": sent.get("combined_sentiment", 0),
+                    "buzz_score": sent.get("buzz_score", 0),
+                })
+
+            # Fundamentals
+            fund = extract_fund_features(ticker)
+            fund_features[group].append(fund)
+
+        except Exception as e:
+            logger.debug(f"Deep analysis failed for {ticker}: {e}")
+
+        if (j + 1) % 5 == 0:
+            _log(f"  Deep analysis: {j+1}/{len(analyze_tickers)}")
+
+        time.sleep(0.3)
+
+    sent_comparison = _compare_groups(
+        sentiment_features["winners"], sentiment_features["losers"]
+    )
+    fund_comparison = _compare_groups(
+        fund_features["winners"], fund_features["losers"]
+    )
+
+    _log(f"  Sentiment factors: {len(sent_comparison)}")
+    _log(f"  Fundamental factors: {len(fund_comparison)}")
+
+    # ── Step 6: Build the unified algorithm ─────────────────────────
+    _log("Step 5: Building unified algorithm...")
+
+    all_factors = []
+    for factor in tech_comparison:
+        factor["category"] = "technical"
+        all_factors.append(factor)
+    for factor in sent_comparison:
+        factor["category"] = "sentiment"
+        all_factors.append(factor)
+    for factor in fund_comparison:
+        factor["category"] = "fundamental"
+        all_factors.append(factor)
+
+    # Sort by discrimination power
+    all_factors.sort(key=lambda f: f["separation"], reverse=True)
+
+    # Assign category weights based on how discriminative each category is,
+    # but with HARD CAPS to prevent pathological results.
+    #
+    # Bug fix: Previously, sentiment could get 50%+ weight with negative
+    # correlation (winners had LOWER sentiment than losers). While partially
+    # true (ORKT had zero buzz), letting sentiment dominate is nonsensical.
+    #
+    # Constraints:
+    #   - technical: minimum 30%, maximum 60%
+    #   - fundamental: minimum 20%, maximum 50%
+    #   - sentiment: minimum 5%, maximum 20%
+    WEIGHT_CAPS = {
+        "technical":   {"min": 0.30, "max": 0.60},
+        "fundamental": {"min": 0.20, "max": 0.50},
+        "sentiment":   {"min": 0.05, "max": 0.20},
+    }
+
+    cat_separations = {}
+    for f in all_factors:
+        cat = f["category"]
+        cat_separations.setdefault(cat, []).append(f["separation"])
+
+    total_sep = sum(np.mean(v) for v in cat_separations.values()) or 1
+    category_weights = {
+        cat: np.mean(seps) / total_sep
+        for cat, seps in cat_separations.items()
+    }
+
+    # Ensure all categories exist
+    for cat in ["technical", "sentiment", "fundamental"]:
+        if cat not in category_weights:
+            category_weights[cat] = WEIGHT_CAPS[cat]["min"]
+
+    # Apply hard caps
+    for cat, caps in WEIGHT_CAPS.items():
+        if cat in category_weights:
+            category_weights[cat] = max(caps["min"], min(caps["max"], category_weights[cat]))
+
+    # Re-normalize to sum to 1.0
+    wt = sum(category_weights.values())
+    category_weights = {k: round(v / wt, 3) for k, v in category_weights.items()}
+
+    algorithm = {
+        "version": "2.0",
+        "built_date": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "training_summary": {
+            "total_stocks": len(winners) + len(losers),
+            "winners": len(winners),
+            "losers": len(losers),
+            "winner_tickers": winners[:20],
+            "criteria": "2-week gain >= 15% AND 4-week gain >= 20%",
+        },
+        "category_weights": category_weights,
+        "factors": all_factors,
+    }
+
+    # ── Step 7: Save permanently ────────────────────────────────────
+    _save_algorithm(algorithm)
+
+    elapsed = time.time() - start
+    _log("=" * 60)
+    _log(f"ALGORITHM BUILT in {elapsed:.0f}s")
+    _log(f"  Winners analyzed: {len(winners)}")
+    _log(f"  Losers analyzed: {len(losers)}")
+    _log(f"  Total factors: {len(all_factors)}")
+    _log(f"  Category weights: {category_weights}")
+    _log(f"  Top 5 most predictive factors:")
+    for f in all_factors[:5]:
+        _log(f"    {f['feature']:25s} ({f['category']:12s}) "
+             f"separation={f['separation']:.3f} "
+             f"W={f['winner_mean']:.3f} L={f['loser_mean']:.3f}")
+    _log(f"  Saved to: {ALGORITHM_FILE}")
+    _log("=" * 60)
+
+    # Save to database too
+    db = Database()
+    db.save_run({
+        "type": "build_algorithm",
+        "version": ALGORITHM_VERSION,
+        "winners": len(winners),
+        "losers": len(losers),
+        "factors": len(all_factors),
+        "elapsed_sec": round(elapsed),
+    })
+
+    # Save run log to file
+    finalize_log()
+
+    return algorithm
+
+
+# ════════════════════════════════════════════════════════════════════
+# STAGE 1 PRE-PUMP PRE-SCREEN (lightweight, no extra API calls)
+# ════════════════════════════════════════════════════════════════════
+
+def _stage1_pre_pump_hint(hist, price: float, market_cap_str: str = "") -> float:
+    """
+    Compute a lightweight pre-pump hint score (0-100) using ONLY data
+    already available in Stage 1 (price history + Finviz basics).
+
+    Three cheap signals:
+      1. Beaten-down position: price near 52-week low = max upside
+      2. Volume acceleration: recent vol > historical vol = accumulation
+      3. Compliance risk: price < $1 + small cap = pump incentive
+
+    This ensures Stage 1 ranking considers setup potential, not just
+    technicals. A stock consolidating near its low with rising volume
+    will rank higher even if RSI/MACD are mediocre.
+    """
+    score = 50.0  # Neutral baseline
+
+    try:
+        close = hist["Close"]
+        high = hist["High"]
+        low = hist["Low"]
+        volume = hist["Volume"]
+
+        # ── Signal 1: Beaten-down position (from price history) ────
+        # Where is current price relative to the period high/low?
+        period_high = float(high.max())
+        period_low = float(low.min())
+        if period_high > period_low and period_low > 0:
+            position = (price - period_low) / (period_high - period_low)
+            if position <= 0.10:
+                score += 15   # Within 10% of low — max upside
+            elif position <= 0.25:
+                score += 10   # Near bottom quarter
+            elif position <= 0.40:
+                score += 5    # Lower half
+            elif position >= 0.85:
+                score -= 10   # Near high — chasing risk
+
+        # ── Signal 2: Volume acceleration (from price history) ─────
+        # Is recent volume (last 10 days) higher than historical (50 days)?
+        if len(volume) >= 20:
+            vol_10d = float(volume.iloc[-10:].mean())
+            vol_50d = float(volume.mean())
+            if vol_50d > 0:
+                vol_ratio = vol_10d / vol_50d
+                if vol_ratio >= 3.0:
+                    score += 15   # 3x volume acceleration
+                elif vol_ratio >= 2.0:
+                    score += 10   # 2x acceleration
+                elif vol_ratio >= 1.5:
+                    score += 5    # 50% increase
+                elif vol_ratio < 0.5:
+                    score -= 5    # Volume drying up
+
+        # ── Signal 3: Compliance risk (price < $1) ────────────────
+        # Stocks below $1 Nasdaq threshold have pump incentive.
+        # Only applies to the sub-$1 subset of our $0.50-$5.00 range.
+        if price < 1.00:
+            score += 8
+
+    except Exception:
+        pass
+
+    return max(0, min(100, score))
+
+
+# ════════════════════════════════════════════════════════════════════
+# TAB 2: PICK STOCKS
+# ════════════════════════════════════════════════════════════════════
+
+def pick_stocks(top_n=5, progress_callback=None):
+    """
+    Apply the two-layer system to find today's best penny stock picks.
+
+    LAYER 1: Quality Gate (quality_gate.py)
+      Hard Kills (instant disqualification):
+        - Already pumped (>100% in 5 days) -> KILL (most important!)
+        - Pump-and-dump aftermath (>300% spike + >80% crash) -> KILL
+        - Fraud / SEC investigation in news -> KILL
+        - Core product failure in news -> KILL
+        - Shell company indicators -> KILL
+        - Toxic gross margins (<5%) -> KILL
+        - Cash runway exhaustion (<6 months) -> KILL
+        - Pre-revenue massive burn -> KILL
+        - Negative shareholder equity -> KILL (balance sheet underwater)
+        - Sub-$0.50 price -> KILL (illiquid garbage)
+        - Extreme profit margin losses (<-200%) -> KILL (hemorrhaging money)
+
+      Scoring Penalties (reduce score, don't kill):
+        - Going concern in SEC filings -> PENALTY (-12pts)
+        - Delisting / compliance notice -> PENALTY (-30pts)
+        - Extreme price decay (85%+ from 52w high) -> PENALTY (-15 to -30pts scaled)
+        - Recent reverse split -> PENALTY (-20 to -35pts scaled for extreme ratios)
+        - Excessive float (>100M shares) -> PENALTY (-15pts)
+        - Micro-employees (<10 FTEs) -> PENALTY (-20pts)
+
+    LAYER 2: Positive Scoring (v3.0 MEGA-ALGORITHM)
+      - Setup quality (25%): float, insider ownership, proximity-to-low, P/B
+      - Technical (20%): RSI, MACD, StochRSI, volume, OBV, BB, trend
+      - Pre-Pump (35%): SI change, float rotation, supply lock, squeeze, compliance, vol accel
+      - Fundamental (10%): revenue growth, short interest, cash position
+      - Catalyst (10%): news-based catalyst detection
+      + Conviction bonus: +8pts for HIGH pre-pump confidence, +3pts for MEDIUM
+
+    Steps:
+      1. Load saved algorithm
+      2. Get ALL current penny stocks from Finviz
+      3. Stage 1: Blended score (60% technical + 40% pre-pump hints)
+         Pre-pump hints use price history only (no extra API calls):
+         beaten-down position, volume acceleration, compliance risk
+      4. Stage 2: On top 100 (STAGE1_KEEP_TOP_N):
+         a. Run quality gate -- kill broken stocks, penalize sketchy ones
+         b. Score survivors -- rank by composite score minus penalties
+      5. Return top N picks with full breakdown
+    """
+    run_log, finalize_log = _create_run_logger("pick")
+
+    def _log(msg):
+        run_log(msg)
+        if progress_callback:
+            progress_callback(msg)
+
+    algorithm = load_algorithm()
+    if not algorithm:
+        _log("ERROR: No algorithm found. Run 'Build Algorithm' first (Tab 1).")
+        return []
+
+    start = time.time()
+    _log("=" * 60)
+    _log(f"PICKING TOP STOCKS $0.50-$5.00 (v{ALGORITHM_VERSION}: MEGA-ALGORITHM)")
+    _log(f"Using algorithm from {algorithm.get('built_date', 'unknown')}")
+    _log(f"Weights: setup={WEIGHTS['setup']:.0%} tech={WEIGHTS['technical']:.0%} "
+         f"pre_pump={WEIGHTS['pre_pump']:.0%} fund={WEIGHTS['fundamental']:.0%} "
+         f"cat={WEIGHTS['catalyst']:.0%}")
+    _log("=" * 60)
+
+    # ── Get current penny stocks ────────────────────────────────────
+    _log("Discovering current penny stocks...")
+    stocks = get_penny_stocks()
+    if not stocks:
+        _log("ERROR: No stocks found.")
+        return []
+
+    _log(f"Found {len(stocks)} stocks. Running Stage 1 screen (technical + pre-pump hints)...")
+
+    # ── Stage 1: Technical score + lightweight pre-pump pre-screen ──
+    # Ranks by blended score: 60% technical + 40% pre-pump hint.
+    # Pre-pump hints use ONLY data already available (price history +
+    # Finviz basics) — no extra API calls. This ensures stocks
+    # consolidating near lows with rising volume rank higher, even if
+    # their RSI/MACD are mediocre.
+    tech_factors = [f for f in algorithm["factors"] if f["category"] == "technical"]
+    stage1_results = []
+
+    for i, stock in enumerate(stocks):
+        ticker = stock["ticker"]
+        try:
+            hist = get_price_history(ticker, period="3mo")
+            if hist is None or hist.empty or len(hist) < 30:
+                continue
+
+            features = extract_tech_features(hist)
+            if not features:
+                continue
+
+            tech_score = _score_features(features, tech_factors)
+
+            # Lightweight pre-pump hint (no extra API calls)
+            pp_hint = _stage1_pre_pump_hint(
+                hist, stock.get("price", 0), stock.get("market_cap", "")
+            )
+
+            # Blended Stage 1 score: tech-dominant but setup-aware
+            stage1_score = tech_score * 0.6 + pp_hint * 0.4
+
+            stage1_results.append({
+                "ticker": ticker,
+                "tech_score": tech_score,
+                "pp_hint": pp_hint,
+                "stage1_score": stage1_score,
+                "features": features,
+                "price": stock.get("price", 0),
+                "volume": stock.get("volume", 0),
+                "company": stock.get("company", ""),
+                "sector": stock.get("sector", ""),
+            })
+        except Exception as e:
+            logger.debug(f"Stage 1 failed for {ticker}: {e}")
+
+        if (i + 1) % 25 == 0:
+            elapsed = time.time() - start
+            rate = (i + 1) / elapsed
+            _log(f"  Stage 1: {i+1}/{len(stocks)} "
+                 f"~{(len(stocks)-i-1)/rate:.0f}s remaining")
+        time.sleep(0.1)
+
+    stage1_results.sort(key=lambda x: x["stage1_score"], reverse=True)
+    _log(f"Stage 1 done: {len(stage1_results)} stocks scored")
+
+    # ── Stage 2: Deep analysis on top candidates ────────────────────
+    top_candidates = stage1_results[:STAGE1_KEEP_TOP_N]
+    sent_factors = [f for f in algorithm["factors"] if f["category"] == "sentiment"]
+    fund_factors = [f for f in algorithm["factors"] if f["category"] == "fundamental"]
+
+    # Pre-download Reddit posts ONCE to avoid per-ticker rate limiting
+    _log("Pre-downloading Reddit posts (bulk mode)...")
+    ensure_bulk_downloaded()
+
+    _log(f"Stage 2: Deep analysis on top {len(top_candidates)} stocks...")
+    _log("  Running LAYER 1 kill filters + LAYER 2 scoring...")
+    final_results = []
+    killed_count = 0
+
+    for j, candidate in enumerate(top_candidates):
+        ticker = candidate["ticker"]
+        try:
+            # ── LAYER 1: Kill Filters + Penalties ──────────────
+            info = get_stock_info(ticker)
+            gate = run_kill_filters(ticker, info=info)
+
+            if gate["killed"]:
+                killed_count += 1
+                _log(f"  KILLED {ticker}: {gate['kill_reasons'][0][:80]}...")
+                continue  # Skip to next stock -- this one is dead
+
+            # Penalty deduction applied to final score later
+            penalty_deduction = gate.get("total_penalty", 0)
+            if penalty_deduction > 0:
+                _log(f"  PENALTY {ticker}: -{penalty_deduction}pts "
+                     f"({len(gate.get('penalties', []))} issue(s))")
+
+            # ── LAYER 2: Positive Scoring ────────────────────────
+
+            # A. Setup quality (40% of total)
+            setup_result = score_setup(ticker, info)
+            setup_score = setup_result["score"]
+
+            # B. Technical score (25% of total)
+            # Use the learned algorithm factors for the technical component
+            tech_score = candidate["tech_score"]
+            # Also compute the direct technical analysis score and blend
+            tech_analysis = analyze_technical(
+                get_price_history(ticker, period="3mo")
+            )
+            if tech_analysis.get("valid"):
+                # Blend learned score with direct analysis (60/40)
+                tech_score = tech_score * 0.6 + tech_analysis["score"] * 0.4
+
+            # C. Fundamental quality (25% of total)
+            fund_result = score_fundamentals(ticker, info)
+            fund_score = fund_result["score"]
+            # Also blend with learned fundamental factors if available
+            if fund_factors:
+                fund_feat = extract_fund_features(ticker)
+                learned_fund = _score_features(fund_feat, fund_factors)
+                fund_score = fund_score * 0.7 + learned_fund * 0.3
+
+            # D. Catalyst score (10% of total)
+            cat_result = analyze_catalyst(ticker)
+            cat_score = cat_result.get("score", 50)
+
+            # E. Pre-Pump Signal Detection (25% of total) -- NEW in v3.0
+            # Combines 7 independent signals that historically precede pumps:
+            # short interest collapse, float rotation, compliance risk,
+            # volume acceleration, supply lock, squeeze setup, beaten-down reversal
+            pre_pump_result = score_pre_pump(
+                ticker, info=info,
+                tech_features={
+                    "multiday_unusual_vol_days": (
+                        tech_analysis.get("multiday_unusual_volume", {}).get("unusual_days", 0)
+                        if tech_analysis.get("valid") else 0
+                    ),
+                },
+            )
+            pre_pump_score = pre_pump_result["score"]
+
+            # F. Sentiment (informational, not in primary weights,
+            #    but used as a small adjustment)
+            company_name = info.get("company_name") or info.get("short_name") or ""
+            sent = analyze_sentiment(ticker, company_name=company_name)
+            has_sentiment_data = sent.get("has_data", False)
+            if has_sentiment_data and sent_factors:
+                sent_features = {
+                    "reddit_mentions": sent.get("reddit", {}).get("mentions", 0),
+                    "reddit_sentiment": sent.get("reddit", {}).get("avg_sentiment", 0),
+                    "stocktwits_bullish_pct": (
+                        sent.get("stocktwits", {}).get("bullish", 0) /
+                        max(1, sent.get("stocktwits", {}).get("total", 1))
+                    ),
+                    "combined_sentiment": sent.get("combined_sentiment", 0),
+                    "buzz_score": sent.get("buzz_score", 0),
+                }
+                sent_score = _score_features(sent_features, sent_factors)
+            else:
+                sent_score = 50.0
+
+            # G. Market context (small adjustment only)
+            mkt_result = analyze_market(candidate.get("sector", ""))
+            mkt_score = mkt_result.get("score", 50)
+
+            # ── Composite Score ──────────────────────────────────
+            # Primary: setup(30%) + technical(25%) + pre_pump(25%) + fundamental(10%) + catalyst(10%)
+            base_score = (
+                setup_score * WEIGHTS["setup"] +
+                tech_score * WEIGHTS["technical"] +
+                pre_pump_score * WEIGHTS["pre_pump"] +
+                fund_score * WEIGHTS["fundamental"] +
+                cat_score * WEIGHTS["catalyst"]
+            )
+
+            # Pre-pump conviction bonus: when multiple independent
+            # pre-pump signals agree, trust the setup more.
+            pp_confidence = pre_pump_result.get("confidence", "LOW")
+            if pp_confidence == "HIGH":
+                conviction_bonus = PRE_PUMP_HIGH_CONVICTION_BONUS
+            elif pp_confidence == "MEDIUM":
+                conviction_bonus = PRE_PUMP_MEDIUM_CONVICTION_BONUS
+            else:
+                conviction_bonus = 0
+
+            # Secondary adjustments: sentiment + market context
+            # These are small nudges, not primary drivers.
+            # ORKT had zero social buzz but still ran +300% -- sentiment
+            # should NOT be a gate.
+            sent_adj = (sent_score - 50) * 0.03  # +/- 1.5 points max
+            mkt_adj = (mkt_score - 50) * 0.02    # +/- 1.0 points max
+
+            # Apply quality gate penalty deductions (going concern,
+            # delisting notices, price decay, reverse splits, excessive float).
+            # These are "normal penny stock shadiness" -- bad signs that
+            # reduce the score but don't kill outright.
+            penalty_adj = -penalty_deduction
+
+            final_score = max(0, min(100,
+                base_score + conviction_bonus + sent_adj + mkt_adj + penalty_adj
+            ))
+
+            final_results.append({
+                "ticker": ticker,
+                "final_score": round(final_score, 1),
+                "company": candidate.get("company", ""),
+                "price": candidate.get("price", 0),
+                "volume": candidate.get("volume", 0),
+                "sector": candidate.get("sector", ""),
+                "quality_gate": gate,
+                "penalty_deduction": penalty_deduction,
+                "sub_scores": {
+                    "setup": round(setup_score, 1),
+                    "technical": round(tech_score, 1),
+                    "pre_pump": round(pre_pump_score, 1),
+                    "fundamental": round(fund_score, 1),
+                    "catalyst": round(cat_score, 1),
+                    "sentiment": round(sent_score, 1),
+                    "market": round(mkt_score, 1),
+                },
+                "setup_detail": setup_result,
+                "pre_pump_detail": pre_pump_result,
+                "fundamental_detail": fund_result,
+                "key_indicators": {
+                    "float_shares": info.get("float_shares", 0),
+                    "insider_pct": info.get("insider_percent_held", 0),
+                    "position_52w": setup_result["proximity_to_low"].get("position"),
+                    "price_to_book": setup_result["price_to_book"].get("price_to_book"),
+                    "rsi": candidate["features"].get("rsi"),
+                    "stochrsi": candidate["features"].get("stochrsi"),
+                    "volume_spike": candidate["features"].get("volume_spike"),
+                    "revenue_growth": info.get("revenue_growth", 0),
+                    "short_pct_float": info.get("short_percent_of_float", 0),
+                    "sentiment": round(sent.get("combined_sentiment", 0), 3),
+                    # New indicators
+                    "adx": candidate["features"].get("adx"),
+                    "mfi": candidate["features"].get("mfi"),
+                    "bb_squeeze": tech_analysis.get("bb_squeeze", {}).get("is_squeeze", False) if tech_analysis.get("valid") else False,
+                    "consolidating": tech_analysis.get("consolidation", {}).get("is_consolidating", False) if tech_analysis.get("valid") else False,
+                    "multiday_unusual_vol": tech_analysis.get("multiday_unusual_volume", {}).get("unusual_days", 0) if tech_analysis.get("valid") else 0,
+                    "squeeze_setup": fund_result.get("squeeze_composite", {}).get("is_squeeze_setup", False),
+                    "dilution_filings": fund_result.get("dilution_risk", {}).get("dilution_filings_6m", 0),
+                    "atr": tech_analysis.get("atr", 0) if tech_analysis.get("valid") else 0,
+                    # Pre-pump signals
+                    "pre_pump_confluence": pre_pump_result.get("confluence_count", 0),
+                    "pre_pump_confidence": pre_pump_result.get("confidence", "LOW"),
+                    "si_change_pct": pre_pump_result.get("signals", {}).get("short_interest_change", {}).get("change_pct", 0),
+                    "float_rotation": pre_pump_result.get("signals", {}).get("float_rotation", {}).get("rotation", 0),
+                    "supply_lock_score": pre_pump_result.get("signals", {}).get("supply_lock", {}).get("score", 0),
+                },
+                "risk_management": _compute_risk_management(
+                    candidate.get("price", 0),
+                    tech_analysis.get("atr", 0) if tech_analysis.get("valid") else 0,
+                    tech_analysis.get("support_resistance", {}).get("support") if tech_analysis.get("valid") else None,
+                ),
+                "sentiment_detail": sent,
+                "catalyst_detail": cat_result,
+            })
+
+        except Exception as e:
+            logger.debug(f"Stage 2 failed for {ticker}: {e}")
+
+        if (j + 1) % 5 == 0:
+            _log(f"  Stage 2: {j+1}/{len(top_candidates)} "
+                 f"({killed_count} killed, {len(final_results)} scored)")
+
+    final_results.sort(key=lambda x: x["final_score"], reverse=True)
+
+    # Apply minimum score threshold -- don't recommend garbage
+    qualified = [r for r in final_results if r["final_score"] >= MIN_RECOMMENDATION_SCORE]
+    below_threshold = len(final_results) - len(qualified)
+    picks = qualified[:top_n]
+
+    elapsed = time.time() - start
+    _log("=" * 60)
+    _log(f"RESULTS: {killed_count} stocks KILLED by quality filters, "
+         f"{len(final_results)} survived scoring")
+    if below_threshold > 0:
+        _log(f"  {below_threshold} stocks scored below minimum threshold "
+             f"({MIN_RECOMMENDATION_SCORE}pts) and were excluded")
+    if not picks:
+        _log("NO STOCKS MEET MINIMUM QUALITY THRESHOLD.")
+        _log(f"All {len(final_results)} survivors scored below {MIN_RECOMMENDATION_SCORE}pts.")
+        _log("This means the current market has no penny stocks worth recommending.")
+        _log("This is BETTER than recommending garbage -- sit on cash.")
+        _log("=" * 60)
+        return []
+    _log(f"TOP {len(picks)} PICKS (found in {elapsed:.0f}s)")
+    _log("=" * 60)
+    for k, pick in enumerate(picks, 1):
+        ss = pick["sub_scores"]
+        ki = pick["key_indicators"]
+        confidence = "LOW" if pick["final_score"] < 50 else "MEDIUM" if pick["final_score"] < 65 else "HIGH"
+        _log(f"  #{k}. {pick['ticker']} - ${pick['price']:.2f} "
+             f"(Score: {pick['final_score']:.1f}, Confidence: {confidence})")
+        _log(f"      {pick['company']}")
+        _log(f"      Setup:{ss['setup']:.0f} Tech:{ss['technical']:.0f} "
+             f"PrePump:{ss['pre_pump']:.0f} Fund:{ss['fundamental']:.0f} "
+             f"Cat:{ss['catalyst']:.0f}")
+        _log(f"      Float: {ki.get('float_shares', 'N/A'):,.0f} | "
+             f"Insider: {(ki.get('insider_pct') or 0)*100:.0f}% | "
+             f"52w Pos: {ki.get('position_52w', 'N/A')} | "
+             f"P/B: {ki.get('price_to_book', 'N/A')} | "
+             f"RSI: {ki.get('rsi', 'N/A')} | "
+             f"StochRSI: {ki.get('stochrsi', 'N/A')}")
+        # Pre-pump signals summary
+        _log(f"      Pre-Pump: confluence={ki.get('pre_pump_confluence', 0)}/7 "
+             f"confidence={ki.get('pre_pump_confidence', 'N/A')} "
+             f"SI-change={ki.get('si_change_pct', 0):.1f}% "
+             f"float-rot={ki.get('float_rotation', 0):.3f}")
+        # Pre-pump signal breakdown
+        pp_detail = pick.get("pre_pump_detail", {})
+        pp_signals = pp_detail.get("signals", {})
+        bullish_signals = []
+        for sig_name, sig_data in pp_signals.items():
+            if sig_data.get("score", 0) >= 65:
+                bullish_signals.append(f"{sig_name}({sig_data['score']})")
+        if bullish_signals:
+            _log(f"      Bullish Pre-Pump: {' | '.join(bullish_signals)}")
+        # Other signals
+        signals = []
+        if ki.get("bb_squeeze"):
+            signals.append("BB-SQUEEZE")
+        if ki.get("consolidating"):
+            signals.append("CONSOLIDATING")
+        if ki.get("squeeze_setup"):
+            signals.append("SQUEEZE-SETUP")
+        if ki.get("multiday_unusual_vol", 0) >= 3:
+            signals.append(f"UNUSUAL-VOL({ki['multiday_unusual_vol']}d)")
+        if ki.get("dilution_filings", 0) > 0:
+            signals.append(f"DILUTION-RISK({ki['dilution_filings']})")
+        if signals:
+            _log(f"      Tech Signals: {' | '.join(signals)}")
+        # ADX/MFI
+        _log(f"      ADX: {ki.get('adx', 'N/A')} | "
+             f"MFI: {ki.get('mfi', 'N/A')}")
+        # Risk management
+        rm = pick.get("risk_management", {})
+        if rm.get("stop_loss"):
+            _log(f"      Stop: ${rm['stop_loss']:.4f} "
+                 f"({rm['risk_pct']:.1f}% risk)")
+        if pick.get("penalty_deduction", 0) > 0:
+            _log(f"      Penalties: -{pick['penalty_deduction']}pts "
+                 f"({len(pick['quality_gate'].get('penalties', []))} issue(s))")
+            for pen in pick["quality_gate"].get("penalties", []):
+                _log(f"        {pen[:100]}")
+    _log("=" * 60)
+
+    # Save picks to database
+    db = Database()
+    for pick in picks:
+        db.save_pick(pick)
+    db.save_run({
+        "type": "pick_stocks",
+        "version": ALGORITHM_VERSION,
+        "total_screened": len(stocks),
+        "stage1_passed": len(stage1_results),
+        "killed_by_filters": killed_count,
+        "final_scored": len(final_results),
+        "below_threshold": below_threshold,
+        "final_picks": len(picks),
+        "elapsed_sec": round(elapsed),
+    })
+
+    # Save run log to file for future reference
+    run_file = finalize_log()
+    _save_run_results(run_file, picks, final_results)
+
+    return picks
+
+
+# ════════════════════════════════════════════════════════════════════
+# INTERNAL HELPERS
+# ════════════════════════════════════════════════════════════════════
+
+def _create_run_logger(run_type: str):
+    """
+    Create a run logger that captures all output to a timestamped file.
+    Returns (log_func, finalize_func).
+    log_func(msg) writes to both loguru and the run file.
+    finalize_func() closes the file and returns the path.
+    """
+    os.makedirs(RUNS_DIR, exist_ok=True)
+    timestamp = time.strftime("%Y%m%d_%H%M%S")
+    run_file = os.path.join(RUNS_DIR, f"{run_type}_{timestamp}_v{ALGORITHM_VERSION}.txt")
+    lines = []
+
+    def log_func(msg):
+        logger.info(msg)
+        lines.append(msg)
+
+    def finalize_func():
+        with open(run_file, "w", encoding="utf-8") as f:
+            f.write(f"Stock Analyzer v{ALGORITHM_VERSION}\n")
+            f.write(f"Run type: {run_type}\n")
+            f.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write("=" * 70 + "\n\n")
+            for line in lines:
+                f.write(line + "\n")
+        logger.info(f"Run log saved to {run_file}")
+        return run_file
+
+    return log_func, finalize_func
+
+
+def _save_run_results(run_file: str, picks: list, all_results: list = None):
+    """Append detailed JSON results to the run log file."""
+    with open(run_file, "a") as f:
+        f.write("\n\n" + "=" * 70 + "\n")
+        f.write("DETAILED RESULTS (JSON)\n")
+        f.write("=" * 70 + "\n")
+        # Save picks as simplified JSON (remove non-serializable objects)
+        safe_picks = []
+        for pick in picks:
+            safe = {
+                "ticker": pick["ticker"],
+                "final_score": pick["final_score"],
+                "company": pick.get("company", ""),
+                "price": pick.get("price", 0),
+                "sub_scores": pick.get("sub_scores", {}),
+                "key_indicators": pick.get("key_indicators", {}),
+                "penalty_deduction": pick.get("penalty_deduction", 0),
+                "pre_pump_detail": pick.get("pre_pump_detail", {}),
+            }
+            safe_picks.append(safe)
+        f.write(json.dumps(safe_picks, indent=2, default=str))
+        f.write("\n")
+
+
+def _compare_groups(winner_features: list, loser_features: list) -> list:
+    """
+    Compare feature distributions between winners and losers.
+    Returns list of factors with separation scores (Cohen's d).
+    """
+    if not winner_features or not loser_features:
+        return []
+
+    w_df = pd.DataFrame(winner_features)
+    l_df = pd.DataFrame(loser_features)
+
+    factors = []
+    numeric_cols = w_df.select_dtypes(include=[np.number]).columns
+
+    for col in numeric_cols:
+        if col == "ticker":
+            continue
+
+        w_vals = w_df[col].dropna()
+        l_vals = l_df[col].dropna()
+
+        if len(w_vals) < 2 or len(l_vals) < 2:
+            continue
+
+        w_mean = float(w_vals.mean())
+        l_mean = float(l_vals.mean())
+        w_std = float(w_vals.std())
+        l_std = float(l_vals.std())
+
+        pooled_std = math.sqrt((w_std ** 2 + l_std ** 2) / 2) if (w_std + l_std) > 0 else 1
+        separation = abs(w_mean - l_mean) / pooled_std if pooled_std > 0 else 0
+
+        factors.append({
+            "feature": col,
+            "winner_mean": round(w_mean, 4),
+            "loser_mean": round(l_mean, 4),
+            "winner_std": round(w_std, 4),
+            "loser_std": round(l_std, 4),
+            "separation": round(separation, 4),
+            "direction": "higher" if w_mean > l_mean else "lower",
+        })
+
+    factors.sort(key=lambda f: f["separation"], reverse=True)
+    return factors
+
+
+def _score_features(stock_features: dict, algorithm_factors: list) -> float:
+    """
+    Score a stock's features against the learned algorithm factors.
+
+    For each factor: how much does this stock look like a winner?
+    Returns score 0-100.
+    """
+    if not algorithm_factors:
+        return 50.0
+
+    total_score = 0
+    total_weight = 0
+
+    for factor in algorithm_factors:
+        name = factor["feature"]
+        if name not in stock_features or stock_features[name] is None:
+            continue
+
+        value = float(stock_features[name])
+        w_mean = factor["winner_mean"]
+        l_mean = factor["loser_mean"]
+        separation = factor["separation"]
+
+        if separation < 0.1:
+            continue  # Not discriminative enough
+
+        # How much does this value look like a winner vs loser?
+        range_ = abs(w_mean - l_mean)
+        if range_ < 0.0001:
+            continue
+
+        if factor["direction"] == "higher":
+            # Higher value = more like winner
+            score = (value - l_mean) / range_
+        else:
+            # Lower value = more like winner
+            score = (l_mean - value) / range_
+
+        score = max(0, min(1, score))  # Clamp to [0, 1]
+        weight = separation  # More discriminative factors matter more
+
+        total_score += score * weight
+        total_weight += weight
+
+    if total_weight > 0:
+        return (total_score / total_weight) * 100
+    return 50.0
+
+
+def _compute_risk_management(price: float, atr: float, support: float = None) -> dict:
+    """
+    Compute risk management levels for a pick.
+    Uses ATR-based stop-loss (2x ATR below entry) and support levels.
+    """
+    if not price or price <= 0:
+        return {"stop_loss": None, "risk_pct": None, "position_note": ""}
+
+    # ATR-based stop (2x ATR below entry)
+    atr_stop = price - (2 * atr) if atr > 0 else None
+
+    # Support-based stop (just below nearest support)
+    support_stop = support * 0.97 if support and support > 0 else None
+
+    # Use the tighter (higher) stop-loss
+    if atr_stop and support_stop:
+        stop = max(atr_stop, support_stop)
+    elif atr_stop:
+        stop = atr_stop
+    elif support_stop:
+        stop = support_stop
+    else:
+        stop = price * 0.85  # Default 15% stop
+
+    stop = max(0.01, stop)  # Never below $0.01
+    risk_pct = ((price - stop) / price) * 100
+
+    return {
+        "stop_loss": round(stop, 4),
+        "risk_pct": round(risk_pct, 1),
+        "atr_stop": round(atr_stop, 4) if atr_stop else None,
+        "support_stop": round(support_stop, 4) if support_stop else None,
+        "position_note": f"Stop ${stop:.4f} ({risk_pct:.1f}% risk)" if stop else "",
+    }
+
+
+def _save_algorithm(algorithm: dict):
+    """Save algorithm to permanent JSON file."""
+    with open(ALGORITHM_FILE, "w") as f:
+        json.dump(algorithm, f, indent=2, default=str)
+    logger.info(f"Algorithm saved to {ALGORITHM_FILE}")
+
+
+def load_algorithm() -> dict:
+    """Load the saved algorithm."""
+    if not os.path.exists(ALGORITHM_FILE):
+        return {}
+    try:
+        with open(ALGORITHM_FILE, "r") as f:
+            return json.load(f)
+    except Exception as e:
+        logger.error(f"Failed to load algorithm: {e}")
+        return {}

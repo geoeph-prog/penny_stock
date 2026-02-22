@@ -1,0 +1,88 @@
+Penny Stock Analyzer v3.1.0
+Run type: build
+Timestamp: 2026-02-18 20:13:49
+======================================================================
+
+============================================================
+BUILDING ALGORITHM FROM RECENT PENNY STOCK DATA
+============================================================
+Step 1: Discovering penny stocks via Finviz...
+  Found 341 penny stocks
+Step 2: Downloading price history and classifying winners...
+  Progress: 25/341 (3 winners, 22 losers) ~339s remaining
+  Progress: 50/341 (8 winners, 42 losers) ~178s remaining
+  Progress: 75/341 (13 winners, 62 losers) ~122s remaining
+  Progress: 100/341 (15 winners, 85 losers) ~92s remaining
+  Progress: 125/341 (20 winners, 105 losers) ~73s remaining
+  Progress: 150/341 (24 winners, 126 losers) ~58s remaining
+  Progress: 175/341 (32 winners, 143 losers) ~47s remaining
+  Progress: 200/341 (38 winners, 162 losers) ~38s remaining
+  Progress: 225/341 (41 winners, 184 losers) ~30s remaining
+  Progress: 250/341 (44 winners, 206 losers) ~22s remaining
+  Progress: 275/341 (53 winners, 222 losers) ~16s remaining
+  Progress: 300/341 (57 winners, 243 losers) ~9s remaining
+  Progress: 325/341 (62 winners, 263 losers) ~4s remaining
+  Classification done: 70 winners, 271 losers
+Step 3: Analyzing technical patterns...
+  Technical features analyzed: 17 factors
+Step 4: Analyzing sentiment & fundamentals (winners + loser sample)...
+  Pre-downloading Reddit posts (bulk mode)...
+  Deep analysis: 5/210
+  Deep analysis: 10/210
+  Deep analysis: 15/210
+  Deep analysis: 20/210
+  Deep analysis: 25/210
+  Deep analysis: 30/210
+  Deep analysis: 35/210
+  Deep analysis: 40/210
+  Deep analysis: 45/210
+  Deep analysis: 50/210
+  Deep analysis: 55/210
+  Deep analysis: 60/210
+  Deep analysis: 65/210
+  Deep analysis: 70/210
+  Deep analysis: 75/210
+  Deep analysis: 80/210
+  Deep analysis: 85/210
+  Deep analysis: 90/210
+  Deep analysis: 95/210
+  Deep analysis: 100/210
+  Deep analysis: 105/210
+  Deep analysis: 110/210
+  Deep analysis: 115/210
+  Deep analysis: 120/210
+  Deep analysis: 125/210
+  Deep analysis: 130/210
+  Deep analysis: 135/210
+  Deep analysis: 140/210
+  Deep analysis: 145/210
+  Deep analysis: 150/210
+  Deep analysis: 155/210
+  Deep analysis: 160/210
+  Deep analysis: 165/210
+  Deep analysis: 170/210
+  Deep analysis: 175/210
+  Deep analysis: 180/210
+  Deep analysis: 185/210
+  Deep analysis: 190/210
+  Deep analysis: 195/210
+  Deep analysis: 200/210
+  Deep analysis: 205/210
+  Deep analysis: 210/210
+  Sentiment factors: 5
+  Fundamental factors: 24
+Step 5: Building unified algorithm...
+============================================================
+ALGORITHM BUILT in 422s
+  Winners analyzed: 70
+  Losers analyzed: 271
+  Total factors: 46
+  Category weights: {'sentiment': np.float64(0.278), 'fundamental': np.float64(0.305), 'technical': np.float64(0.417)}
+  Top 5 most predictive factors:
+    reddit_sentiment          (sentiment   ) separation=0.712 W=0.168 L=0.503
+    combined_sentiment        (sentiment   ) separation=0.712 W=0.168 L=0.503
+    position_52w              (fundamental ) separation=0.430 W=0.098 L=0.048
+    buzz_score                (sentiment   ) separation=0.365 W=28.400 L=34.087
+    reddit_mentions           (sentiment   ) separation=0.315 W=4.077 L=15.739
+  Saved to: algorithm.json
+============================================================

@@ -1,0 +1,95 @@
+======================================================================
+  HISTORICAL BACKTEST  |  v3.4.0
+  Target Date: 2025-08-03  |  Hold: [5, 10, 14] trading days
+======================================================================
+  Loaded algorithm (46 factors)
+
+  Fetching penny stock universe from Finviz...
+  Found 294 current penny stocks
+  Downloading 2-year price history (this takes a minute)...
+  Got history for 294/294 stocks
+
+  Filtering to penny stocks as of 2025-08-03...
+  Found 82 penny stocks on 2025-08-03
+
+  Stage 1: Technical screening 82 candidates...
+  Top 50 tech scores: 74.6 to 44.7
+
+  Stage 2: Deep analysis on top 50...
+    SCYX: 47.2 (LOW)
+    SFHG: 70.3 (HIGH)
+    PED: 58.7 (MEDIUM)
+    CISO: 44.5 (LOW)
+    MODD: 53.9 (MEDIUM)
+    BANL: 70.9 (HIGH)
+    XTNT: 48.1 (LOW)
+    BKYI: 62.9 (MEDIUM)
+    TVGN: 53.5 (MEDIUM)
+    FEMY: 46.5 (LOW)
+    MAPS: 46.2 (LOW)
+    XLO: 67.5 (HIGH)
+    NXL: 58.0 (MEDIUM)
+    IGC: 42.2 (LOW)
+    MSS: 61.8 (MEDIUM)
+    BARK: 51.5 (MEDIUM)
+    XPL: 44.5 (LOW)
+    CXAI: 56.0 (MEDIUM)
+    YCBD: 63.6 (MEDIUM)
+    TOON: 48.6 (LOW)
+    PRTS: 54.5 (MEDIUM)
+
+  Stage 2: 29 killed, 21 scored above 40pts
+
+======================================================================
+  TOP 5 PICKS FOR 2025-08-03
+======================================================================
+
+  #1. BANL - $0.6840 (Score: 70.9, HIGH)
+      CBL International Ltd
+      Setup:90 Tech:59 PrePump:69 Fund:45
+      Forward: 5d:+4.1%(W) | 10d:-2.8%(L) | 14d:+0.0%(L)
+
+  #2. SFHG - $0.8140 (Score: 70.3, HIGH)
+      Samfine Creation Holdings Group Ltd
+      Setup:86 Tech:61 PrePump:71 Fund:37
+      Forward: 5d:-12.8%(L) | 10d:-13.0%(L) | 14d:-14.0%(L)
+
+  #3. XLO - $0.6500 (Score: 67.5, HIGH)
+      Xilio Therapeutics Inc
+      Setup:76 Tech:53 PrePump:64 Fund:77
+      Forward: 5d:+2.0%(W) | 10d:+9.1%(W) | 14d:+3.1%(W)
+
+  #4. YCBD - $0.8600 (Score: 63.6, MEDIUM)
+      cbdMD Inc
+      Setup:69 Tech:54 PrePump:69 Fund:34
+      Forward: 5d:+2.7%(W) | 10d:-12.1%(L) | 14d:-25.1%(L)
+
+  #5. BKYI - $0.7600 (Score: 62.8, MEDIUM)
+      Bio-Key International Inc
+      Setup:75 Tech:60 PrePump:56 Fund:45
+      Forward: 5d:-1.3%(L) | 10d:-4.0%(L) | 14d:+0.0%(L)
+
+======================================================================
+  BACKTEST SUMMARY
+======================================================================
+
+  Top 5 Picks Performance:
+      5d: Win Rate  60.0% | Avg   -1.1% | Best   +4.1% | Worst  -12.8%
+     10d: Win Rate  20.0% | Avg   -4.5% | Best   +9.1% | Worst  -13.0%
+     14d: Win Rate  20.0% | Avg   -7.2% | Best   +3.1% | Worst  -25.1%
+
+  All 21 Scored Stocks Performance:
+      5d: Win Rate  61.9% | Avg   +1.6% | Best  +27.0% | Worst  -12.8%
+     10d: Win Rate  38.1% | Avg   -0.1% | Best  +28.0% | Worst  -20.7%
+     14d: Win Rate  33.3% | Avg   -4.0% | Best  +19.5% | Worst  -30.7%
+
+  LIMITATIONS:
+    - Survivorship bias: only tests stocks in current Finviz universe
+    - Fundamentals (insider%, float, SI) use CURRENT data, not historical
+    - Catalyst score set to neutral (50) -- no historical news data
+    - Going concern / delisting penalties not applied
+
+======================================================================
+  Backtest completed in 64s
+======================================================================
+

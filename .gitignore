@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+*.db
+.cache/
+*.log
+twitter_cookies.json
+learned_patterns.json
+*.egg-info/
+dist/
+build/
+.env
+venv/
+.venv/
+alert_config.json

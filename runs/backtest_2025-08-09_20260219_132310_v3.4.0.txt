@@ -1,0 +1,91 @@
+======================================================================
+  HISTORICAL BACKTEST  |  v3.4.0
+  Target Date: 2025-08-09  |  Hold: [5, 10, 14] trading days
+======================================================================
+  Loaded algorithm (46 factors)
+
+  Fetching penny stock universe from Finviz...
+  Found 298 current penny stocks
+  Downloading 2-year price history (this takes a minute)...
+  Got history for 298/298 stocks
+
+  Filtering to penny stocks as of 2025-08-09...
+  Found 94 penny stocks on 2025-08-09
+
+  Stage 1: Technical screening 94 candidates...
+  Top 50 tech scores: 80.0 to 47.2
+
+  Stage 2: Deep analysis on top 50...
+    BANL: 68.2 (HIGH)
+    CISO: 47.3 (LOW)
+    MAPS: 45.7 (LOW)
+    IGC: 40.4 (LOW)
+    XTNT: 47.9 (LOW)
+    ZJYL: 60.6 (MEDIUM)
+    SFHG: 66.8 (HIGH)
+    FURY: 44.1 (LOW)
+    SMTK: 76.9 (HIGH)
+    PED: 57.8 (MEDIUM)
+    BKYI: 61.3 (MEDIUM)
+    VRAX: 63.4 (MEDIUM)
+    TOON: 41.6 (LOW)
+    CXAI: 52.8 (MEDIUM)
+    ICCM: 59.1 (MEDIUM)
+    BLNK: 47.3 (LOW)
+    NXL: 58.2 (MEDIUM)
+
+  Stage 2: 33 killed, 17 scored above 40pts
+
+======================================================================
+  TOP 5 PICKS FOR 2025-08-09
+======================================================================
+
+  #1. SMTK - $0.8300 (Score: 76.9, HIGH)
+      SmartKem Inc
+      Setup:76 Tech:56 PrePump:84 Fund:40
+      Forward: 5d:-25.4%(L) | 10d:-21.7%(L) | 14d:-10.6%(L)
+
+  #2. BANL - $0.7120 (Score: 68.2, HIGH)
+      CBL International Ltd
+      Setup:90 Tech:46 PrePump:69 Fund:45
+      Forward: 5d:-6.6%(L) | 10d:-2.0%(L) | 14d:-8.0%(L)
+
+  #3. SFHG - $0.7100 (Score: 66.8, HIGH)
+      Samfine Creation Holdings Group Ltd
+      Setup:86 Tech:44 PrePump:71 Fund:37
+      Forward: 5d:-0.3%(L) | 10d:+0.0%(L) | 14d:+2.1%(W)
+
+  #4. VRAX - $0.7840 (Score: 63.4, MEDIUM)
+      Virax Biolabs Group Ltd
+      Setup:74 Tech:42 PrePump:73 Fund:31
+      Forward: 5d:-1.1%(L) | 10d:-2.4%(L) | 14d:-21.6%(L)
+
+  #5. BKYI - $0.7500 (Score: 61.3, MEDIUM)
+      Bio-Key International Inc
+      Setup:75 Tech:52 PrePump:56 Fund:45
+      Forward: 5d:-2.7%(L) | 10d:+2.7%(W) | 14d:+0.0%(L)
+
+======================================================================
+  BACKTEST SUMMARY
+======================================================================
+
+  Top 5 Picks Performance:
+      5d: Win Rate   0.0% | Avg   -7.2% | Best   -0.3% | Worst  -25.4%
+     10d: Win Rate  20.0% | Avg   -4.7% | Best   +2.7% | Worst  -21.7%
+     14d: Win Rate  20.0% | Avg   -7.6% | Best   +2.1% | Worst  -21.6%
+
+  All 17 Scored Stocks Performance:
+      5d: Win Rate  47.1% | Avg   +0.0% | Best  +26.6% | Worst  -25.4%
+     10d: Win Rate  58.8% | Avg   +2.4% | Best  +20.2% | Worst  -21.7%
+     14d: Win Rate  58.8% | Avg   +7.1% | Best  +44.2% | Worst  -21.6%
+
+  LIMITATIONS:
+    - Survivorship bias: only tests stocks in current Finviz universe
+    - Fundamentals (insider%, float, SI) use CURRENT data, not historical
+    - Catalyst score set to neutral (50) -- no historical news data
+    - Going concern / delisting penalties not applied
+
+======================================================================
+  Backtest completed in 64s
+======================================================================
+
