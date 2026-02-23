@@ -1,9 +1,9 @@
 {
-  "last_scan": "2026-02-23T15:41:32.139300",
-  "last_price_check": "2026-02-23T18:43:45.722494",
+  "last_scan": "2026-02-23T21:16:27.256325",
+  "last_price_check": "2026-02-23T21:08:06.164555",
   "last_daily_summary": "2026-02-23T15:41:34.528170",
-  "alerts_sent": 2,
-  "buy_alerts": 1,
+  "alerts_sent": 3,
+  "buy_alerts": 2,
   "sell_alerts": 0,
   "summary_alerts": 1,
   "history": [
@@ -16,6 +16,11 @@
       "time": "2026-02-23T15:41:34.528179",
       "type": "SUMMARY",
       "detail": "$4,944.52"
+    },
+    {
+      "time": "2026-02-23T21:16:28.433868",
+      "type": "BUY",
+      "detail": "CPIX, CINT, NXDT, PED, OSUR, WEST, ACTG, SCYX, ZDGE, WPRT"
     }
   ]
 }
