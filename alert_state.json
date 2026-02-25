@@ -1,10 +1,10 @@
 {
   "last_scan": "2026-02-25T17:01:55.388786",
-  "last_price_check": "2026-02-25T16:50:44.641461",
+  "last_price_check": "2026-02-25T19:53:26.101694",
   "last_daily_summary": "2026-02-24T16:24:47.326714",
-  "alerts_sent": 8,
+  "alerts_sent": 9,
   "buy_alerts": 5,
-  "sell_alerts": 1,
+  "sell_alerts": 2,
   "summary_alerts": 2,
   "history": [
     {
@@ -46,6 +46,11 @@
       "time": "2026-02-25T17:01:57.062021",
       "type": "BUY",
       "detail": "NXDT, OSUR, WEST, SCYX, ACDC, HEPS, CRCT, STTK, PHK, TUSK"
+    },
+    {
+      "time": "2026-02-25T19:53:27.554624",
+      "type": "SELL",
+      "detail": "ASPN"
     }
   ]
 }
