@@ -1,10 +1,10 @@
 {
-  "last_scan": "2026-02-24T21:15:45.550509",
-  "last_price_check": "2026-02-24T22:59:21.133627",
+  "last_scan": "2026-02-25T17:01:55.388786",
+  "last_price_check": "2026-02-25T16:50:44.641461",
   "last_daily_summary": "2026-02-24T16:24:47.326714",
-  "alerts_sent": 6,
-  "buy_alerts": 4,
-  "sell_alerts": 0,
+  "alerts_sent": 8,
+  "buy_alerts": 5,
+  "sell_alerts": 1,
   "summary_alerts": 2,
   "history": [
     {
@@ -36,6 +36,16 @@
       "time": "2026-02-24T21:15:46.937522",
       "type": "BUY",
       "detail": "CPIX, CINT, EPSN, NXDT, OSUR, WEST, PED, SCYX, ACTG, ZDGE"
+    },
+    {
+      "time": "2026-02-25T16:50:46.775362",
+      "type": "SELL",
+      "detail": "ASPN"
+    },
+    {
+      "time": "2026-02-25T17:01:57.062021",
+      "type": "BUY",
+      "detail": "NXDT, OSUR, WEST, SCYX, ACDC, HEPS, CRCT, STTK, PHK, TUSK"
     }
   ]
 }
