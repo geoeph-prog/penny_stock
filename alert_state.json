@@ -1,10 +1,10 @@
 {
   "last_scan": "2026-02-26T20:28:22.788577",
-  "last_price_check": "2026-02-26T21:02:12.462729",
+  "last_price_check": "2026-02-26T21:46:37.730795",
   "last_daily_summary": "2026-02-26T15:48:52.752702",
-  "alerts_sent": 20,
+  "alerts_sent": 21,
   "buy_alerts": 8,
-  "sell_alerts": 9,
+  "sell_alerts": 10,
   "summary_alerts": 3,
   "history": [
     {
@@ -104,6 +104,11 @@
     },
     {
       "time": "2026-02-26T21:02:14.173706",
+      "type": "SELL",
+      "detail": "SCYX"
+    },
+    {
+      "time": "2026-02-26T21:46:39.304876",
       "type": "SELL",
       "detail": "SCYX"
     }
