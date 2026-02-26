@@ -1,10 +1,10 @@
 {
   "last_scan": "2026-02-26T15:48:50.211568",
-  "last_price_check": "2026-02-26T17:45:24.373451",
+  "last_price_check": "2026-02-26T18:31:47.074212",
   "last_daily_summary": "2026-02-26T15:48:52.752702",
-  "alerts_sent": 16,
+  "alerts_sent": 17,
   "buy_alerts": 7,
-  "sell_alerts": 6,
+  "sell_alerts": 7,
   "summary_alerts": 3,
   "history": [
     {
@@ -84,6 +84,11 @@
     },
     {
       "time": "2026-02-26T17:45:25.898095",
+      "type": "SELL",
+      "detail": "ASPN"
+    },
+    {
+      "time": "2026-02-26T18:31:48.644735",
       "type": "SELL",
       "detail": "ASPN"
     }
