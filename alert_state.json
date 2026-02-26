@@ -1,10 +1,10 @@
 {
   "last_scan": "2026-02-26T20:28:22.788577",
-  "last_price_check": "2026-02-26T20:19:16.770055",
+  "last_price_check": "2026-02-26T21:02:12.462729",
   "last_daily_summary": "2026-02-26T15:48:52.752702",
-  "alerts_sent": 19,
+  "alerts_sent": 20,
   "buy_alerts": 8,
-  "sell_alerts": 8,
+  "sell_alerts": 9,
   "summary_alerts": 3,
   "history": [
     {
@@ -101,6 +101,11 @@
       "time": "2026-02-26T20:28:24.219146",
       "type": "BUY",
       "detail": "CPIX, NXDT, WEST, PED, CINT, SCYX, ACTG, CHMI, OSUR, HEPS"
+    },
+    {
+      "time": "2026-02-26T21:02:14.173706",
+      "type": "SELL",
+      "detail": "SCYX"
     }
   ]
 }
