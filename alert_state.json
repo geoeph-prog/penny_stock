@@ -1,10 +1,10 @@
 {
   "last_scan": "2026-02-27T19:11:20.335672",
-  "last_price_check": "2026-02-27T19:03:02.487124",
+  "last_price_check": "2026-02-27T19:47:21.692669",
   "last_daily_summary": "2026-02-27T15:35:59.988453",
-  "alerts_sent": 31,
+  "alerts_sent": 32,
   "buy_alerts": 10,
-  "sell_alerts": 17,
+  "sell_alerts": 18,
   "summary_alerts": 4,
   "history": [
     {
@@ -161,6 +161,11 @@
       "time": "2026-02-27T19:11:22.111322",
       "type": "BUY",
       "detail": "NXDT, PED, SCYX, ACTG, CHMI, WEST, HEPS, STTK, ACDC, PHK"
+    },
+    {
+      "time": "2026-02-27T19:47:24.065418",
+      "type": "SELL",
+      "detail": "ASPN"
     }
   ]
 }
