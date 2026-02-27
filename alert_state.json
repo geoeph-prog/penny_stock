@@ -1,10 +1,10 @@
 {
   "last_scan": "2026-02-27T14:07:12.091370",
-  "last_price_check": "2026-02-27T13:58:55.870748",
+  "last_price_check": "2026-02-27T14:46:37.959334",
   "last_daily_summary": "2026-02-26T15:48:52.752702",
-  "alerts_sent": 23,
+  "alerts_sent": 24,
   "buy_alerts": 9,
-  "sell_alerts": 11,
+  "sell_alerts": 12,
   "summary_alerts": 3,
   "history": [
     {
@@ -121,6 +121,11 @@
       "time": "2026-02-27T14:07:13.701505",
       "type": "BUY",
       "detail": "UEIC, CPIX, NXDT, PED, SCYX, ACTG, CINT, WEST, CHMI, MSGM"
+    },
+    {
+      "time": "2026-02-27T14:46:39.688540",
+      "type": "SELL",
+      "detail": "ASPN"
     }
   ]
 }
