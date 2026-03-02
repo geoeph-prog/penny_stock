@@ -21,10 +21,10 @@
         "sentiment": 50.0,
         "market": 43.2
       },
-      "current_price": 4.98,
+      "current_price": 4.96,
       "high_since_entry": 5.06,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-02T21:06:24.819492"
+      "last_updated": "2026-03-02T21:49:52.362463"
     },
     {
       "ticker": "PED",
@@ -48,7 +48,7 @@
       "current_price": 0.6982,
       "high_since_entry": 0.7056,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-02T21:06:24.819492"
+      "last_updated": "2026-03-02T21:49:52.362463"
     },
     {
       "ticker": "OSUR",
@@ -72,7 +72,7 @@
       "current_price": 2.96,
       "high_since_entry": 3.22,
       "trailing_stop_active": true,
-      "last_updated": "2026-03-02T21:06:24.819492"
+      "last_updated": "2026-03-02T21:49:52.362463"
     },
     {
       "ticker": "NXDT",
@@ -96,7 +96,7 @@
       "current_price": 4.69,
       "high_since_entry": 4.98,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-02T21:06:24.819492"
+      "last_updated": "2026-03-02T21:49:52.362463"
     },
     {
       "ticker": "ACTG",
@@ -120,7 +120,7 @@
       "current_price": 4.13,
       "high_since_entry": 4.32,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-02T21:06:24.819492"
+      "last_updated": "2026-03-02T21:49:52.362463"
     },
     {
       "ticker": "CRNT",
@@ -144,7 +144,7 @@
       "current_price": 2.3,
       "high_since_entry": 2.37,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-02T21:06:24.819492"
+      "last_updated": "2026-03-02T21:49:52.362463"
     },
     {
       "ticker": "SCYX",
@@ -168,7 +168,7 @@
       "current_price": 0.7493,
       "high_since_entry": 0.85,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-02T21:06:24.819492"
+      "last_updated": "2026-03-02T21:49:52.362463"
     },
     {
       "ticker": "ASPN",
@@ -189,10 +189,10 @@
         "sentiment": 50.0,
         "market": 53.2
       },
-      "current_price": 3.27,
+      "current_price": 3.28,
       "high_since_entry": 3.74,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-02T21:06:24.819492"
+      "last_updated": "2026-03-02T21:49:52.362463"
     }
   ],
   "trade_history": [
@@ -289,5 +289,5 @@
   "sell_follow_ups": [],
   "insights": [],
   "created": "2026-02-20T09:22:34.998847",
-  "last_updated": "2026-03-02T21:06:24.819492"
+  "last_updated": "2026-03-02T21:49:52.362463"
 }
