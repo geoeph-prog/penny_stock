@@ -1,11 +1,11 @@
 {
   "last_scan": "2026-03-02T14:08:29.270463",
-  "last_price_check": "2026-03-02T14:52:27.333856",
-  "last_daily_summary": "2026-02-27T15:35:59.988453",
-  "alerts_sent": 35,
+  "last_price_check": "2026-03-02T15:40:25.407490",
+  "last_daily_summary": "2026-03-02T15:40:27.705961",
+  "alerts_sent": 37,
   "buy_alerts": 11,
-  "sell_alerts": 20,
-  "summary_alerts": 4,
+  "sell_alerts": 21,
+  "summary_alerts": 5,
   "history": [
     {
       "time": "2026-02-23T15:41:33.522576",
@@ -181,6 +181,16 @@
       "time": "2026-03-02T14:52:29.299032",
       "type": "SELL",
       "detail": "CINT, PED, OSUR, NXDT, ACTG, CRNT, SCYX, ASPN"
+    },
+    {
+      "time": "2026-03-02T15:40:26.647570",
+      "type": "SELL",
+      "detail": "CINT, PED, OSUR, NXDT, ACTG, CRNT, SCYX, ASPN"
+    },
+    {
+      "time": "2026-03-02T15:40:27.705982",
+      "type": "SUMMARY",
+      "detail": "$4,996.81"
     }
   ]
 }
