@@ -1,10 +1,10 @@
 {
-  "last_scan": "2026-03-02T19:12:42.668673",
-  "last_price_check": "2026-03-02T21:49:52.362463",
+  "last_scan": "2026-03-03T14:06:59.133420",
+  "last_price_check": "2026-03-03T13:58:26.283846",
   "last_daily_summary": "2026-03-02T15:40:27.705961",
-  "alerts_sent": 46,
-  "buy_alerts": 12,
-  "sell_alerts": 29,
+  "alerts_sent": 48,
+  "buy_alerts": 13,
+  "sell_alerts": 30,
   "summary_alerts": 5,
   "history": [
     {
@@ -236,6 +236,16 @@
       "time": "2026-03-02T21:49:53.816940",
       "type": "SELL",
       "detail": "CINT, PED, OSUR, NXDT, ACTG, CRNT, SCYX, ASPN"
+    },
+    {
+      "time": "2026-03-03T13:58:27.613627",
+      "type": "SELL",
+      "detail": "CINT, PED, OSUR, NXDT, ACTG, CRNT, SCYX, ASPN"
+    },
+    {
+      "time": "2026-03-03T14:07:00.360420",
+      "type": "BUY",
+      "detail": "TLF, NXDT, SCYX, CINT, MSGM, STTK, ZDGE, PHK, VRA, FBIO"
     }
   ]
 }
