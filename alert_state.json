@@ -1,10 +1,10 @@
 {
   "last_scan": "2026-03-04T19:04:44.609562",
-  "last_price_check": "2026-03-04T18:55:59.893051",
+  "last_price_check": "2026-03-04T19:37:24.374892",
   "last_daily_summary": "2026-03-04T15:23:43.076774",
-  "alerts_sent": 71,
+  "alerts_sent": 72,
   "buy_alerts": 16,
-  "sell_alerts": 48,
+  "sell_alerts": 49,
   "summary_alerts": 7,
   "history": [
     {
@@ -361,6 +361,11 @@
       "time": "2026-03-04T19:04:46.301802",
       "type": "BUY",
       "detail": "NXDT, HIO, WHWK, SCYX, LGVN, SRTA, MSGM, WPRT, ACDC, FBIO"
+    },
+    {
+      "time": "2026-03-04T19:37:26.370113",
+      "type": "SELL",
+      "detail": "CINT, PED, OSUR, NXDT, ACTG, CRNT, SCYX, ASPN"
     }
   ]
 }
