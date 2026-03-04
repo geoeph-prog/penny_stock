@@ -1,10 +1,10 @@
 {
   "last_scan": "2026-03-04T14:06:57.927779",
-  "last_price_check": "2026-03-04T13:56:47.572342",
+  "last_price_check": "2026-03-04T14:38:10.477662",
   "last_daily_summary": "2026-03-03T15:44:46.946360",
-  "alerts_sent": 63,
+  "alerts_sent": 64,
   "buy_alerts": 15,
-  "sell_alerts": 42,
+  "sell_alerts": 43,
   "summary_alerts": 6,
   "history": [
     {
@@ -321,6 +321,11 @@
       "time": "2026-03-04T14:06:59.351623",
       "type": "BUY",
       "detail": "NXDT, TLF, SCYX, CHMI, ACTG, MSGM, STTK, CTRM, PHK, VRA"
+    },
+    {
+      "time": "2026-03-04T14:38:11.889117",
+      "type": "SELL",
+      "detail": "CINT, PED, OSUR, NXDT, ACTG, CRNT, SCYX, ASPN"
     }
   ]
 }
