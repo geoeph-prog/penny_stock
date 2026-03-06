@@ -1,10 +1,10 @@
 {
   "last_scan": "2026-03-06T18:16:21.399253",
-  "last_price_check": "2026-03-06T20:57:01.788400",
+  "last_price_check": "2026-03-06T21:31:25.647601",
   "last_daily_summary": "2026-03-06T15:21:02.461240",
-  "alerts_sent": 101,
+  "alerts_sent": 102,
   "buy_alerts": 20,
-  "sell_alerts": 72,
+  "sell_alerts": 73,
   "summary_alerts": 9,
   "history": [
     {
@@ -509,6 +509,11 @@
     },
     {
       "time": "2026-03-06T20:57:03.353769",
+      "type": "SELL",
+      "detail": "CINT, PED, OSUR, NXDT, ACTG, CRNT, SCYX, ASPN"
+    },
+    {
+      "time": "2026-03-06T21:31:27.313399",
       "type": "SELL",
       "detail": "CINT, PED, OSUR, NXDT, ACTG, CRNT, SCYX, ASPN"
     }
