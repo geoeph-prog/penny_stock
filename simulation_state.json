@@ -21,10 +21,10 @@
         "sentiment": 50.0,
         "market": 43.2
       },
-      "current_price": 5.16,
+      "current_price": 5.06,
       "high_since_entry": 5.23,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-06T13:53:46.060964"
+      "last_updated": "2026-03-06T14:35:48.661894"
     },
     {
       "ticker": "PED",
@@ -45,10 +45,10 @@
         "sentiment": 50.0,
         "market": 53.2
       },
-      "current_price": 0.639,
+      "current_price": 0.7001,
       "high_since_entry": 0.75,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-06T13:53:46.060964"
+      "last_updated": "2026-03-06T14:35:48.661894"
     },
     {
       "ticker": "OSUR",
@@ -69,10 +69,10 @@
         "sentiment": 50.0,
         "market": 47.0
       },
-      "current_price": 2.99,
+      "current_price": 2.9,
       "high_since_entry": 3.22,
       "trailing_stop_active": true,
-      "last_updated": "2026-03-06T13:53:46.060964"
+      "last_updated": "2026-03-06T14:35:48.661894"
     },
     {
       "ticker": "NXDT",
@@ -93,10 +93,10 @@
         "sentiment": 50.0,
         "market": 49.5
       },
-      "current_price": 4.6,
+      "current_price": 4.4601,
       "high_since_entry": 4.98,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-06T13:53:46.060964"
+      "last_updated": "2026-03-06T14:35:48.661894"
     },
     {
       "ticker": "ACTG",
@@ -117,10 +117,10 @@
         "sentiment": 50.0,
         "market": 53.2
       },
-      "current_price": 4.12,
+      "current_price": 4.0,
       "high_since_entry": 4.32,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-06T13:53:46.060964"
+      "last_updated": "2026-03-06T14:35:48.661894"
     },
     {
       "ticker": "CRNT",
@@ -165,10 +165,10 @@
         "sentiment": 50.0,
         "market": 47.0
       },
-      "current_price": 0.793,
+      "current_price": 0.8099,
       "high_since_entry": 0.85,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-06T13:53:46.060964"
+      "last_updated": "2026-03-06T14:35:48.661894"
     },
     {
       "ticker": "ASPN",
@@ -189,10 +189,10 @@
         "sentiment": 50.0,
         "market": 53.2
       },
-      "current_price": 3.27,
+      "current_price": 3.25,
       "high_since_entry": 3.74,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-06T13:53:46.060964"
+      "last_updated": "2026-03-06T14:35:48.661894"
     }
   ],
   "trade_history": [
@@ -289,5 +289,5 @@
   "sell_follow_ups": [],
   "insights": [],
   "created": "2026-02-20T09:22:34.998847",
-  "last_updated": "2026-03-06T13:53:46.060964"
+  "last_updated": "2026-03-06T14:35:48.661894"
 }
