@@ -24,7 +24,7 @@
       "current_price": 5.03,
       "high_since_entry": 5.23,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-09T16:12:56.452374"
+      "last_updated": "2026-03-09T17:10:29.814581"
     },
     {
       "ticker": "PED",
@@ -45,10 +45,10 @@
         "sentiment": 50.0,
         "market": 53.2
       },
-      "current_price": 0.8197,
+      "current_price": 0.8175,
       "high_since_entry": 0.85,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-09T16:12:56.452374"
+      "last_updated": "2026-03-09T17:10:29.814581"
     },
     {
       "ticker": "OSUR",
@@ -69,10 +69,10 @@
         "sentiment": 50.0,
         "market": 47.0
       },
-      "current_price": 3.145,
+      "current_price": 3.135,
       "high_since_entry": 3.23,
       "trailing_stop_active": true,
-      "last_updated": "2026-03-09T16:12:56.452374"
+      "last_updated": "2026-03-09T17:10:29.814581"
     },
     {
       "ticker": "NXDT",
@@ -93,10 +93,10 @@
         "sentiment": 50.0,
         "market": 49.5
       },
-      "current_price": 4.6098,
+      "current_price": 4.6,
       "high_since_entry": 4.98,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-09T16:12:56.452374"
+      "last_updated": "2026-03-09T17:10:29.814581"
     },
     {
       "ticker": "ACTG",
@@ -117,10 +117,10 @@
         "sentiment": 50.0,
         "market": 53.2
       },
-      "current_price": 4.015,
+      "current_price": 4.02,
       "high_since_entry": 4.32,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-09T16:12:56.452374"
+      "last_updated": "2026-03-09T17:10:29.814581"
     },
     {
       "ticker": "CRNT",
@@ -141,10 +141,10 @@
         "sentiment": 50.0,
         "market": 43.2
       },
-      "current_price": 2.235,
+      "current_price": 2.255,
       "high_since_entry": 2.37,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-09T16:12:56.452374"
+      "last_updated": "2026-03-09T17:10:29.814581"
     },
     {
       "ticker": "SCYX",
@@ -165,10 +165,10 @@
         "sentiment": 50.0,
         "market": 47.0
       },
-      "current_price": 0.8299,
+      "current_price": 0.8257,
       "high_since_entry": 0.85,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-09T16:12:56.452374"
+      "last_updated": "2026-03-09T17:10:29.814581"
     },
     {
       "ticker": "ASPN",
@@ -189,10 +189,10 @@
         "sentiment": 50.0,
         "market": 53.2
       },
-      "current_price": 3.14,
+      "current_price": 3.1151,
       "high_since_entry": 3.74,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-09T16:12:56.452374"
+      "last_updated": "2026-03-09T17:10:29.814581"
     }
   ],
   "trade_history": [
@@ -289,5 +289,5 @@
   "sell_follow_ups": [],
   "insights": [],
   "created": "2026-02-20T09:22:34.998847",
-  "last_updated": "2026-03-09T16:12:56.452374"
+  "last_updated": "2026-03-09T17:10:29.814581"
 }
