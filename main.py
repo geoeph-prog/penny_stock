@@ -11,6 +11,9 @@ Usage:
     python main.py optimize     # Run full 3-year backtest optimization
     python main.py simulate       # Paper trading simulation status
     python main.py simulate trade # Run auto-trade cycle
+    python main.py portfolio      # View real portfolio
+    python main.py portfolio add TICKER SHARES PRICE  # Add position
+    python main.py portfolio sell TICKER  # Sell position
     python main.py --cli history  # View past picks
 """
 
@@ -47,7 +50,7 @@ def cmd_pick(args):
         return
 
     print("\n" + "=" * 70)
-    print(f"  TOP {len(picks)} STOCK PICKS (v{ALGORITHM_VERSION} MEGA-ALGORITHM)")
+    print(f"  TOP {len(picks)} STOCK PICKS (v{ALGORITHM_VERSION}: MEGA-ALGORITHM)")
     print("=" * 70)
     for i, pick in enumerate(picks, 1):
         ss = pick.get("sub_scores", {})
@@ -59,7 +62,8 @@ def cmd_pick(args):
             print(f"      {pick['company']}")
         print(f"      Setup:{ss.get('setup',0):.0f} | Tech:{ss.get('technical',0):.0f} | "
               f"PrePump:{ss.get('pre_pump',0):.0f} | Fund:{ss.get('fundamental',0):.0f} | "
-              f"Cat:{ss.get('catalyst',0):.0f}")
+              f"Cat:{ss.get('catalyst',0):.0f} | Market:{ss.get('market',50):.0f} | "
+              f"Sector:{ss.get('sector',50):.0f}")
         print(f"      Pre-Pump: confluence={ki.get('pre_pump_confluence', 0)}/7 "
               f"confidence={ki.get('pre_pump_confidence', 'N/A')}")
         if pick.get("penalty_deduction", 0) > 0:
@@ -96,7 +100,6 @@ def cmd_optimize(args):
         print("\nNo recommendations generated.")
         return
 
-    # Ask user whether to apply
     print("\nApply optimized config? (y/n): ", end="")
     try:
         answer = input().strip().lower()
@@ -108,7 +111,7 @@ def cmd_optimize(args):
         print(f"\nOptimized config saved to {path}")
         print("The algorithm will use these settings on next run.")
     else:
-        print("\nNot applied. You can apply later from the GUI (Tab 5).")
+        print("\nNot applied. You can apply later from the GUI.")
 
 
 def cmd_simulate(args):
@@ -158,6 +161,68 @@ def cmd_simulate(args):
         print("Usage: python main.py simulate {status|trade|refresh|reset|learn}")
 
 
+def cmd_portfolio(args):
+    from pennystock.portfolio.manager import PortfolioManager
+    mgr = PortfolioManager()
+
+    if args.port_action == "status":
+        summary = mgr.get_portfolio_summary()
+        print(f"\n  Portfolio Value: ${summary['total_value']:,.2f}")
+        print(f"  Cost Basis: ${summary['cost_basis']:,.2f}")
+        print(f"  Unrealized P&L: ${summary['unrealized_pnl']:+,.2f}")
+        print(f"  Realized P&L: ${summary['realized_pnl']:+,.2f}")
+        print(f"  Total P&L: ${summary['total_pnl']:+,.2f}")
+        print(f"  Positions: {summary['num_positions']}")
+        if summary['total_trades'] > 0:
+            print(f"  Win Rate: {summary['win_rate']:.0f}% ({summary['total_trades']} trades)")
+        for pos in mgr.state.get("positions", []):
+            entry = pos["entry_price"]
+            current = pos.get("current_price", entry)
+            pnl_pct = ((current - entry) / entry) * 100 if entry > 0 else 0
+            print(f"    {pos['ticker']}: {pos['shares']} shares @ ${entry:.4f} "
+                  f"-> ${current:.4f} ({pnl_pct:+.1f}%)")
+
+    elif args.port_action == "add":
+        if not args.ticker or not args.shares or not args.price:
+            print("Usage: python main.py portfolio add TICKER SHARES PRICE")
+            print("Example: python main.py portfolio add CINT 500 1.50")
+            return
+        mgr.add_position(args.ticker, int(args.shares), float(args.price),
+                         progress_callback=print)
+
+    elif args.port_action == "sell":
+        if not args.ticker:
+            print("Usage: python main.py portfolio sell TICKER")
+            return
+        mgr.refresh_prices(progress_callback=print)
+        mgr.remove_position(args.ticker, reason="manual_sell",
+                            progress_callback=print)
+
+    elif args.port_action == "refresh":
+        mgr.refresh_prices(progress_callback=print)
+        print("Portfolio prices refreshed.")
+
+    elif args.port_action == "check":
+        mgr.refresh_prices(progress_callback=print)
+        sells = mgr.check_sell_signals()
+        if sells:
+            print(f"\n  {len(sells)} sell signal(s):")
+            for pos, reason, desc in sells:
+                entry = pos["entry_price"]
+                current = pos.get("current_price", entry)
+                ret = ((current - entry) / entry) * 100
+                print(f"    {pos['ticker']}: {desc} ({ret:+.1f}%)")
+        else:
+            print("\n  No sell signals.")
+
+    elif args.port_action == "reset":
+        mgr.reset()
+        print("Portfolio reset.")
+
+    else:
+        print("Usage: python main.py portfolio {status|add|sell|refresh|check|reset}")
+
+
 def cmd_alerts(args):
     from pennystock.alerts.monitor import AlertMonitor
 
@@ -187,7 +252,9 @@ def cmd_alerts(args):
             return
         monitor = AlertMonitor()
         print("Starting alert monitor (Ctrl+C to stop)...")
+        print("  Monitors YOUR PORTFOLIO positions (not simulation)")
         print(f"  Price check: every {monitor.state.get('price_interval', 15)} min")
+        print(f"  Buy alerts: HIGH confidence picks only")
         monitor.start(log_callback=print)
         try:
             while monitor.is_running:
@@ -245,7 +312,7 @@ def main():
     subparsers.add_parser("build", help="Build algorithm from recent winners vs losers")
 
     pick_p = subparsers.add_parser("pick", help="Pick top stocks ($0.50-$5.00)")
-    pick_p.add_argument("-n", "--top-n", type=int, default=5)
+    pick_p.add_argument("-n", "--top-n", type=int, default=8)
 
     analyze_p = subparsers.add_parser("analyze", help="Deep dive analysis on a single stock")
     analyze_p.add_argument("ticker", type=str, nargs="?", help="Stock ticker to analyze (e.g. GETY)")
@@ -260,6 +327,14 @@ def main():
     sim_p.add_argument("sim_action", type=str, nargs="?", default="status",
                        choices=["status", "trade", "refresh", "reset", "learn"],
                        help="Simulation action (default: status)")
+
+    port_p = subparsers.add_parser("portfolio", help="Real portfolio management")
+    port_p.add_argument("port_action", type=str, nargs="?", default="status",
+                        choices=["status", "add", "sell", "refresh", "check", "reset"],
+                        help="Portfolio action (default: status)")
+    port_p.add_argument("ticker", type=str, nargs="?", help="Ticker for add/sell")
+    port_p.add_argument("shares", type=str, nargs="?", help="Shares for add")
+    port_p.add_argument("price", type=str, nargs="?", help="Entry price for add")
 
     alert_p = subparsers.add_parser("alerts", help="Email alert monitor")
     alert_p.add_argument("alert_action", type=str, nargs="?", default="status",
@@ -276,8 +351,8 @@ def main():
         # CLI mode
         commands = {"build": cmd_build, "pick": cmd_pick, "analyze": cmd_analyze,
                     "backtest": cmd_backtest, "optimize": cmd_optimize,
-                    "simulate": cmd_simulate, "alerts": cmd_alerts,
-                    "history": cmd_history}
+                    "simulate": cmd_simulate, "portfolio": cmd_portfolio,
+                    "alerts": cmd_alerts, "history": cmd_history}
         func = commands.get(args.command)
         if func:
             func(args)

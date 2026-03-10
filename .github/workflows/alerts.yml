@@ -82,12 +82,12 @@ jobs:
           git config user.email "alert-bot@users.noreply.github.com"
 
           # Stage state files if they changed
-          git add -f simulation_state.json alert_state.json 2>/dev/null || true
+          git add -f portfolio_state.json alert_state.json simulation_state.json 2>/dev/null || true
 
           # Only commit if there are actual changes
           if git diff --cached --quiet; then
             echo "No state changes to commit"
           else
-            git commit -m "bot: update alert/simulation state [skip ci]"
+            git commit -m "bot: update alert/portfolio state [skip ci]"
             git push
           fi

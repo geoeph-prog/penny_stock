@@ -115,14 +115,14 @@ class AlertMonitor:
     # ─── Price check + sell triggers ────────────────────────
 
     def check_positions(self) -> list:
-        """Fetch live prices for held positions and check sell triggers.
+        """Fetch live prices for PORTFOLIO positions and check sell triggers.
 
         Returns list of (position, reason, description) tuples.
         """
-        from pennystock.simulation.engine import SimulationEngine
+        from pennystock.portfolio.manager import PortfolioManager
 
-        engine = SimulationEngine()
-        positions = engine.state.get("positions", [])
+        manager = PortfolioManager()
+        positions = manager.state.get("positions", [])
         if not positions:
             return []
 
@@ -192,9 +192,9 @@ class AlertMonitor:
                         ))
 
         # Save updated prices back
-        engine.state["positions"] = positions
-        engine.state["last_updated"] = now.isoformat()
-        engine._save_state()
+        manager.state["positions"] = positions
+        manager.state["last_updated"] = now.isoformat()
+        manager._save_state()
 
         self.state["last_price_check"] = now.isoformat()
         self._save_state()
@@ -204,18 +204,25 @@ class AlertMonitor:
     # ─── Scan for new picks ─────────────────────────────────
 
     def scan_for_picks(self) -> list:
-        """Run the pick algorithm and return results."""
-        self._log("Running stock scan...")
+        """Run the pick algorithm and return only HIGH confidence results.
+
+        Only sends buy alerts for very highly recommended stocks to avoid
+        noise. The user should only get buy signals they can trust.
+        """
+        self._log("Running stock scan (HIGH confidence only)...")
         try:
             from pennystock.algorithm import pick_stocks
             picks = pick_stocks(top_n=10)
             self.state["last_scan"] = datetime.now().isoformat()
             self._save_state()
-            if picks:
-                self._log(f"Scan found {len(picks)} picks")
-            else:
+            if not picks:
                 self._log("Scan found no picks above threshold")
-            return picks or []
+                return []
+
+            # Only alert on HIGH confidence picks (score >= 55)
+            high_conf = [p for p in picks if p.get("final_score", 0) >= 55]
+            self._log(f"Scan found {len(picks)} picks, {len(high_conf)} high-confidence")
+            return high_conf
         except Exception as e:
             self._log(f"Scan failed: {e}")
             return []
@@ -252,11 +259,11 @@ class AlertMonitor:
         """Send end-of-day portfolio summary."""
         if not ALERT_DAILY_SUMMARY:
             return
-        from pennystock.simulation.engine import SimulationEngine
+        from pennystock.portfolio.manager import PortfolioManager
         from pennystock.alerts.email_sender import send_portfolio_summary
-        engine = SimulationEngine()
-        summary = engine.get_portfolio_summary()
-        positions = engine.state.get("positions", [])
+        manager = PortfolioManager()
+        summary = manager.get_portfolio_summary()
+        positions = manager.state.get("positions", [])
         if send_portfolio_summary(summary, positions):
             self.state["alerts_sent"] += 1
             self.state["summary_alerts"] += 1
