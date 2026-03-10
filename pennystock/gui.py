@@ -1368,6 +1368,9 @@ class SimulationTab(QWidget):
         if self.engine is None:
             from pennystock.simulation.engine import SimulationEngine
             self.engine = SimulationEngine()
+        else:
+            # Reload state from disk in case CLI or cloud updated it
+            self.engine.state = self.engine._load_state()
         return self.engine
 
     def _load_and_display(self):
