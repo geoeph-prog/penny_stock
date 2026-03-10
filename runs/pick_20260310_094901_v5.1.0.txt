@@ -1,0 +1,354 @@
+Stock Analyzer v5.1.0
+Run type: pick
+Timestamp: 2026-03-10 09:56:43
+======================================================================
+
+============================================================
+PICKING TOP STOCKS $0.50-$5.00 (v5.1.0: MEGA-ALGORITHM)
+Using algorithm from 2026-02-20 11:11:42
+Weights: setup=25% tech=20% pre_pump=35% fund=10% cat=10%
+============================================================
+Discovering current penny stocks...
+Found 323 stocks. Running Stage 1 screen (technical + pre-pump hints)...
+  Stage 1: 25/323 ~1040s remaining
+  Stage 1: 50/323 ~494s remaining
+  Stage 1: 75/323 ~310s remaining
+  Stage 1: 100/323 ~216s remaining
+  Stage 1: 125/323 ~159s remaining
+  Stage 1: 150/323 ~119s remaining
+  Stage 1: 175/323 ~90s remaining
+  Stage 1: 200/323 ~68s remaining
+  Stage 1: 225/323 ~49s remaining
+  Stage 1: 250/323 ~34s remaining
+  Stage 1: 275/323 ~21s remaining
+  Stage 1: 300/323 ~9s remaining
+Stage 1 done: 322 stocks scored
+Pre-downloading Reddit posts (bulk mode)...
+Stage 2: Deep analysis on top 100 stocks...
+  Running LAYER 1 kill filters + LAYER 2 scoring...
+  KILLED CNTN: RECENT SPIKE: Stock had a 115% spike (high/low range) in the last 40 trading day...
+  KILLED TYGO: RECENT SPIKE: Stock had a 191% spike (high/low range) in the last 40 trading day...
+  PENALTY ABEV: -27pts (2 issue(s))
+  PENALTY FBIO: -12pts (1 issue(s))
+  KILLED NAMM: RECENT SPIKE: Stock had a 712% spike (high/low range) in the last 40 trading day...
+  KILLED NUAI: RECENT SPIKE: Stock had a 202% spike (high/low range) in the last 40 trading day...
+  KILLED SATL: RECENT SPIKE: Stock had a 141% spike (high/low range) in the last 40 trading day...
+  KILLED IAUX: EXTREME LOSSES: Profit margin -209% (< -200% threshold). Company is losing money...
+  KILLED LGO: RECENT SPIKE: Stock had a 84% spike (high/low range) in the last 40 trading days...
+  KILLED PZG: RECENT SPIKE: Stock had a 140% spike (high/low range) in the last 40 trading day...
+  KILLED WRN: RECENT SPIKE: Stock had a 61% spike (high/low range) in the last 40 trading days...
+  KILLED MST: RECENT SPIKE: Stock had a 240% spike (high/low range) in the last 40 trading day...
+  PENALTY VGZ: -27pts (2 issue(s))
+  PENALTY DNN: -27pts (2 issue(s))
+  PENALTY GROY: -27pts (2 issue(s))
+  Stage 2: 15/100 (10 killed, 5 scored)
+  KILLED TRX: RECENT SPIKE: Stock had a 222% spike (high/low range) in the last 40 trading day...
+  KILLED ATYR: RECENT SPIKE: Stock had a 69% spike (high/low range) in the last 40 trading days...
+  KILLED UROY: RECENT SPIKE: Stock had a 62% spike (high/low range) in the last 40 trading days...
+  KILLED AXG: RECENT SPIKE: Stock had a 77% spike (high/low range) in the last 40 trading days...
+  KILLED THM: RECENT SPIKE: Stock had a 79% spike (high/low range) in the last 40 trading days...
+  PENALTY MSOS: -12pts (1 issue(s))
+  KILLED ASTL: CASH DEATH SPIRAL: Only 0.2 months of cash remaining ($4,500,000 cash / $22,847,...
+  KILLED GORO: RECENT SPIKE: Stock had a 110% spike (high/low range) in the last 40 trading day...
+  PENALTY AUR: -27pts (2 issue(s))
+  KILLED URG: EXTREME LOSSES: Profit margin -201% (< -200% threshold). Company is losing money...
+  KILLED REI: RECENT SPIKE: Stock had a 86% spike (high/low range) in the last 40 trading days...
+  KILLED AREC: RECENT SPIKE: Stock had a 81% spike (high/low range) in the last 40 trading days...
+  KILLED SIDU: RECENT SPIKE: Stock had a 181% spike (high/low range) in the last 40 trading day...
+  KILLED DVS: SHELL COMPANY: Zero revenue AND zero reported employees...
+  KILLED LAC: RECENT SPIKE: Stock had a 62% spike (high/low range) in the last 40 trading days...
+  KILLED NFGC: PRE-REVENUE BURN: Revenue $0 (< $1,000,000) with $51.2M/year cash burn (> $50M/y...
+  PENALTY GERN: -27pts (2 issue(s))
+  KILLED AGIG: RECENT SPIKE: Stock had a 197% spike (high/low range) in the last 40 trading day...
+  PENALTY GAU: -27pts (2 issue(s))
+  KILLED UP: RECENT SPIKE: Stock had a 148% spike (high/low range) in the last 40 trading day...
+  KILLED STAK: RECENT SPIKE: Stock had a 376% spike (high/low range) in the last 40 trading day...
+  KILLED CHRS: RECENT SPIKE: Stock had a 90% spike (high/low range) in the last 40 trading days...
+  KILLED SLNH: RECENT SPIKE: Stock had a 149% spike (high/low range) in the last 40 trading day...
+  KILLED CYPH: RECENT SPIKE: Stock had a 154% spike (high/low range) in the last 40 trading day...
+  KILLED INDO: RECENT SPIKE: Stock had a 168% spike (high/low range) in the last 40 trading day...
+  KILLED CYH: NEGATIVE EQUITY: Book value per share is $-10.41. Balance sheet is underwater....
+  PENALTY VUZI: -12pts (1 issue(s))
+  PENALTY DDD: -27pts (2 issue(s))
+  KILLED PLG: RECENT SPIKE: Stock had a 96% spike (high/low range) in the last 40 trading days...
+  KILLED ENSC: RECENT SPIKE: Stock had a 257% spike (high/low range) in the last 40 trading day...
+  KILLED CCO: NEGATIVE EQUITY: Book value per share is $-6.85. Balance sheet is underwater....
+  KILLED XWEL: RECENT SPIKE: Stock had a 746% spike (high/low range) in the last 40 trading day...
+  KILLED CNTX: RECENT SPIKE: Stock had a 137% spike (high/low range) in the last 40 trading day...
+  PENALTY NWL: -27pts (2 issue(s))
+  PENALTY ALEC: -12pts (1 issue(s))
+  Stage 2: 50/100 (37 killed, 13 scored)
+  PENALTY EVO: -27pts (2 issue(s))
+  KILLED RZLV: RECENT SPIKE: Stock had a 142% spike (high/low range) in the last 40 trading day...
+  KILLED DEFT: RECENT SPIKE: Stock had a 92% spike (high/low range) in the last 40 trading days...
+  KILLED WWR: RECENT SPIKE: Stock had a 70% spike (high/low range) in the last 40 trading days...
+  Stage 2: 55/100 (40 killed, 15 scored)
+  KILLED ZENA: RECENT SPIKE: Stock had a 135% spike (high/low range) in the last 40 trading day...
+  KILLED SLDP: RECENT SPIKE: Stock had a 104% spike (high/low range) in the last 40 trading day...
+  KILLED ALTS: RECENT SPIKE: Stock had a 126% spike (high/low range) in the last 40 trading day...
+  KILLED TMQ: RECENT SPIKE: Stock had a 112% spike (high/low range) in the last 40 trading day...
+  KILLED BDMD: RECENT SPIKE: Stock had a 389% spike (high/low range) in the last 40 trading day...
+  PENALTY BBD: -27pts (2 issue(s))
+  KILLED BAK: RECENT SPIKE: Stock had a 86% spike (high/low range) in the last 40 trading days...
+  PENALTY WOOF: -12pts (1 issue(s))
+  KILLED RYDE: RECENT SPIKE: Stock had a 231% spike (high/low range) in the last 40 trading day...
+  KILLED PGEN: RECENT SPIKE: Stock had a 70% spike (high/low range) in the last 40 trading days...
+  PENALTY TSHA: -27pts (2 issue(s))
+  KILLED PED: RECENT SPIKE: Stock had a 66% spike (high/low range) in the last 40 trading days...
+  KILLED SRFM: RECENT SPIKE: Stock had a 97% spike (high/low range) in the last 40 trading days...
+  KILLED TMDE: RECENT SPIKE: Stock had a 904% spike (high/low range) in the last 40 trading day...
+  KILLED BLNK: PUMP-AND-DUMP AFTERMATH: Stock spiked 2x in 17 trading days (peak $2.50), then c...
+  KILLED SYNX: RECENT SPIKE: Stock had a 116% spike (high/low range) in the last 40 trading day...
+  KILLED DVLT: RECENT SPIKE: Stock had a 92% spike (high/low range) in the last 40 trading days...
+  KILLED XXRP: RECENT SPIKE: Stock had a 329% spike (high/low range) in the last 40 trading day...
+  KILLED BEAT: RECENT SPIKE: Stock had a 113% spike (high/low range) in the last 40 trading day...
+  KILLED NFE: RECENT SPIKE: Stock had a 85% spike (high/low range) in the last 40 trading days...
+  KILLED WTI: RECENT SPIKE: Stock had a 168% spike (high/low range) in the last 40 trading day...
+  PENALTY BLDP: -27pts (2 issue(s))
+  KILLED IRE: RECENT SPIKE: Stock had a 292% spike (high/low range) in the last 40 trading day...
+  PENALTY GGB: -27pts (2 issue(s))
+  KILLED AGEN: RECENT SPIKE: Stock had a 80% spike (high/low range) in the last 40 trading days...
+  KILLED ABSI: RECENT SPIKE: Stock had a 70% spike (high/low range) in the last 40 trading days...
+  PENALTY COTY: -27pts (2 issue(s))
+  KILLED RKLZ: RECENT SPIKE: Stock had a 92% spike (high/low range) in the last 40 trading days...
+  KILLED KITT: RECENT SPIKE: Stock had a 112% spike (high/low range) in the last 40 trading day...
+  KILLED PRSO: RECENT SPIKE: Stock had a 177% spike (high/low range) in the last 40 trading day...
+  KILLED TOI: RECENT SPIKE: Stock had a 93% spike (high/low range) in the last 40 trading days...
+  KILLED ABAT: RECENT SPIKE: Stock had a 69% spike (high/low range) in the last 40 trading days...
+  KILLED UXRP: RECENT SPIKE: Stock had a 337% spike (high/low range) in the last 40 trading day...
+  KILLED BZAI: RECENT SPIKE: Stock had a 128% spike (high/low range) in the last 40 trading day...
+  KILLED AMC: RECENT SPIKE: Stock had a 64% spike (high/low range) in the last 40 trading days...
+  PENALTY CLOV: -15pts (1 issue(s))
+  KILLED TURB: RECENT SPIKE: Stock had a 1040% spike (high/low range) in the last 40 trading da...
+  KILLED GXAI: RECENT SPIKE: Stock had a 158% spike (high/low range) in the last 40 trading day...
+  KILLED DGNX: RECENT SPIKE: Stock had a 733% spike (high/low range) in the last 40 trading day...
+  KILLED NMG: RECENT SPIKE: Stock had a 64% spike (high/low range) in the last 40 trading days...
+  KILLED UAVS: RECENT SPIKE: Stock had a 137% spike (high/low range) in the last 40 trading day...
+  KILLED HIVE: RECENT SPIKE: Stock had a 86% spike (high/low range) in the last 40 trading days...
+  KILLED RXT: RECENT SPIKE: Stock had a 597% spike (high/low range) in the last 40 trading day...
+  KILLED BTBT: RECENT SPIKE: Stock had a 64% spike (high/low range) in the last 40 trading days...
+  KILLED BMEA: RECENT SPIKE: Stock had a 61% spike (high/low range) in the last 40 trading days...
+============================================================
+RESULTS: 78 stocks KILLED by quality filters, 22 survived scoring
+  20 stocks scored below minimum threshold (40pts) and were excluded
+TOP 2 PICKS (found in 462s)
+============================================================
+  #1. MNTK - $1.34 (Score: 52.4, Confidence: MEDIUM)
+      Montauk Renewables Inc
+      Setup:65 Tech:56 PrePump:46 Fund:38 Cat:50
+      Float: 65,095,205 | Insider: 69% | 52w Pos: 0.0 | P/B: 0.73 | RSI: 34.37499882959004 | StochRSI: 34.145141268717424
+      Pre-Pump: confluence=2/7 confidence=LOW SI-change=36.6% float-rot=0.003
+      Bullish Pre-Pump: supply_lock(70) | beaten_down(85)
+      Tech Signals: BB-SQUEEZE | CONSOLIDATING
+      ADX: 21.957584440739716 | MFI: 37.09949634862337
+      Stop: $1.3645 (-1.8% risk)
+  #2. FBIO - $3.41 (Score: 41.6, Confidence: LOW)
+      Fortress Biotech Inc
+      Setup:42 Tech:77 PrePump:46 Fund:66 Cat:55
+      Float: 23,452,886 | Insider: 20% | 52w Pos: 0.637 | P/B: 1.87 | RSI: 44.537810581880024 | StochRSI: 46.69237813168371
+      Pre-Pump: confluence=0/7 confidence=LOW SI-change=-4.0% float-rot=0.024
+      Tech Signals: DILUTION-RISK(1)
+      ADX: 23.39598052400056 | MFI: 82.46515797564587
+      Stop: $2.8972 (15.0% risk)
+      Penalties: -12pts (1 issue(s))
+        GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in 
+============================================================
+
+
+======================================================================
+DETAILED RESULTS (JSON)
+======================================================================
+[
+  {
+    "ticker": "MNTK",
+    "final_score": 52.4,
+    "company": "Montauk Renewables Inc",
+    "price": 1.34,
+    "sub_scores": {
+      "setup": 65.2,
+      "technical": 56.4,
+      "pre_pump": 46.0,
+      "fundamental": 38.5,
+      "catalyst": 50,
+      "sentiment": 50.0,
+      "market": 42.2
+    },
+    "key_indicators": {
+      "float_shares": 65095205,
+      "insider_pct": 0.69274,
+      "position_52w": 0.0,
+      "price_to_book": 0.73,
+      "rsi": 34.37499882959004,
+      "stochrsi": 34.145141268717424,
+      "volume_spike": 0.4490292973984512,
+      "revenue_growth": -0.313,
+      "short_pct_float": 0.0543,
+      "sentiment": 0.0,
+      "adx": 21.957584440739716,
+      "mfi": 37.09949634862337,
+      "bb_squeeze": "True",
+      "consolidating": "True",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 0,
+      "atr": 0.1184,
+      "pre_pump_confluence": 2,
+      "pre_pump_confidence": "LOW",
+      "si_change_pct": 36.6,
+      "float_rotation": 0.003,
+      "supply_lock_score": 70
+    },
+    "penalty_deduction": 0,
+    "pre_pump_detail": {
+      "score": 46.0,
+      "signals": {
+        "short_interest_change": {
+          "score": 25,
+          "change_pct": 36.6,
+          "shares_short": 1537876,
+          "shares_short_prior": 1126178,
+          "signal": "bearish_buildup"
+        },
+        "float_rotation": {
+          "score": 25,
+          "rotation": 0.003,
+          "volume": 167490,
+          "float": 65095205,
+          "signal": "normal"
+        },
+        "compliance_risk": {
+          "score": 50,
+          "below_dollar": false,
+          "price": 1.3288,
+          "signal": "normal"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.44,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 70,
+          "insider_pct": 69.3,
+          "float_shares": 65095205,
+          "signal": "normal"
+        },
+        "squeeze_setup": {
+          "score": 38,
+          "short_pct_float": 5.4,
+          "days_to_cover": 2.1,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 85,
+          "position_52w": 0.0,
+          "price": 1.3288,
+          "52w_low": 1.3288,
+          "52w_high": 2.94,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 2,
+      "total_signals": 7,
+      "confidence": "LOW"
+    }
+  },
+  {
+    "ticker": "FBIO",
+    "final_score": 41.6,
+    "company": "Fortress Biotech Inc",
+    "price": 3.41,
+    "sub_scores": {
+      "setup": 41.5,
+      "technical": 77.1,
+      "pre_pump": 45.5,
+      "fundamental": 65.9,
+      "catalyst": 55,
+      "sentiment": 50.0,
+      "market": 39.8
+    },
+    "key_indicators": {
+      "float_shares": 23452886,
+      "insider_pct": 0.20468001,
+      "position_52w": 0.637,
+      "price_to_book": 1.87,
+      "rsi": 44.537810581880024,
+      "stochrsi": 46.69237813168371,
+      "volume_spike": 0.46438524451322905,
+      "revenue_growth": 0.205,
+      "short_pct_float": 0.17379999,
+      "sentiment": 0.0,
+      "adx": 23.39598052400056,
+      "mfi": 82.46515797564587,
+      "bb_squeeze": "False",
+      "consolidating": "False",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 1,
+      "atr": 0.2564,
+      "pre_pump_confluence": 0,
+      "pre_pump_confidence": "LOW",
+      "si_change_pct": -4.0,
+      "float_rotation": 0.024,
+      "supply_lock_score": 55
+    },
+    "penalty_deduction": 12,
+    "pre_pump_detail": {
+      "score": 45.5,
+      "signals": {
+        "short_interest_change": {
+          "score": 55,
+          "change_pct": -4.0,
+          "shares_short": 4310143,
+          "shares_short_prior": 4491241,
+          "signal": "neutral"
+        },
+        "float_rotation": {
+          "score": 25,
+          "rotation": 0.024,
+          "volume": 574100,
+          "float": 23452886,
+          "signal": "normal"
+        },
+        "compliance_risk": {
+          "score": 50,
+          "below_dollar": false,
+          "price": 3.37,
+          "signal": "normal"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.54,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 55,
+          "insider_pct": 20.5,
+          "float_shares": 23452886,
+          "signal": "normal"
+        },
+        "squeeze_setup": {
+          "score": 55,
+          "short_pct_float": 17.4,
+          "days_to_cover": 4.5,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 25,
+          "position_52w": 0.637,
+          "price": 3.37,
+          "52w_low": 1.33,
+          "52w_high": 4.53,
+          "signal": "normal"
+        }
+      },
+      "confluence_count": 0,
+      "total_signals": 7,
+      "confidence": "LOW"
+    }
+  }
+]

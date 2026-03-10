@@ -1,8 +1,9 @@
 {
-  "cash": 1003.5699999999999,
+  "cash": 0.7730000000016162,
   "initial_capital": 5000.0,
   "positions": [
     {
+<<<<<<< Updated upstream
       "ticker": "CINT",
       "company": "CI&T Inc",
       "shares": 101,
@@ -147,52 +148,260 @@
       "last_updated": "2026-03-10T15:01:04.821262"
     },
     {
+=======
+>>>>>>> Stashed changes
       "ticker": "SCYX",
       "company": "Scynexis Inc",
-      "shares": 603,
-      "entry_price": 0.83,
-      "entry_date": "2026-02-20T12:43:06.657680",
-      "entry_score": 49.6,
+      "shares": 601,
+      "entry_price": 0.86,
+      "entry_date": "2026-03-10T09:30:30.990850",
+      "entry_score": 52.7,
       "entry_confidence": "",
       "pre_pump_confidence": "LOW",
       "pre_pump_confluence": 1,
       "sub_scores": {
         "setup": 46.5,
-        "technical": 65.6,
-        "pre_pump": 42.8,
-        "fundamental": 44.0,
+        "technical": 63.9,
+        "pre_pump": 45.8,
+        "fundamental": 69.2,
         "catalyst": 55,
         "sentiment": 50.0,
-        "market": 47.0
+        "market": 39.8
       },
+<<<<<<< Updated upstream
       "current_price": 0.9119,
       "high_since_entry": 0.92,
       "trailing_stop_active": false,
       "last_updated": "2026-03-10T15:01:04.821262"
+=======
+      "current_price": 0.904,
+      "high_since_entry": 0.92,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-10T10:54:05.374254"
+>>>>>>> Stashed changes
     },
     {
-      "ticker": "ASPN",
-      "company": "Aspen Aerogels Inc",
-      "shares": 138,
-      "entry_price": 3.63,
-      "entry_date": "2026-02-20T12:43:06.657731",
-      "entry_score": 42.5,
+      "ticker": "NXDT",
+      "company": "NexPoint Diversified Real Estate Trust",
+      "shares": 110,
+      "entry_price": 4.7,
+      "entry_date": "2026-03-10T09:30:30.990973",
+      "entry_score": 52.2,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 1,
+      "sub_scores": {
+        "setup": 47.8,
+        "technical": 73.1,
+        "pre_pump": 46.2,
+        "fundamental": 41.3,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 43.5
+      },
+      "current_price": 4.79,
+      "high_since_entry": 4.84,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-10T10:54:05.374254"
+    },
+    {
+      "ticker": "CHMI",
+      "company": "Cherry Hill Mortgage Investment Corporation",
+      "shares": 197,
+      "entry_price": 2.62,
+      "entry_date": "2026-03-10T09:30:30.991080",
+      "entry_score": 50.3,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 0,
+      "sub_scores": {
+        "setup": 46.5,
+        "technical": 69.8,
+        "pre_pump": 44.2,
+        "fundamental": 38.4,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 43.5
+      },
+      "current_price": 2.67,
+      "high_since_entry": 2.75,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-10T10:54:05.374254"
+    },
+    {
+      "ticker": "VYNE",
+      "company": "VYNE Therapeutics Inc",
+      "shares": 878,
+      "entry_price": 0.59,
+      "entry_date": "2026-03-10T09:30:30.991181",
+      "entry_score": 48.2,
+      "entry_confidence": "",
+      "pre_pump_confidence": "MEDIUM",
+      "pre_pump_confluence": 3,
+      "sub_scores": {
+        "setup": 51.5,
+        "technical": 70.7,
+        "pre_pump": 56.8,
+        "fundamental": 49.7,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 39.8
+      },
+      "current_price": 0.5901,
+      "high_since_entry": 0.61,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-10T10:54:05.374254"
+    },
+    {
+      "ticker": "VRA",
+      "company": "Vera Bradley Inc",
+      "shares": 200,
+      "entry_price": 2.59,
+      "entry_date": "2026-03-10T09:30:30.991281",
+      "entry_score": 48.1,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 1,
+      "sub_scores": {
+        "setup": 65.2,
+        "technical": 85.1,
+        "pre_pump": 47.6,
+        "fundamental": 47.5,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 42.2
+      },
+      "current_price": 2.79,
+      "high_since_entry": 2.7999,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-10T10:54:05.374254"
+    },
+    {
+      "ticker": "LZM",
+      "company": "Lifezone Metals Ltd",
+      "shares": 122,
+      "entry_price": 4.23,
+      "entry_date": "2026-03-10T09:30:30.991376",
+      "entry_score": 47.0,
       "entry_confidence": "",
       "pre_pump_confidence": "LOW",
       "pre_pump_confluence": 2,
       "sub_scores": {
-        "setup": 51.5,
-        "technical": 66.6,
-        "pre_pump": 52.5,
-        "fundamental": 44.2,
+        "setup": 62.0,
+        "technical": 69.8,
+        "pre_pump": 49.8,
+        "fundamental": 67.8,
         "catalyst": 55,
         "sentiment": 50.0,
-        "market": 53.2
+        "market": 42.2
       },
+<<<<<<< Updated upstream
       "current_price": 3.25,
       "high_since_entry": 3.74,
       "trailing_stop_active": false,
       "last_updated": "2026-03-10T15:01:04.821262"
+=======
+      "current_price": 4.315,
+      "high_since_entry": 4.645,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-10T10:54:05.374254"
+    },
+    {
+      "ticker": "HITI",
+      "company": "High Tide Inc",
+      "shares": 212,
+      "entry_price": 2.44,
+      "entry_date": "2026-03-10T09:30:30.991471",
+      "entry_score": 46.5,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 0,
+      "sub_scores": {
+        "setup": 36.0,
+        "technical": 68.8,
+        "pre_pump": 38.2,
+        "fundamental": 50.6,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 39.8
+      },
+      "current_price": 2.48,
+      "high_since_entry": 2.5188,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-10T10:54:05.374254"
+    },
+    {
+      "ticker": "ZDGE",
+      "company": "Zedge Inc",
+      "shares": 159,
+      "entry_price": 3.25,
+      "entry_date": "2026-03-10T09:30:30.991566",
+      "entry_score": 44.8,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 1,
+      "sub_scores": {
+        "setup": 56.5,
+        "technical": 75.3,
+        "pre_pump": 49.0,
+        "fundamental": 52.3,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 39.8
+      },
+      "current_price": 3.32,
+      "high_since_entry": 3.3491,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-10T10:54:05.374254"
+    },
+    {
+      "ticker": "AIRJ",
+      "company": "AirJoule Technologies Corp",
+      "shares": 148,
+      "entry_price": 3.51,
+      "entry_date": "2026-03-10T09:30:30.991660",
+      "entry_score": 44.2,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 1,
+      "sub_scores": {
+        "setup": 70.2,
+        "technical": 63.1,
+        "pre_pump": 42.1,
+        "fundamental": 44.5,
+        "catalyst": 55,
+        "sentiment": 100.0,
+        "market": 39.8
+      },
+      "current_price": 3.49,
+      "high_since_entry": 3.65,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-10T10:54:05.374254"
+    },
+    {
+      "ticker": "MNTK",
+      "company": "Montauk Renewables Inc",
+      "shares": 386,
+      "entry_price": 1.34,
+      "entry_date": "2026-03-10T09:56:43.490626",
+      "entry_score": 52.4,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 2,
+      "sub_scores": {
+        "setup": 65.2,
+        "technical": 56.4,
+        "pre_pump": 46.0,
+        "fundamental": 38.5,
+        "catalyst": 50,
+        "sentiment": 50.0,
+        "market": 42.2
+      },
+      "current_price": 1.38,
+      "high_since_entry": 1.645,
+      "trailing_stop_active": true,
+      "last_updated": "2026-03-10T10:54:05.374254"
+>>>>>>> Stashed changes
     }
   ],
   "trade_history": [
@@ -283,11 +492,526 @@
       "entry_score": 42.5,
       "entry_confidence": "",
       "description": "Pick #8, Score 42.5"
+    },
+    {
+      "ticker": "CINT",
+      "action": "SELL",
+      "shares": 101,
+      "price": 5.0,
+      "entry_price": 4.95,
+      "date": "2026-03-10T09:19:02.953790",
+      "return_pct": 1.01,
+      "trade_pnl": 5.05,
+      "sell_reason": "max_hold",
+      "description": "Held 17d (max 10d)",
+      "entry_score": 54.7,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 47.2,
+        "technical": 75.5,
+        "pre_pump": 49.0,
+        "fundamental": 53.1,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 43.2
+      }
+    },
+    {
+      "ticker": "PED",
+      "action": "SELL",
+      "shares": 819,
+      "price": 0.767,
+      "entry_price": 0.61,
+      "date": "2026-03-10T09:19:02.953984",
+      "return_pct": 25.74,
+      "trade_pnl": 128.58,
+      "sell_reason": "max_hold",
+      "description": "Held 17d (max 10d)",
+      "entry_score": 52.9,
+      "entry_confidence": "",
+      "pre_pump_confidence": "MEDIUM",
+      "sub_scores": {
+        "setup": 67.5,
+        "technical": 76.8,
+        "pre_pump": 61.8,
+        "fundamental": 27.5,
+        "catalyst": 52,
+        "sentiment": 50.0,
+        "market": 53.2
+      }
+    },
+    {
+      "ticker": "OSUR",
+      "action": "SELL",
+      "shares": 182,
+      "price": 3.2,
+      "entry_price": 2.74,
+      "date": "2026-03-10T09:19:02.954123",
+      "return_pct": 16.79,
+      "trade_pnl": 83.72,
+      "sell_reason": "max_hold",
+      "description": "Held 17d (max 10d)",
+      "entry_score": 52.8,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 41.5,
+        "technical": 80.6,
+        "pre_pump": 45.1,
+        "fundamental": 50.8,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 47.0
+      }
+    },
+    {
+      "ticker": "NXDT",
+      "action": "SELL",
+      "shares": 107,
+      "price": 4.7,
+      "entry_price": 4.66,
+      "date": "2026-03-10T09:19:02.954209",
+      "return_pct": 0.86,
+      "trade_pnl": 4.28,
+      "sell_reason": "max_hold",
+      "description": "Held 17d (max 10d)",
+      "entry_score": 52.3,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 47.8,
+        "technical": 80.5,
+        "pre_pump": 41.8,
+        "fundamental": 41.0,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 49.5
+      }
+    },
+    {
+      "ticker": "ACTG",
+      "action": "SELL",
+      "shares": 120,
+      "price": 4.11,
+      "entry_price": 4.16,
+      "date": "2026-03-10T09:19:02.954289",
+      "return_pct": -1.2,
+      "trade_pnl": -6.0,
+      "sell_reason": "max_hold",
+      "description": "Held 17d (max 10d)",
+      "entry_score": 50.5,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 34.0,
+        "technical": 71.4,
+        "pre_pump": 43.0,
+        "fundamental": 71.6,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 53.2
+      }
+    },
+    {
+      "ticker": "CRNT",
+      "action": "SELL",
+      "shares": 216,
+      "price": 2.3,
+      "entry_price": 2.31,
+      "date": "2026-03-10T09:19:02.954366",
+      "return_pct": -0.43,
+      "trade_pnl": -2.16,
+      "sell_reason": "max_hold",
+      "description": "Held 17d (max 10d)",
+      "entry_score": 49.7,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 39.0,
+        "technical": 70.0,
+        "pre_pump": 47.2,
+        "fundamental": 40.5,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 43.2
+      }
+    },
+    {
+      "ticker": "SCYX",
+      "action": "SELL",
+      "shares": 603,
+      "price": 0.86,
+      "entry_price": 0.83,
+      "date": "2026-03-10T09:19:02.954440",
+      "return_pct": 3.61,
+      "trade_pnl": 18.09,
+      "sell_reason": "max_hold",
+      "description": "Held 17d (max 10d)",
+      "entry_score": 49.6,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 46.5,
+        "technical": 65.6,
+        "pre_pump": 42.8,
+        "fundamental": 44.0,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 47.0
+      }
+    },
+    {
+      "ticker": "ASPN",
+      "action": "SELL",
+      "shares": 138,
+      "price": 3.21,
+      "entry_price": 3.63,
+      "date": "2026-03-10T09:19:02.954508",
+      "return_pct": -11.57,
+      "trade_pnl": -57.96,
+      "sell_reason": "max_hold",
+      "description": "Held 17d (max 10d)",
+      "entry_score": 42.5,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 51.5,
+        "technical": 66.6,
+        "pre_pump": 52.5,
+        "fundamental": 44.2,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 53.2
+      }
+    },
+    {
+      "ticker": "CPIX",
+      "action": "BUY",
+      "shares": 151,
+      "price": 3.41,
+      "date": "2026-03-10T09:30:30.990659",
+      "cost": 514.91,
+      "entry_score": 58.0,
+      "entry_confidence": "",
+      "description": "Pick #1, Score 58.0"
+    },
+    {
+      "ticker": "SCYX",
+      "action": "BUY",
+      "shares": 601,
+      "price": 0.86,
+      "date": "2026-03-10T09:30:30.990890",
+      "cost": 516.86,
+      "entry_score": 52.7,
+      "entry_confidence": "",
+      "description": "Pick #2, Score 52.7"
+    },
+    {
+      "ticker": "NXDT",
+      "action": "BUY",
+      "shares": 110,
+      "price": 4.7,
+      "date": "2026-03-10T09:30:30.991005",
+      "cost": 517.0,
+      "entry_score": 52.2,
+      "entry_confidence": "",
+      "description": "Pick #3, Score 52.2"
+    },
+    {
+      "ticker": "CHMI",
+      "action": "BUY",
+      "shares": 197,
+      "price": 2.62,
+      "date": "2026-03-10T09:30:30.991109",
+      "cost": 516.14,
+      "entry_score": 50.3,
+      "entry_confidence": "",
+      "description": "Pick #4, Score 50.3"
+    },
+    {
+      "ticker": "VYNE",
+      "action": "BUY",
+      "shares": 878,
+      "price": 0.59,
+      "date": "2026-03-10T09:30:30.991210",
+      "cost": 518.02,
+      "entry_score": 48.2,
+      "entry_confidence": "",
+      "description": "Pick #5, Score 48.2"
+    },
+    {
+      "ticker": "VRA",
+      "action": "BUY",
+      "shares": 200,
+      "price": 2.59,
+      "date": "2026-03-10T09:30:30.991308",
+      "cost": 518.0,
+      "entry_score": 48.1,
+      "entry_confidence": "",
+      "description": "Pick #6, Score 48.1"
+    },
+    {
+      "ticker": "LZM",
+      "action": "BUY",
+      "shares": 122,
+      "price": 4.23,
+      "date": "2026-03-10T09:30:30.991403",
+      "cost": 516.06,
+      "entry_score": 47.0,
+      "entry_confidence": "",
+      "description": "Pick #7, Score 47.0"
+    },
+    {
+      "ticker": "HITI",
+      "action": "BUY",
+      "shares": 212,
+      "price": 2.44,
+      "date": "2026-03-10T09:30:30.991498",
+      "cost": 517.28,
+      "entry_score": 46.5,
+      "entry_confidence": "",
+      "description": "Pick #8, Score 46.5"
+    },
+    {
+      "ticker": "ZDGE",
+      "action": "BUY",
+      "shares": 159,
+      "price": 3.25,
+      "date": "2026-03-10T09:30:30.991592",
+      "cost": 516.75,
+      "entry_score": 44.8,
+      "entry_confidence": "",
+      "description": "Pick #9, Score 44.8"
+    },
+    {
+      "ticker": "AIRJ",
+      "action": "BUY",
+      "shares": 148,
+      "price": 3.51,
+      "date": "2026-03-10T09:30:30.991687",
+      "cost": 519.48,
+      "entry_score": 44.2,
+      "entry_confidence": "",
+      "description": "Pick #10, Score 44.2"
+    },
+    {
+      "ticker": "CPIX",
+      "action": "SELL",
+      "shares": 151,
+      "price": 3.41,
+      "entry_price": 3.41,
+      "date": "2026-03-10T09:49:01.129172",
+      "return_pct": 0.0,
+      "trade_pnl": 0.0,
+      "sell_reason": "trailing_stop",
+      "description": "Trailing stop: peaked at +34.3%, dropped to $3.4100",
+      "entry_score": 58.0,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 70.5,
+        "technical": 68.0,
+        "pre_pump": 43.0,
+        "fundamental": 64.2,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 39.8
+      }
+    },
+    {
+      "ticker": "MNTK",
+      "action": "BUY",
+      "shares": 386,
+      "price": 1.34,
+      "date": "2026-03-10T09:56:43.490781",
+      "cost": 517.24,
+      "entry_score": 52.4,
+      "entry_confidence": "",
+      "description": "Pick #1, Score 52.4"
     }
   ],
-  "score_performance": {},
-  "sell_follow_ups": [],
-  "insights": [],
+  "score_performance": {
+    "score_50_60": {
+      "trades": 6,
+      "wins": 4,
+      "total_return": 43.2
+    },
+    "pp_LOW": {
+      "trades": 8,
+      "wins": 4,
+      "total_return": 9.07
+    },
+    "reason_max_hold": {
+      "trades": 8,
+      "wins": 5,
+      "total_return": 34.81
+    },
+    "dominant_technical": {
+      "trades": 7,
+      "wins": 5,
+      "total_return": 36.01
+    },
+    "pp_MEDIUM": {
+      "trades": 1,
+      "wins": 1,
+      "total_return": 25.74
+    },
+    "dominant_fundamental": {
+      "trades": 1,
+      "wins": 0,
+      "total_return": -1.2
+    },
+    "score_40_50": {
+      "trades": 3,
+      "wins": 1,
+      "total_return": -8.39
+    },
+    "reason_trailing_stop": {
+      "trades": 1,
+      "wins": 0,
+      "total_return": 0.0
+    },
+    "dominant_setup": {
+      "trades": 1,
+      "wins": 0,
+      "total_return": 0.0
+    }
+  },
+  "sell_follow_ups": [
+    {
+      "ticker": "CINT",
+      "sell_date": "2026-03-10T09:19:02.953811",
+      "sell_price": 5.0,
+      "entry_price": 4.95,
+      "return_pct": 1.01,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "PED",
+      "sell_date": "2026-03-10T09:19:02.953999",
+      "sell_price": 0.767,
+      "entry_price": 0.61,
+      "return_pct": 25.74,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "OSUR",
+      "sell_date": "2026-03-10T09:19:02.954132",
+      "sell_price": 3.2,
+      "entry_price": 2.74,
+      "return_pct": 16.79,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "NXDT",
+      "sell_date": "2026-03-10T09:19:02.954216",
+      "sell_price": 4.7,
+      "entry_price": 4.66,
+      "return_pct": 0.86,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "ACTG",
+      "sell_date": "2026-03-10T09:19:02.954295",
+      "sell_price": 4.11,
+      "entry_price": 4.16,
+      "return_pct": -1.2,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "CRNT",
+      "sell_date": "2026-03-10T09:19:02.954372",
+      "sell_price": 2.3,
+      "entry_price": 2.31,
+      "return_pct": -0.43,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "SCYX",
+      "sell_date": "2026-03-10T09:19:02.954445",
+      "sell_price": 0.86,
+      "entry_price": 0.83,
+      "return_pct": 3.61,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "ASPN",
+      "sell_date": "2026-03-10T09:19:02.954515",
+      "sell_price": 3.21,
+      "entry_price": 3.63,
+      "return_pct": -11.57,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "CPIX",
+      "sell_date": "2026-03-10T09:49:01.129188",
+      "sell_price": 3.41,
+      "entry_price": 3.41,
+      "return_pct": 0.0,
+      "sell_reason": "trailing_stop",
+      "verdict": null,
+      "current_price": null
+    }
+  ],
+  "insights": [
+    {
+      "date": "2026-03-10T09:19:02.953879",
+      "text": "WIN: CINT +1.0% via max_hold (score 55, pp=LOW)"
+    },
+    {
+      "date": "2026-03-10T09:19:02.954030",
+      "text": "WIN: PED +25.7% via max_hold (score 53, pp=MEDIUM)"
+    },
+    {
+      "date": "2026-03-10T09:19:02.954151",
+      "text": "WIN: OSUR +16.8% via max_hold (score 53, pp=LOW)"
+    },
+    {
+      "date": "2026-03-10T09:19:02.954231",
+      "text": "WIN: NXDT +0.9% via max_hold (score 52, pp=LOW)"
+    },
+    {
+      "date": "2026-03-10T09:19:02.954313",
+      "text": "LOSS: ACTG -1.2% via max_hold (score 50, pp=LOW)"
+    },
+    {
+      "date": "2026-03-10T09:19:02.954389",
+      "text": "LOSS: CRNT -0.4% via max_hold (score 50, pp=LOW)"
+    },
+    {
+      "date": "2026-03-10T09:19:02.954459",
+      "text": "WIN: SCYX +3.6% via max_hold (score 50, pp=LOW)"
+    },
+    {
+      "date": "2026-03-10T09:19:02.954528",
+      "text": "LOSS: ASPN -11.6% via max_hold (score 42, pp=LOW)"
+    },
+    {
+      "date": "2026-03-10T09:49:01.129233",
+      "text": "LOSS: CPIX +0.0% via trailing_stop (score 58, pp=LOW)"
+    }
+  ],
   "created": "2026-02-20T09:22:34.998847",
+<<<<<<< Updated upstream
   "last_updated": "2026-03-10T15:01:04.821262"
+=======
+  "last_updated": "2026-03-10T10:54:05.374254"
+>>>>>>> Stashed changes
 }

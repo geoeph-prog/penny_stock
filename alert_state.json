@@ -1,4 +1,5 @@
 {
+<<<<<<< Updated upstream
   "last_scan": "2026-03-10T14:07:32.820635",
   "last_price_check": "2026-03-10T15:01:04.821262",
   "last_daily_summary": "2026-03-10T15:01:08.293066",
@@ -6,6 +7,15 @@
   "buy_alerts": 23,
   "sell_alerts": 86,
   "summary_alerts": 11,
+=======
+  "last_scan": "2026-03-10T11:04:00.607686",
+  "last_price_check": "2026-03-10T10:54:05.374254",
+  "last_daily_summary": "2026-03-09T15:10:03.261427",
+  "alerts_sent": 118,
+  "buy_alerts": 23,
+  "sell_alerts": 85,
+  "summary_alerts": 10,
+>>>>>>> Stashed changes
   "history": [
     {
       "time": "2026-02-23T15:41:33.522576",
@@ -588,6 +598,7 @@
       "detail": "CINT, PED, OSUR, NXDT, ACTG, CRNT, SCYX, ASPN"
     },
     {
+<<<<<<< Updated upstream
       "time": "2026-03-10T14:00:11.600574",
       "type": "SELL",
       "detail": "CINT, PED, OSUR, NXDT, ACTG, CRNT, SCYX, ASPN"
@@ -606,6 +617,16 @@
       "time": "2026-03-10T15:01:08.293083",
       "type": "SUMMARY",
       "detail": "$5,163.10"
+=======
+      "time": "2026-03-10T10:54:07.276852",
+      "type": "SELL",
+      "detail": "MNTK"
+    },
+    {
+      "time": "2026-03-10T11:04:02.715286",
+      "type": "BUY",
+      "detail": "PSEC, SRTA, NNBR, RSKD, LZM, HITI, CVU, FBIO"
+>>>>>>> Stashed changes
     }
   ]
 }
