@@ -7928,3 +7928,4 @@
 2026-03-10 11:04:02.713 | INFO     | pennystock.alerts.email_sender:send_email:63 - Email sent: BUY Alert: PSEC, SRTA, NNBR, RSKD, LZM, HITI, CVU, FBIO
 2026-03-10 11:04:02.718 | INFO     | pennystock.alerts.monitor:_log:98 - BUY alert sent for PSEC, SRTA, NNBR, RSKD, LZM, HITI, CVU, FBIO
 2026-03-10 11:05:53.961 | INFO     | pennystock.alerts.monitor:_log:98 - Alert monitor stopped
+2026-03-10 11:20:58.445 | ERROR    | pennystock.simulation.engine:_load_state:51 - Failed to load simulation state: Expecting property name enclosed in double quotes: line 6 column 1 (char 84)
