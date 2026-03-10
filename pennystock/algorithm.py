@@ -657,11 +657,16 @@ def pick_stocks(top_n=5, progress_callback=None):
                 conviction_bonus = 0
 
             # Secondary adjustments: sentiment + market context
-            # These are small nudges, not primary drivers.
             # ORKT had zero social buzz but still ran +300% -- sentiment
-            # should NOT be a gate.
+            # should NOT be a gate for individual stocks.
             sent_adj = (sent_score - 50) * 0.03  # +/- 1.5 points max
-            mkt_adj = (mkt_score - 50) * 0.02    # +/- 1.0 points max
+
+            # Market & sector sentiment: meaningful factor for timing
+            # A bearish market drags penny stocks down regardless of setup.
+            # A hot sector gives tailwinds. These are real indicators.
+            mkt_adj = (mkt_score - 50) * 0.10    # +/- 5.0 points max
+            sector_perf = mkt_result.get("sector_performance", {})
+            sector_adj = (sector_perf.get("score", 50) - 50) * 0.06  # +/- 3.0 points max
 
             # Apply quality gate penalty deductions (going concern,
             # delisting notices, price decay, reverse splits, excessive float).
@@ -670,7 +675,7 @@ def pick_stocks(top_n=5, progress_callback=None):
             penalty_adj = -penalty_deduction
 
             final_score = max(0, min(100,
-                base_score + conviction_bonus + sent_adj + mkt_adj + penalty_adj
+                base_score + conviction_bonus + sent_adj + mkt_adj + sector_adj + penalty_adj
             ))
 
             final_results.append({
@@ -690,6 +695,7 @@ def pick_stocks(top_n=5, progress_callback=None):
                     "catalyst": round(cat_score, 1),
                     "sentiment": round(sent_score, 1),
                     "market": round(mkt_score, 1),
+                    "sector": round(sector_perf.get("score", 50), 1),
                 },
                 "setup_detail": setup_result,
                 "pre_pump_detail": pre_pump_result,
