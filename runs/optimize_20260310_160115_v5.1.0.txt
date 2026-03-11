@@ -1,0 +1,138 @@
+======================================================================
+  ALGORITHM OPTIMIZER  v5.1.0
+  Full Backtest + Parameter Optimization
+======================================================================
+
+  Phase 1: Loading algorithm...
+  Loaded algorithm (46 factors)
+
+  Phase 2: Fetching market data (one-time download)...
+  Fetching stock universe from Finviz...
+  Found 899 stocks in universe
+  Downloading 3-year price history (this takes several minutes)...
+  Got history for 899/899 stocks
+  Pre-fetching stock info for all tickers...
+    Stock info: 100/899 fetched...
+    Stock info: 200/899 fetched...
+    Stock info: 300/899 fetched...
+    Stock info: 400/899 fetched...
+    Stock info: 500/899 fetched...
+    Stock info: 600/899 fetched...
+    Stock info: 700/899 fetched...
+    Stock info: 800/899 fetched...
+  Cached info for 899 stocks
+
+  Phase 3: Generated 70 backtest dates
+  Range: 2023-03-15 to 2026-02-02
+
+  Phase 4: Running 70 backtests...
+    [1/70] 2023-03-15...
+    [6/70] 2023-06-01...
+    [11/70] 2023-08-15...
+    [16/70] 2023-11-01...
+    [21/70] 2024-01-15...
+    [26/70] 2024-04-01...
+    [31/70] 2024-06-17...
+    [36/70] 2024-09-02...
+    [41/70] 2024-11-15...
+    [46/70] 2025-02-03...
+    [51/70] 2025-04-15...
+    [56/70] 2025-07-01...
+    [61/70] 2025-09-15...
+    [66/70] 2025-12-01...
+  Collected 1459 total scored picks
+
+  Phase 5: Optimizing sell parameters (grid search)...
+  Testing 8,820 parameter combinations...
+    2,000/8,820 (23%)
+    4,000/8,820 (45%)
+    6,000/8,820 (68%)
+    8,000/8,820 (91%)
+
+  Tested 8,820 valid combinations
+
+  ======================================================================
+  TOP 20 SELL STRATEGIES BY EXPECTED RETURN
+  ======================================================================
+    # TopN Hold    SL    TP      Trail  WinR   AvgR   MedR     n
+  --- ---- ---- ----- ----- ---------- ----- ------ ------ -----
+    1    5  20d  -20%   off        off   52%  +3.6%  +0.6%   335
+    2    5  20d  -25%   off        off   53%  +3.5%  +0.7%   335
+    3    5  20d   off   off        off   53%  +3.5%  +0.8%   335
+    4    3  20d  -20%   off        off   53%  +3.5%  +0.7%   201
+    5    7  20d   off   off        off   53%  +3.4%  +0.7%   469
+    6    7  20d  -20%   off        off   52%  +3.4%  +0.5%   469
+    7    7  20d  -25%   off        off   53%  +3.4%  +0.6%   469
+    8    3  20d   off   off        off   53%  +3.2%  +0.8%   201
+    9    5  20d  -12%   off        off   47%  +3.1%  -0.9%   335
+   10    7  20d  -15%   off        off   50%  +3.1%  +0.2%   469
+   11   10  20d  -25%   off        off   51%  +3.1%  +0.3%   666
+   12    3  20d  -25%   off        off   53%  +3.1%  +0.7%   201
+   13    5  20d  -10%   off        off   44%  +3.0%  -2.2%   335
+   14    5  20d  -15%   off        off   50%  +3.0%  +0.0%   335
+   15   10  20d   off   off        off   51%  +3.0%  +0.3%   666
+   16   10  20d  -20%   off        off   50%  +3.0%  +0.2%   666
+   17   10  20d  -15%   off        off   49%  +2.9%  -0.2%   666
+   18    7  20d  -12%   off        off   47%  +2.9%  -0.9%   469
+   19    3  20d  -12%   off        off   47%  +2.9%  -1.7%   201
+   20   10  20d  -12%   off        off   46%  +2.8%  -0.9%   666
+
+  Phase 6: Optimizing scoring weights...
+
+  Sub-score correlations with 5d forward return:
+        fundamental: r=+0.0433 +
+          technical: r=+0.0361 +
+           pre_pump: r=+0.0008 
+              setup: r=+0.0005 
+           catalyst: r=+0.0000 
+  Added correlation-based weight config: {'setup': np.float64(0.09), 'technical': np.float64(0.33), 'pre_pump': np.float64(0.09), 'fundamental': np.float64(0.4), 'catalyst': np.float64(0.09)}
+
+  ======================================================================
+  TOP 10 WEIGHT CONFIGURATIONS (5d hold, top 5)
+  ======================================================================
+  #1: MinScore=55 S:25% T:20% PP:35% F:10% C:10% -> WinR:53% Avg:+1.7% n=94
+  #2: MinScore=55 S:30% T:20% PP:30% F:10% C:10% -> WinR:51% Avg:+1.2% n=92
+  #3: MinScore=55 S:25% T:25% PP:30% F:10% C:10% -> WinR:50% Avg:+1.2% n=105
+  #4: MinScore=55 S:20% T:25% PP:35% F:10% C:10% -> WinR:52% Avg:+1.2% n=113
+  #5: MinScore=55 S:20% T:20% PP:40% F:10% C:10% -> WinR:51% Avg:+1.2% n=106
+  #6: MinScore=55 S:25% T:20% PP:35% F:15% C:5% -> WinR:51% Avg:+1.0% n=108
+  #7: MinScore=55 S:15% T:15% PP:50% F:10% C:10% -> WinR:49% Avg:+0.9% n=121
+  #8: MinScore=55 S:20% T:15% PP:45% F:10% C:10% -> WinR:47% Avg:+0.7% n=106
+  #9: MinScore=55 S:9% T:33% PP:9% F:40% C:9% -> WinR:50% Avg:+0.7% n=294
+  #10: MinScore=50 S:25% T:20% PP:35% F:15% C:5% -> WinR:48% Avg:+0.6% n=255
+
+  Phase 7: Generating final recommendations...
+
+======================================================================
+  RECOMMENDED CONFIGURATION
+======================================================================
+
+  === Sell Strategy ===
+    Hold Period:      20 trading days
+    Stop-Loss:        -20.0%
+    Take-Profit:      disabled
+    Trailing Stop:    disabled
+    Top N Picks:      5
+    Expected Return:  52% win, +3.6% avg
+
+  === Scoring Weights ===
+          Dimension   Current  Recommended
+    ---------------  --------  -----------
+              setup      25%         25%
+          technical      20%         20%
+           pre_pump      35%         35%
+        fundamental      10%         10%
+           catalyst      10%         10%
+    Min Score:        40 -> 55
+    Expected Return:  53% win, +1.7% avg
+
+  === Factor Predictiveness ===
+        fundamental: +0.0433 +
+          technical: +0.0361 +
+           pre_pump: +0.0008 
+              setup: +0.0005 
+           catalyst: +0.0000 
+
+======================================================================
+  Optimization completed in 131.8 minutes
+======================================================================
