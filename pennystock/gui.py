@@ -782,9 +782,7 @@ class StockPickerTab(QWidget):
         self.log.clear()
         self._append_log("Starting stock scan with market & sector sentiment...")
 
-        from pennystock.config import STAGE2_RETURN_TOP_N
-        top_n = min(STAGE2_RETURN_TOP_N, 8)
-        self.worker = Worker(pick_stocks, top_n=top_n)
+        self.worker = Worker(pick_stocks, top_n=5)
         self.worker.progress.connect(self._append_log)
         self.worker.finished.connect(self._pick_done)
         self.worker.start()

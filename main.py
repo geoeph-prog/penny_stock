@@ -312,7 +312,7 @@ def main():
     subparsers.add_parser("build", help="Build algorithm from recent winners vs losers")
 
     pick_p = subparsers.add_parser("pick", help="Pick top stocks ($0.50-$5.00)")
-    pick_p.add_argument("-n", "--top-n", type=int, default=8)
+    pick_p.add_argument("-n", "--top-n", type=int, default=5)
 
     analyze_p = subparsers.add_parser("analyze", help="Deep dive analysis on a single stock")
     analyze_p.add_argument("ticker", type=str, nargs="?", help="Stock ticker to analyze (e.g. GETY)")

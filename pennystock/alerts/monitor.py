@@ -212,7 +212,7 @@ class AlertMonitor:
         self._log("Running stock scan (HIGH confidence only)...")
         try:
             from pennystock.algorithm import pick_stocks
-            picks = pick_stocks(top_n=10)
+            picks = pick_stocks(top_n=5)
             self.state["last_scan"] = datetime.now().isoformat()
             self._save_state()
             if not picks:

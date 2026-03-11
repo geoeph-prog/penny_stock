@@ -24,7 +24,7 @@ STOCHRSI_PERIOD = 14  # StochRSI lookback on RSI values
 # ── Screening ───────────────────────────────────────────────────────
 STAGE1_KEEP_TOP_N = 100       # Stocks to pass from Stage 1 -> Stage 2 (raised from 50)
 STAGE2_RETURN_TOP_N = 10      # Final picks returned to user (expanded for wider $0.50-$5 range)
-MIN_RECOMMENDATION_SCORE = 40 # Don't recommend stocks scoring below this
+MIN_RECOMMENDATION_SCORE = 35 # Don't recommend stocks scoring below this
 HISTORY_PERIOD = "6mo"        # Price history for technical analysis
 SHORT_HISTORY_PERIOD = "3mo"  # Shorter window for recent patterns
 
