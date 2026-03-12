@@ -1,7 +1,85 @@
 {
-  "positions": [],
-  "trade_history": [],
+  "positions": [
+    {
+      "ticker": "VYNE",
+      "company": "",
+      "shares": 820,
+      "entry_price": 0.6,
+      "entry_date": "2026-03-11T20:20:32.943092",
+      "current_price": 0.6,
+      "high_since_entry": 0.609,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-11T20:46:04.504641"
+    },
+    {
+      "ticker": "PSEC",
+      "company": "",
+      "shares": 185,
+      "entry_price": 2.66,
+      "entry_date": "2026-03-11T20:20:50.118108",
+      "current_price": 2.66,
+      "high_since_entry": 2.81,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-11T20:46:04.504641"
+    },
+    {
+      "ticker": "VRA",
+      "company": "",
+      "shares": 190,
+      "entry_price": 2.49,
+      "entry_date": "2026-03-11T20:21:04.089652",
+      "current_price": 2.49,
+      "high_since_entry": 2.82,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-11T20:46:04.504641"
+    },
+    {
+      "ticker": "DTI",
+      "company": "",
+      "shares": 130,
+      "entry_price": 3.61,
+      "entry_date": "2026-03-11T20:21:16.151860",
+      "current_price": 3.61,
+      "high_since_entry": 3.924,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-11T20:46:04.504641"
+    }
+  ],
+  "trade_history": [
+    {
+      "ticker": "VYNE",
+      "action": "BUY",
+      "shares": 820,
+      "price": 0.6,
+      "date": "2026-03-11T20:20:32.943092",
+      "cost": 492.0
+    },
+    {
+      "ticker": "PSEC",
+      "action": "BUY",
+      "shares": 185,
+      "price": 2.66,
+      "date": "2026-03-11T20:20:50.118108",
+      "cost": 492.1
+    },
+    {
+      "ticker": "VRA",
+      "action": "BUY",
+      "shares": 190,
+      "price": 2.49,
+      "date": "2026-03-11T20:21:04.089652",
+      "cost": 473.1
+    },
+    {
+      "ticker": "DTI",
+      "action": "BUY",
+      "shares": 130,
+      "price": 3.61,
+      "date": "2026-03-11T20:21:16.151860",
+      "cost": 469.3
+    }
+  ],
   "watchlist": [],
   "created": "2026-03-10T16:46:00.924157",
-  "last_updated": "2026-03-10T16:46:00.924167"
+  "last_updated": "2026-03-11T20:46:04.504641"
 }

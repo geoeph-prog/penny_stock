@@ -11829,3 +11829,733 @@
 2026-03-11 10:14:46.716 | INFO     | pennystock.algorithm:log_func:868 - This means the current market has no penny stocks worth recommending.
 2026-03-11 10:14:46.716 | INFO     | pennystock.algorithm:log_func:868 - This is BETTER than recommending garbage -- sit on cash.
 2026-03-11 10:14:46.716 | INFO     | pennystock.algorithm:log_func:868 - ============================================================
+2026-03-11 20:20:02.424 | INFO     | pennystock.algorithm:log_func:868 - ============================================================
+2026-03-11 20:20:02.424 | INFO     | pennystock.algorithm:log_func:868 - PICKING TOP STOCKS $0.50-$5.00 (v5.1.0: MEGA-ALGORITHM)
+2026-03-11 20:20:02.424 | INFO     | pennystock.algorithm:log_func:868 - Using algorithm from 2026-02-20 11:11:42
+2026-03-11 20:20:02.424 | INFO     | pennystock.algorithm:log_func:868 - Weights: setup=25% tech=20% pre_pump=35% fund=10% cat=10%
+2026-03-11 20:20:02.424 | INFO     | pennystock.algorithm:log_func:868 - ============================================================
+2026-03-11 20:20:02.424 | INFO     | pennystock.algorithm:log_func:868 - Discovering current penny stocks...
+2026-03-11 20:21:24.064 | INFO     | pennystock.data.finviz_client:get_penny_stocks:61 - Finviz found 995 stocks ($0.5-$5.0, vol>50,000)
+2026-03-11 20:21:24.064 | INFO     | pennystock.algorithm:log_func:868 - Found 995 stocks. Running Stage 1 screen (technical + pre-pump hints)...
+2026-03-11 20:21:28.601 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 25/995 ~3344s remaining
+2026-03-11 20:21:33.088 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 50/995 ~1714s remaining
+2026-03-11 20:21:39.139 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 75/995 ~1186s remaining
+2026-03-11 20:21:44.817 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 100/995 ~916s remaining
+2026-03-11 20:21:49.803 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 125/995 ~747s remaining
+2026-03-11 20:21:54.691 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 150/995 ~632s remaining
+2026-03-11 20:21:59.140 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 175/995 ~547s remaining
+2026-03-11 20:22:03.992 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 200/995 ~483s remaining
+2026-03-11 20:22:08.781 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 225/995 ~432s remaining
+2026-03-11 20:22:13.075 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 250/995 ~389s remaining
+2026-03-11 20:22:17.681 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 275/995 ~354s remaining
+2026-03-11 20:22:22.092 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 300/995 ~324s remaining
+2026-03-11 20:22:26.404 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 325/995 ~297s remaining
+2026-03-11 20:22:30.658 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 350/995 ~273s remaining
+2026-03-11 20:22:35.362 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 375/995 ~253s remaining
+2026-03-11 20:22:39.833 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 400/995 ~234s remaining
+2026-03-11 20:22:44.579 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 425/995 ~217s remaining
+2026-03-11 20:22:49.445 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 450/995 ~202s remaining
+2026-03-11 20:22:54.257 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 475/995 ~188s remaining
+2026-03-11 20:22:59.410 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 500/995 ~175s remaining
+2026-03-11 20:23:04.786 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 525/995 ~163s remaining
+2026-03-11 20:23:10.063 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 550/995 ~152s remaining
+2026-03-11 20:23:15.913 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 575/995 ~141s remaining
+2026-03-11 20:23:20.929 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 600/995 ~131s remaining
+2026-03-11 20:23:26.320 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 625/995 ~121s remaining
+2026-03-11 20:23:31.794 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 650/995 ~111s remaining
+2026-03-11 20:23:36.913 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 675/995 ~102s remaining
+2026-03-11 20:23:42.263 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 700/995 ~93s remaining
+2026-03-11 20:23:47.337 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 725/995 ~84s remaining
+2026-03-11 20:23:52.689 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 750/995 ~75s remaining
+2026-03-11 20:23:57.421 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 775/995 ~67s remaining
+2026-03-11 20:24:02.203 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 800/995 ~58s remaining
+2026-03-11 20:24:06.906 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 825/995 ~50s remaining
+2026-03-11 20:24:11.996 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 850/995 ~43s remaining
+2026-03-11 20:24:17.300 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 875/995 ~35s remaining
+2026-03-11 20:24:23.271 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 900/995 ~28s remaining
+2026-03-11 20:24:28.719 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 925/995 ~20s remaining
+2026-03-11 20:24:33.523 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 950/995 ~13s remaining
+2026-03-11 20:24:39.060 | INFO     | pennystock.algorithm:log_func:868 -   Stage 1: 975/995 ~6s remaining
+2026-03-11 20:24:43.185 | INFO     | pennystock.algorithm:log_func:868 - Stage 1 done: 989 stocks scored
+2026-03-11 20:24:43.185 | INFO     | pennystock.algorithm:log_func:868 - Pre-downloading Reddit posts (bulk mode)...
+2026-03-11 20:24:43.186 | INFO     | pennystock.data.reddit_scraper:bulk_download_posts:82 - Bulk downloading Reddit posts from 11 subreddits...
+2026-03-11 20:24:49.764 | DEBUG    | pennystock.data.reddit_scraper:bulk_download_posts:112 -   r/pennystocks: 200 posts
+2026-03-11 20:24:57.094 | DEBUG    | pennystock.data.reddit_scraper:bulk_download_posts:112 -   r/RobinHoodPennyStocks: 200 posts
+2026-03-11 20:25:03.374 | DEBUG    | pennystock.data.reddit_scraper:bulk_download_posts:112 -   r/Shortsqueeze: 200 posts
+2026-03-11 20:25:09.668 | DEBUG    | pennystock.data.reddit_scraper:bulk_download_posts:112 -   r/StockMarket: 200 posts
+2026-03-11 20:25:15.677 | DEBUG    | pennystock.data.reddit_scraper:bulk_download_posts:112 -   r/stocks: 200 posts
+2026-03-11 20:25:21.865 | DEBUG    | pennystock.data.reddit_scraper:bulk_download_posts:112 -   r/wallstreetbets: 200 posts
+2026-03-11 20:25:28.115 | DEBUG    | pennystock.data.reddit_scraper:bulk_download_posts:112 -   r/smallstreetbets: 200 posts
+2026-03-11 20:25:34.437 | DEBUG    | pennystock.data.reddit_scraper:bulk_download_posts:112 -   r/Daytrading: 200 posts
+2026-03-11 20:25:40.649 | DEBUG    | pennystock.data.reddit_scraper:bulk_download_posts:112 -   r/StocksAndTrading: 200 posts
+2026-03-11 20:25:45.082 | DEBUG    | pennystock.data.reddit_scraper:bulk_download_posts:112 -   r/stockpicks: 16 posts
+2026-03-11 20:25:51.299 | DEBUG    | pennystock.data.reddit_scraper:bulk_download_posts:112 -   r/UndervaluedStonks: 200 posts
+2026-03-11 20:25:51.299 | INFO     | pennystock.data.reddit_scraper:bulk_download_posts:115 - Bulk download complete: 2016 posts from 11 subreddits
+2026-03-11 20:25:51.300 | INFO     | pennystock.analysis.sentiment:ensure_bulk_downloaded:24 - Reddit bulk download ready — ticker searches will be local only.
+2026-03-11 20:25:51.300 | INFO     | pennystock.algorithm:log_func:868 - Stage 2: Deep analysis on top 100 stocks...
+2026-03-11 20:25:51.300 | INFO     | pennystock.algorithm:log_func:868 -   Running LAYER 1 kill filters + LAYER 2 scoring...
+2026-03-11 20:25:52.753 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: ROLR has 'going concern' in 5 recent 10-K/10-Q filing(s)
+2026-03-11 20:25:52.817 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED ROLR: 3 kill filter(s) triggered
+2026-03-11 20:25:52.817 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 1231% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:25:52.818 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> PUMP-AND-DUMP AFTERMATH: Stock spiked 7x in 2 trading days (peak $23.75), then crashed 83% from peak. The party is over -- this is post-manipulation dead money.
+2026-03-11 20:25:52.818 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> CASH DEATH SPIRAL: Only 4.6 months of cash remaining ($2,728,000 cash / $589,750/month burn). Threshold: 6 months.
+2026-03-11 20:25:52.818 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES ROLR: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:25:52.818 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:25:52.818 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXTREME DECAY (-15pts): Price $4.00 is 88.1% below 52-week high $33.68 (ratio 0.1188). Could be deep value or could be dead.
+2026-03-11 20:25:52.818 | INFO     | pennystock.algorithm:log_func:868 -   KILLED ROLR: RECENT SPIKE: Stock had a 1231% spike (high/low range) in the last 40 trading da...
+2026-03-11 20:25:53.847 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: LNKS has 'going concern' in 3 recent 20-F/6-K filing(s)
+2026-03-11 20:25:53.895 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED LNKS: 1 kill filter(s) triggered
+2026-03-11 20:25:53.896 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 477% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:25:53.896 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES LNKS: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:25:53.896 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:25:53.896 | INFO     | pennystock.algorithm:log_func:868 -   KILLED LNKS: RECENT SPIKE: Stock had a 477% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:25:55.053 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for CNTN: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:25:55.053 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED CNTN: 1 kill filter(s) triggered
+2026-03-11 20:25:55.053 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 115% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:25:55.054 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES CNTN: 1 penalty(ies), total deduction: -20pts
+2026-03-11 20:25:55.054 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> MICRO EMPLOYEES (-20pts): Only 2 full-time employee(s) reported. Companies with < 10 FTEs are often shells, zombies, or SPACs.
+2026-03-11 20:25:55.054 | INFO     | pennystock.algorithm:log_func:868 -   KILLED CNTN: RECENT SPIKE: Stock had a 115% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:25:55.835 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: NAMM has 'going concern' in 4 recent 10-K/10-Q filing(s)
+2026-03-11 20:25:55.888 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED NAMM: 2 kill filter(s) triggered
+2026-03-11 20:25:55.888 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 712% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:25:55.888 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> NEGATIVE EQUITY: Book value per share is $-2.85. Balance sheet is underwater.
+2026-03-11 20:25:55.888 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES NAMM: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:25:55.888 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:25:55.888 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXTREME DECAY (-15pts): Price $3.02 is 94.5% below 52-week high $55.00 (ratio 0.0549). Could be deep value or could be dead.
+2026-03-11 20:25:55.889 | INFO     | pennystock.algorithm:log_func:868 -   KILLED NAMM: RECENT SPIKE: Stock had a 712% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:25:56.565 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: PLX has 'going concern' in 8 recent 10-K/10-Q filing(s)
+2026-03-11 20:25:56.741 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for PLX: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:25:56.741 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED PLX: 1 kill filter(s) triggered
+2026-03-11 20:25:56.741 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 62% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:25:56.741 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES PLX: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:25:56.742 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:25:56.742 | INFO     | pennystock.algorithm:log_func:868 -   KILLED PLX: RECENT SPIKE: Stock had a 62% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:25:57.416 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: SATL has 'going concern' in 4 recent 10-K/10-Q filing(s)
+2026-03-11 20:25:57.505 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED SATL: 2 kill filter(s) triggered
+2026-03-11 20:25:57.509 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 117% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:25:57.510 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> NEGATIVE EQUITY: Book value per share is $-0.53. Balance sheet is underwater.
+2026-03-11 20:25:57.510 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES SATL: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:25:57.510 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:25:57.511 | INFO     | pennystock.algorithm:log_func:868 -   KILLED SATL: RECENT SPIKE: Stock had a 117% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:25:58.194 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: NAUT has 'going concern' in 4 recent 10-K/10-Q filing(s)
+2026-03-11 20:25:58.265 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED NAUT: 2 kill filter(s) triggered
+2026-03-11 20:25:58.265 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 76% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:25:58.265 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> PRE-REVENUE BURN: Revenue $0 (< $1,000,000) with $50.7M/year cash burn (> $50M/year max). Pre-revenue company burning through cash with no product revenue.
+2026-03-11 20:25:58.266 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES NAUT: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:25:58.266 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:25:58.266 | INFO     | pennystock.algorithm:log_func:868 -   KILLED NAUT: RECENT SPIKE: Stock had a 76% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:25:59.126 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: JZXN has 'going concern' in 2 recent 20-F/6-K filing(s)
+2026-03-11 20:25:59.201 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for JZXN: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:25:59.201 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED JZXN: 3 kill filter(s) triggered
+2026-03-11 20:25:59.202 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 275% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:25:59.202 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> PUMP-AND-DUMP AFTERMATH: Stock spiked 3x in 11 trading days (peak $296.00), then crashed 100% from peak. The party is over -- this is post-manipulation dead money.
+2026-03-11 20:25:59.202 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> TOXIC MARGINS: Gross margin 0.7% (< 5% minimum). Business model does not generate meaningful gross profit.
+2026-03-11 20:25:59.202 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES JZXN: 2 penalty(ies), total deduction: -42pts
+2026-03-11 20:25:59.202 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:25:59.203 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> CATASTROPHIC DECAY (-30pts): Price $1.2400 is 99.6% below 52-week high $312.80 (ratio 0.0040). This stock has been destroyed.
+2026-03-11 20:25:59.203 | INFO     | pennystock.algorithm:log_func:868 -   KILLED JZXN: RECENT SPIKE: Stock had a 275% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:26:00.290 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED WRN: 1 kill filter(s) triggered
+2026-03-11 20:26:00.291 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 61% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:00.291 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES WRN: 1 penalty(ies), total deduction: -15pts
+2026-03-11 20:26:00.292 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 176.0M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:26:00.292 | INFO     | pennystock.algorithm:log_func:868 -   KILLED WRN: RECENT SPIKE: Stock had a 61% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:26:01.329 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: AMBR has 'going concern' in 3 recent 20-F/6-K filing(s)
+2026-03-11 20:26:01.442 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for AMBR: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:26:01.442 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED AMBR: 1 kill filter(s) triggered
+2026-03-11 20:26:01.443 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> EXTREME LOSSES: Profit margin -296% (< -200% threshold). Company is losing money at a catastrophic rate.
+2026-03-11 20:26:01.443 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES AMBR: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:26:01.443 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:01.443 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 122.2M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:26:01.443 | INFO     | pennystock.algorithm:log_func:868 -   KILLED AMBR: EXTREME LOSSES: Profit margin -296% (< -200% threshold). Company is losing money...
+2026-03-11 20:26:02.064 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: DDL has 'going concern' in 9 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:02.155 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES DDL: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:26:02.155 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:02.155 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 174.1M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:26:02.155 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY DDL: -27pts (2 issue(s))
+2026-03-11 20:26:02.957 | DEBUG    | pennystock.data.sec_client:_load_ticker_map:39 - Loaded 10416 ticker-CIK mappings
+2026-03-11 20:26:03.622 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for DDL
+2026-03-11 20:26:04.886 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for NXDT: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:26:06.170 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for NXDT
+2026-03-11 20:26:07.202 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: VRA has 'going concern' in 5 recent 20-F/6-K filing(s)
+2026-03-11 20:26:07.410 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES VRA: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:26:07.410 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:07.410 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY VRA: -12pts (1 issue(s))
+2026-03-11 20:26:08.958 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for VRA
+2026-03-11 20:26:10.132 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED ALXO: 3 kill filter(s) triggered
+2026-03-11 20:26:10.133 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 129% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:10.133 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> SHELL COMPANY: Zero revenue AND zero reported employees
+2026-03-11 20:26:10.133 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> PRE-REVENUE BURN: Revenue $0 (< $1,000,000) with $84.1M/year cash burn (> $50M/year max). Pre-revenue company burning through cash with no product revenue.
+2026-03-11 20:26:10.134 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES ALXO: 1 penalty(ies), total deduction: -15pts
+2026-03-11 20:26:10.134 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 104.0M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:26:10.134 | INFO     | pennystock.algorithm:log_func:868 -   KILLED ALXO: RECENT SPIKE: Stock had a 129% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:26:10.876 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: PZG has 'going concern' in 5 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:11.018 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED PZG: 1 kill filter(s) triggered
+2026-03-11 20:26:11.019 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 122% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:11.019 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES PZG: 2 penalty(ies), total deduction: -32pts
+2026-03-11 20:26:11.019 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:11.020 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> MICRO EMPLOYEES (-20pts): Only 4 full-time employee(s) reported. Companies with < 10 FTEs are often shells, zombies, or SPACs.
+2026-03-11 20:26:11.020 | INFO     | pennystock.algorithm:log_func:868 -   KILLED PZG: RECENT SPIKE: Stock had a 122% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:26:12.628 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: TRX has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:12.898 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED TRX: 1 kill filter(s) triggered
+2026-03-11 20:26:12.898 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 211% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:12.898 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES TRX: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:26:12.899 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:12.899 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 250.0M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:26:12.899 | INFO     | pennystock.algorithm:log_func:868 -   KILLED TRX: RECENT SPIKE: Stock had a 211% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:26:15.700 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: EDAP has 'going concern' in 2 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:16.023 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES EDAP: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:26:16.025 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:16.025 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY EDAP: -12pts (1 issue(s))
+2026-03-11 20:26:20.021 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for EDAP
+2026-03-11 20:26:20.836 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: VRME has 'going concern' in 1 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:21.061 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for VRME: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:26:21.061 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED VRME: 1 kill filter(s) triggered
+2026-03-11 20:26:21.062 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 86% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:21.062 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES VRME: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:26:21.062 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:21.062 | INFO     | pennystock.algorithm:log_func:868 -   KILLED VRME: RECENT SPIKE: Stock had a 86% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:26:21.804 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: ATYR has 'going concern' in 3 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:21.972 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for ATYR: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:26:21.972 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED ATYR: 2 kill filter(s) triggered
+2026-03-11 20:26:21.973 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 69% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:21.973 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> PRE-REVENUE BURN: Revenue $190,000 (< $1,000,000) with $62.0M/year cash burn (> $50M/year max). Pre-revenue company burning through cash with no product revenue.
+2026-03-11 20:26:21.973 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES ATYR: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:26:21.974 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:21.974 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXTREME DECAY (-15pts): Price $0.92 is 87.4% below 52-week high $7.29 (ratio 0.1265). Could be deep value or could be dead.
+2026-03-11 20:26:21.974 | INFO     | pennystock.algorithm:log_func:868 -   KILLED ATYR: RECENT SPIKE: Stock had a 69% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:26:23.020 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: RAY has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:23.131 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for RAY: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:26:23.131 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED RAY: 1 kill filter(s) triggered
+2026-03-11 20:26:23.131 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 129% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:23.131 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES RAY: 3 penalty(ies), total deduction: -47pts
+2026-03-11 20:26:23.131 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:23.131 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXTREME DECAY (-15pts): Price $3.99 is 93.2% below 52-week high $58.88 (ratio 0.0678). Could be deep value or could be dead.
+2026-03-11 20:26:23.131 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> MICRO EMPLOYEES (-20pts): Only 6 full-time employee(s) reported. Companies with < 10 FTEs are often shells, zombies, or SPACs.
+2026-03-11 20:26:23.131 | INFO     | pennystock.algorithm:log_func:868 -   KILLED RAY: RECENT SPIKE: Stock had a 129% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:26:24.085 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: DHX has 'going concern' in 1 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:24.534 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED DHX: 1 kill filter(s) triggered
+2026-03-11 20:26:24.542 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 92% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:24.542 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES DHX: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:26:24.542 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:24.544 | INFO     | pennystock.algorithm:log_func:868 -   KILLED DHX: RECENT SPIKE: Stock had a 92% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:26:25.271 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: KLXE has 'going concern' in 4 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:25.408 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for KLXE: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:26:25.408 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED KLXE: 2 kill filter(s) triggered
+2026-03-11 20:26:25.409 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 72% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:25.409 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> NEGATIVE EQUITY: Book value per share is $-3.42. Balance sheet is underwater.
+2026-03-11 20:26:25.409 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES KLXE: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:26:25.409 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:25.409 | INFO     | pennystock.algorithm:log_func:868 -   KILLED KLXE: RECENT SPIKE: Stock had a 72% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:26:26.061 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: IAUX has 'going concern' in 6 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:26.131 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED IAUX: 1 kill filter(s) triggered
+2026-03-11 20:26:26.132 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> EXTREME LOSSES: Profit margin -209% (< -200% threshold). Company is losing money at a catastrophic rate.
+2026-03-11 20:26:26.132 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES IAUX: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:26:26.132 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:26.132 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 701.1M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:26:26.132 | INFO     | pennystock.algorithm:log_func:868 -   KILLED IAUX: EXTREME LOSSES: Profit margin -209% (< -200% threshold). Company is losing money...
+2026-03-11 20:26:27.636 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED CPSH: 1 kill filter(s) triggered
+2026-03-11 20:26:27.636 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 85% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:27.636 | INFO     | pennystock.algorithm:log_func:868 -   KILLED CPSH: RECENT SPIKE: Stock had a 85% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:26:30.038 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: ABEV has 'going concern' in 8 recent 20-F/6-K filing(s)
+2026-03-11 20:26:30.323 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for ABEV: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:26:30.324 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES ABEV: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:26:30.324 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:30.325 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 4277.2M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:26:30.325 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY ABEV: -27pts (2 issue(s))
+2026-03-11 20:26:32.443 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for ABEV
+2026-03-11 20:26:32.444 | INFO     | pennystock.algorithm:log_func:868 -   Stage 2: 25/100 (20 killed, 5 scored)
+2026-03-11 20:26:33.871 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: UXIN has 'going concern' in 10 recent 20-F/6-K filing(s)
+2026-03-11 20:26:33.966 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for UXIN: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:26:33.966 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED UXIN: 1 kill filter(s) triggered
+2026-03-11 20:26:33.966 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> NEGATIVE EQUITY: Book value per share is $-0.14. Balance sheet is underwater.
+2026-03-11 20:26:33.966 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES UXIN: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:26:33.966 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:33.966 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 16293.2M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:26:33.967 | INFO     | pennystock.algorithm:log_func:868 -   KILLED UXIN: NEGATIVE EQUITY: Book value per share is $-0.14. Balance sheet is underwater....
+2026-03-11 20:26:35.106 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: LGO has 'going concern' in 10 recent 20-F/6-K filing(s)
+2026-03-11 20:26:35.256 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for LGO: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:26:35.256 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED LGO: 2 kill filter(s) triggered
+2026-03-11 20:26:35.257 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 64% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:35.257 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> TOXIC MARGINS: Gross margin 0.7% (< 5% minimum). Business model does not generate meaningful gross profit.
+2026-03-11 20:26:35.257 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES LGO: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:26:35.257 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:35.257 | INFO     | pennystock.algorithm:log_func:868 -   KILLED LGO: RECENT SPIKE: Stock had a 64% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:26:36.188 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: TII has 'going concern' in 5 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:36.293 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for TII: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:26:36.293 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED TII: 1 kill filter(s) triggered
+2026-03-11 20:26:36.294 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 96% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:36.294 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES TII: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:26:36.294 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:36.294 | INFO     | pennystock.algorithm:log_func:868 -   KILLED TII: RECENT SPIKE: Stock had a 96% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:26:37.120 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: ONL has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:37.202 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES ONL: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:26:37.203 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:37.203 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY ONL: -12pts (1 issue(s))
+2026-03-11 20:26:39.226 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for ONL
+2026-03-11 20:26:39.944 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: ADAG has 'going concern' in 5 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:40.040 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED ADAG: 1 kill filter(s) triggered
+2026-03-11 20:26:40.040 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 197% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:40.040 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES ADAG: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:26:40.040 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:40.040 | INFO     | pennystock.algorithm:log_func:868 -   KILLED ADAG: RECENT SPIKE: Stock had a 197% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:26:41.217 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: DSX has 'going concern' in 3 recent 20-F/6-K filing(s)
+2026-03-11 20:26:41.530 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES DSX: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:26:41.530 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:41.530 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY DSX: -12pts (1 issue(s))
+2026-03-11 20:26:43.458 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for DSX
+2026-03-11 20:26:44.933 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: BLNE has 'going concern' in 4 recent 10-K/10-Q filing(s)
+2026-03-11 20:26:45.113 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for BLNE: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:26:45.113 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED BLNE: 3 kill filter(s) triggered
+2026-03-11 20:26:45.114 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 87% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:26:45.114 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> CASH DEATH SPIRAL: Only 1.4 months of cash remaining ($1,535,000 cash / $1,088,333/month burn). Threshold: 6 months.
+2026-03-11 20:26:45.114 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> EXTREME LOSSES: Profit margin -230% (< -200% threshold). Company is losing money at a catastrophic rate.
+2026-03-11 20:26:45.114 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES BLNE: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:26:45.114 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:45.114 | INFO     | pennystock.algorithm:log_func:868 -   KILLED BLNE: RECENT SPIKE: Stock had a 87% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:26:56.677 | DEBUG    | pennystock.data.sec_client:search_filing_text:244 - SEC text search failed for 'going concern' in GAU: HTTPSConnectionPool(host='efts.sec.gov', port=443): Max retries exceeded with url: /LATEST/search-index?q=%22GAU%22+%22going+concern%22&dateRange=custom&startdt=2025-03-11&enddt=2026-03-11&forms=10-K%2C10-Q (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x0000018C97330A40>: Failed to resolve 'efts.sec.gov' ([Errno 11001] getaddrinfo failed)"))
+2026-03-11 20:26:59.325 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: GAU has 'going concern' in 1 recent 20-F/6-K filing(s)
+2026-03-11 20:26:59.454 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES GAU: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:26:59.454 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:26:59.454 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 244.8M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:26:59.454 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY GAU: -27pts (2 issue(s))
+2026-03-11 20:27:01.452 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for GAU
+2026-03-11 20:27:02.410 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: FBIO has 'going concern' in 1 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:02.541 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for FBIO: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:27:02.541 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES FBIO: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:02.552 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:02.552 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY FBIO: -12pts (1 issue(s))
+2026-03-11 20:27:04.524 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for FBIO
+2026-03-11 20:27:05.559 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: RZLT has 'going concern' in 4 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:05.689 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for RZLT: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:27:05.689 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED RZLT: 2 kill filter(s) triggered
+2026-03-11 20:27:05.692 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 73% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:05.692 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> PRE-REVENUE BURN: Revenue $0 (< $1,000,000) with $77.1M/year cash burn (> $50M/year max). Pre-revenue company burning through cash with no product revenue.
+2026-03-11 20:27:05.692 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES RZLT: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:05.692 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:05.693 | INFO     | pennystock.algorithm:log_func:868 -   KILLED RZLT: RECENT SPIKE: Stock had a 73% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:27:06.717 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: UFG has 'going concern' in 1 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:06.786 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED UFG: 2 kill filter(s) triggered
+2026-03-11 20:27:06.786 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> PUMP-AND-DUMP AFTERMATH: Stock spiked 2x in 8 trading days (peak $9.65), then crashed 89% from peak. The party is over -- this is post-manipulation dead money.
+2026-03-11 20:27:06.786 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> TOXIC MARGINS: Gross margin 1.9% (< 5% minimum). Business model does not generate meaningful gross profit.
+2026-03-11 20:27:06.786 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES UFG: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:27:06.786 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:06.787 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXTREME DECAY (-15pts): Price $1.07 is 90.3% below 52-week high $11.00 (ratio 0.0973). Could be deep value or could be dead.
+2026-03-11 20:27:06.787 | INFO     | pennystock.algorithm:log_func:868 -   KILLED UFG: PUMP-AND-DUMP AFTERMATH: Stock spiked 2x in 8 trading days (peak $9.65), then cr...
+2026-03-11 20:27:08.485 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: DNN has 'going concern' in 1 recent 20-F/6-K filing(s)
+2026-03-11 20:27:08.680 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for DNN: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:27:08.680 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES DNN: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:27:08.680 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:08.680 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 898.7M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:27:08.680 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY DNN: -27pts (2 issue(s))
+2026-03-11 20:27:10.296 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for DNN
+2026-03-11 20:27:11.166 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: CABA has 'going concern' in 5 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:11.272 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED CABA: 2 kill filter(s) triggered
+2026-03-11 20:27:11.272 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 85% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:11.272 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> PRE-REVENUE BURN: Revenue $0 (< $1,000,000) with $118.9M/year cash burn (> $50M/year max). Pre-revenue company burning through cash with no product revenue.
+2026-03-11 20:27:11.272 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES CABA: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:11.272 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:11.272 | INFO     | pennystock.algorithm:log_func:868 -   KILLED CABA: RECENT SPIKE: Stock had a 85% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:27:12.487 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: GROY has 'going concern' in 7 recent 20-F/6-K filing(s)
+2026-03-11 20:27:12.603 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES GROY: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:27:12.604 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:12.604 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 130.5M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:27:12.604 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY GROY: -27pts (2 issue(s))
+2026-03-11 20:27:13.910 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for GROY
+2026-03-11 20:27:14.632 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: BNKK has 'going concern' in 1 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:14.720 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for BNKK: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:27:14.720 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED BNKK: 3 kill filter(s) triggered
+2026-03-11 20:27:14.720 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 172% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:14.720 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> PUMP-AND-DUMP AFTERMATH: Stock spiked 2x in 13 trading days (peak $42.00), then crashed 93% from peak. The party is over -- this is post-manipulation dead money.
+2026-03-11 20:27:14.720 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> CASH DEATH SPIRAL: Only 5.4 months of cash remaining ($9,017,981 cash / $1,674,836/month burn). Threshold: 6 months.
+2026-03-11 20:27:14.720 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES BNKK: 3 penalty(ies), total deduction: -47pts
+2026-03-11 20:27:14.720 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:14.720 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXTREME DECAY (-15pts): Price $2.74 is 94.2% below 52-week high $46.90 (ratio 0.0584). Could be deep value or could be dead.
+2026-03-11 20:27:14.720 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> MICRO EMPLOYEES (-20pts): Only 8 full-time employee(s) reported. Companies with < 10 FTEs are often shells, zombies, or SPACs.
+2026-03-11 20:27:14.721 | INFO     | pennystock.algorithm:log_func:868 -   KILLED BNKK: RECENT SPIKE: Stock had a 172% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:27:15.585 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: BARK has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:15.680 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES BARK: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:27:15.680 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:15.680 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 107.9M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:27:15.681 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY BARK: -27pts (2 issue(s))
+2026-03-11 20:27:17.296 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for BARK
+2026-03-11 20:27:17.943 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: UROY has 'going concern' in 3 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:18.029 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED UROY: 1 kill filter(s) triggered
+2026-03-11 20:27:18.029 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 62% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:18.029 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES UROY: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:27:18.029 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:18.029 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 117.3M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:27:18.029 | INFO     | pennystock.algorithm:log_func:868 -   KILLED UROY: RECENT SPIKE: Stock had a 62% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:27:18.728 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: HYPR has 'going concern' in 3 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:18.810 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES HYPR: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:18.810 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:18.810 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY HYPR: -12pts (1 issue(s))
+2026-03-11 20:27:19.896 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for HYPR
+2026-03-11 20:27:20.913 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: TEAD has 'going concern' in 2 recent 20-F/6-K filing(s)
+2026-03-11 20:27:21.013 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED TEAD: 1 kill filter(s) triggered
+2026-03-11 20:27:21.013 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 71% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:21.013 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES TEAD: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:21.014 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:21.014 | INFO     | pennystock.algorithm:log_func:868 -   KILLED TEAD: RECENT SPIKE: Stock had a 71% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:27:21.707 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: FURY has 'going concern' in 2 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:21.848 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for FURY: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:27:21.848 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED FURY: 1 kill filter(s) triggered
+2026-03-11 20:27:21.848 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 77% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:21.848 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES FURY: 3 penalty(ies), total deduction: -47pts
+2026-03-11 20:27:21.848 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:21.849 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 175.2M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:27:21.849 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> MICRO EMPLOYEES (-20pts): Only 9 full-time employee(s) reported. Companies with < 10 FTEs are often shells, zombies, or SPACs.
+2026-03-11 20:27:21.849 | INFO     | pennystock.algorithm:log_func:868 -   KILLED FURY: RECENT SPIKE: Stock had a 77% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:27:22.442 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: GLDG has 'going concern' in 4 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:22.570 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED GLDG: 1 kill filter(s) triggered
+2026-03-11 20:27:22.571 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 67% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:22.571 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES GLDG: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:27:22.571 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:22.571 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 204.5M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:27:22.571 | INFO     | pennystock.algorithm:log_func:868 -   KILLED GLDG: RECENT SPIKE: Stock had a 67% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:27:23.669 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED RPID: 1 kill filter(s) triggered
+2026-03-11 20:27:23.670 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 69% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:23.670 | INFO     | pennystock.algorithm:log_func:868 -   KILLED RPID: RECENT SPIKE: Stock had a 69% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:27:25.747 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: CVV has 'going concern' in 4 recent 20-F/6-K filing(s)
+2026-03-11 20:27:25.960 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED CVV: 1 kill filter(s) triggered
+2026-03-11 20:27:25.960 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 78% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:25.960 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES CVV: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:25.961 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:25.961 | INFO     | pennystock.algorithm:log_func:868 -   KILLED CVV: RECENT SPIKE: Stock had a 78% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:27:27.124 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: ATLN has 'going concern' in 4 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:27.249 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for ATLN: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:27:27.249 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED ATLN: 2 kill filter(s) triggered
+2026-03-11 20:27:27.249 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 137% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:27.250 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> NEGATIVE EQUITY: Book value per share is $-0.40. Balance sheet is underwater.
+2026-03-11 20:27:27.250 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES ATLN: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:27.250 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:27.250 | INFO     | pennystock.algorithm:log_func:868 -   KILLED ATLN: RECENT SPIKE: Stock had a 137% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:27:28.324 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: SKBL has 'going concern' in 2 recent 20-F/6-K filing(s)
+2026-03-11 20:27:28.389 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED SKBL: 1 kill filter(s) triggered
+2026-03-11 20:27:28.389 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> CASH DEATH SPIRAL: Only 3.2 months of cash remaining ($803,516 cash / $250,499/month burn). Threshold: 6 months.
+2026-03-11 20:27:28.389 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES SKBL: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:28.389 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:28.390 | INFO     | pennystock.algorithm:log_func:868 -   KILLED SKBL: CASH DEATH SPIRAL: Only 3.2 months of cash remaining ($803,516 cash / $250,499/m...
+2026-03-11 20:27:29.942 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED PRTS: 1 kill filter(s) triggered
+2026-03-11 20:27:29.943 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 91% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:29.943 | INFO     | pennystock.algorithm:log_func:868 -   KILLED PRTS: RECENT SPIKE: Stock had a 91% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:27:30.677 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: HKD has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:30.778 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED HKD: 1 kill filter(s) triggered
+2026-03-11 20:27:30.778 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 67% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:30.778 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES HKD: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:30.778 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:30.778 | INFO     | pennystock.algorithm:log_func:868 -   KILLED HKD: RECENT SPIKE: Stock had a 67% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:27:31.552 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: ECC has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:31.711 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES ECC: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:31.711 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:31.711 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY ECC: -12pts (1 issue(s))
+2026-03-11 20:27:33.931 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for ECC
+2026-03-11 20:27:34.993 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED CPIX: 1 kill filter(s) triggered
+2026-03-11 20:27:34.993 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 68% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:34.993 | INFO     | pennystock.algorithm:log_func:868 -   KILLED CPIX: RECENT SPIKE: Stock had a 68% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:27:35.666 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: SIDU has 'going concern' in 7 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:35.753 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for SIDU: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:27:35.753 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED SIDU: 1 kill filter(s) triggered
+2026-03-11 20:27:35.753 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 144% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:35.753 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES SIDU: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:35.753 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:35.753 | INFO     | pennystock.algorithm:log_func:868 -   KILLED SIDU: RECENT SPIKE: Stock had a 144% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:27:36.619 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: SVC has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:36.928 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES SVC: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:27:36.928 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:36.928 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 158.6M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:27:36.928 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY SVC: -27pts (2 issue(s))
+2026-03-11 20:27:38.465 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for SVC
+2026-03-11 20:27:39.259 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: URG has 'going concern' in 2 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:39.381 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED URG: 1 kill filter(s) triggered
+2026-03-11 20:27:39.381 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> EXTREME LOSSES: Profit margin -201% (< -200% threshold). Company is losing money at a catastrophic rate.
+2026-03-11 20:27:39.381 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES URG: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:27:39.381 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:39.381 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 349.5M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:27:39.381 | INFO     | pennystock.algorithm:log_func:868 -   KILLED URG: EXTREME LOSSES: Profit margin -201% (< -200% threshold). Company is losing money...
+2026-03-11 20:27:40.048 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: HOVR has 'going concern' in 5 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:41.186 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES HOVR: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:41.186 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:41.186 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY HOVR: -12pts (1 issue(s))
+2026-03-11 20:27:48.083 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for HOVR
+2026-03-11 20:27:48.945 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: CHRS has 'going concern' in 9 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:49.215 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED CHRS: 1 kill filter(s) triggered
+2026-03-11 20:27:49.215 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 73% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:49.215 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES CHRS: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:27:49.215 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:49.215 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 134.6M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:27:49.216 | INFO     | pennystock.algorithm:log_func:868 -   KILLED CHRS: RECENT SPIKE: Stock had a 73% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:27:50.020 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: EPM has 'going concern' in 2 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:50.283 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for EPM: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:27:50.283 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES EPM: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:50.283 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:50.283 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY EPM: -12pts (1 issue(s))
+2026-03-11 20:27:51.535 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for EPM
+2026-03-11 20:27:51.625 | INFO     | pennystock.algorithm:log_func:868 -   Stage 2: 60/100 (43 killed, 17 scored)
+2026-03-11 20:27:52.252 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: ENLV has 'going concern' in 1 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:52.374 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for ENLV: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:27:52.374 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED ENLV: 1 kill filter(s) triggered
+2026-03-11 20:27:52.375 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> SHELL COMPANY: Zero revenue AND zero reported employees
+2026-03-11 20:27:52.376 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES ENLV: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:52.379 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:52.379 | INFO     | pennystock.algorithm:log_func:868 -   KILLED ENLV: SHELL COMPANY: Zero revenue AND zero reported employees...
+2026-03-11 20:27:53.106 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: MCRP has 'going concern' in 4 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:53.183 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED MCRP: 1 kill filter(s) triggered
+2026-03-11 20:27:53.183 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 137% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:53.184 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES MCRP: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:53.184 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:53.184 | INFO     | pennystock.algorithm:log_func:868 -   KILLED MCRP: RECENT SPIKE: Stock had a 137% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:27:53.958 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: THM has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:54.123 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED THM: 1 kill filter(s) triggered
+2026-03-11 20:27:54.123 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 76% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:54.123 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES THM: 2 penalty(ies), total deduction: -32pts
+2026-03-11 20:27:54.123 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:54.123 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> MICRO EMPLOYEES (-20pts): Only 3 full-time employee(s) reported. Companies with < 10 FTEs are often shells, zombies, or SPACs.
+2026-03-11 20:27:54.123 | INFO     | pennystock.algorithm:log_func:868 -   KILLED THM: RECENT SPIKE: Stock had a 76% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:27:58.561 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for CRNT
+2026-03-11 20:27:59.518 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: ELUT has 'going concern' in 5 recent 10-K/10-Q filing(s)
+2026-03-11 20:27:59.639 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED ELUT: 3 kill filter(s) triggered
+2026-03-11 20:27:59.639 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 104% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:27:59.639 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> CASH DEATH SPIRAL: Only 1.8 months of cash remaining ($4,721,000 cash / $2,687,750/month burn). Threshold: 6 months.
+2026-03-11 20:27:59.640 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> NEGATIVE EQUITY: Book value per share is $-1.03. Balance sheet is underwater.
+2026-03-11 20:27:59.640 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES ELUT: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:27:59.641 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:27:59.641 | INFO     | pennystock.algorithm:log_func:868 -   KILLED ELUT: RECENT SPIKE: Stock had a 104% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:28:00.651 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: VSME has 'going concern' in 1 recent 20-F/6-K filing(s)
+2026-03-11 20:28:00.732 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for VSME: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:00.732 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED VSME: 1 kill filter(s) triggered
+2026-03-11 20:28:00.732 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 107% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:00.732 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES VSME: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:00.732 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:00.732 | INFO     | pennystock.algorithm:log_func:868 -   KILLED VSME: RECENT SPIKE: Stock had a 107% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:28:02.055 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: BDN has 'going concern' in 1 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:02.406 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for BDN: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:02.406 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES BDN: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:28:02.407 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:02.407 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 165.7M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:28:02.407 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY BDN: -27pts (2 issue(s))
+2026-03-11 20:28:04.358 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for BDN
+2026-03-11 20:28:06.250 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: FF has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:06.416 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES FF: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:06.418 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:06.418 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY FF: -12pts (1 issue(s))
+2026-03-11 20:28:08.528 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for FF
+2026-03-11 20:28:09.384 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: DVS has 'going concern' in 5 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:09.561 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for DVS: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:09.561 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED DVS: 1 kill filter(s) triggered
+2026-03-11 20:28:09.562 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> SHELL COMPANY: Zero revenue AND zero reported employees
+2026-03-11 20:28:09.562 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES DVS: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:09.562 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:09.563 | INFO     | pennystock.algorithm:log_func:868 -   KILLED DVS: SHELL COMPANY: Zero revenue AND zero reported employees...
+2026-03-11 20:28:10.277 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: REI has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:10.425 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for REI: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:10.425 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED REI: 1 kill filter(s) triggered
+2026-03-11 20:28:10.425 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 80% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:10.425 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES REI: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:28:10.425 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:10.425 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 186.5M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:28:10.426 | INFO     | pennystock.algorithm:log_func:868 -   KILLED REI: RECENT SPIKE: Stock had a 80% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:28:11.283 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: IBIO has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:11.416 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for IBIO: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:11.416 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES IBIO: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:11.416 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:11.417 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY IBIO: -12pts (1 issue(s))
+2026-03-11 20:28:12.664 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for IBIO
+2026-03-11 20:28:13.468 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: NMRA has 'going concern' in 2 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:13.534 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED NMRA: 2 kill filter(s) triggered
+2026-03-11 20:28:13.538 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 98% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:13.538 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> PRE-REVENUE BURN: Revenue $0 (< $1,000,000) with $208.8M/year cash burn (> $50M/year max). Pre-revenue company burning through cash with no product revenue.
+2026-03-11 20:28:13.539 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES NMRA: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:13.541 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:13.543 | INFO     | pennystock.algorithm:log_func:868 -   KILLED NMRA: RECENT SPIKE: Stock had a 98% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:28:14.696 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: ZTEK has 'going concern' in 3 recent 20-F/6-K filing(s)
+2026-03-11 20:28:14.838 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED ZTEK: 2 kill filter(s) triggered
+2026-03-11 20:28:14.838 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 102% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:14.838 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> CASH DEATH SPIRAL: Only 3.8 months of cash remaining ($1,801,175 cash / $468,078/month burn). Threshold: 6 months.
+2026-03-11 20:28:14.839 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES ZTEK: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:28:14.839 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:14.839 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 102.7M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:28:14.839 | INFO     | pennystock.algorithm:log_func:868 -   KILLED ZTEK: RECENT SPIKE: Stock had a 102% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:28:15.559 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: TYGO has 'going concern' in 5 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:15.642 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED TYGO: 1 kill filter(s) triggered
+2026-03-11 20:28:15.642 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 191% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:15.642 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES TYGO: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:15.642 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:15.643 | INFO     | pennystock.algorithm:log_func:868 -   KILLED TYGO: RECENT SPIKE: Stock had a 191% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:28:16.504 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: SUNE has 'going concern' in 8 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:16.850 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for SUNE: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:16.851 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED SUNE: 1 kill filter(s) triggered
+2026-03-11 20:28:16.851 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 301% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:16.851 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES SUNE: 2 penalty(ies), total deduction: -42pts
+2026-03-11 20:28:16.851 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:16.851 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> CATASTROPHIC DECAY (-30pts): Price $1.3400 is 99.1% below 52-week high $150.00 (ratio 0.0089). This stock has been destroyed.
+2026-03-11 20:28:16.851 | INFO     | pennystock.algorithm:log_func:868 -   KILLED SUNE: RECENT SPIKE: Stock had a 301% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:28:17.940 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED RXT: 2 kill filter(s) triggered
+2026-03-11 20:28:17.940 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 597% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:17.940 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> NEGATIVE EQUITY: Book value per share is $-4.97. Balance sheet is underwater.
+2026-03-11 20:28:17.940 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES RXT: 1 penalty(ies), total deduction: -15pts
+2026-03-11 20:28:17.940 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 109.0M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:28:17.940 | INFO     | pennystock.algorithm:log_func:868 -   KILLED RXT: RECENT SPIKE: Stock had a 597% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:28:23.794 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: LZM has 'going concern' in 3 recent 20-F/6-K filing(s)
+2026-03-11 20:28:23.879 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES LZM: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:23.879 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:23.879 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY LZM: -12pts (1 issue(s))
+2026-03-11 20:28:25.465 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for LZM
+2026-03-11 20:28:26.325 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: LOOP has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:26.433 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED LOOP: 1 kill filter(s) triggered
+2026-03-11 20:28:26.434 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> NEGATIVE EQUITY: Book value per share is $-0.15. Balance sheet is underwater.
+2026-03-11 20:28:26.434 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES LOOP: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:26.434 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:26.435 | INFO     | pennystock.algorithm:log_func:868 -   KILLED LOOP: NEGATIVE EQUITY: Book value per share is $-0.15. Balance sheet is underwater....
+2026-03-11 20:28:27.303 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: LCFY has 'going concern' in 2 recent 20-F/6-K filing(s)
+2026-03-11 20:28:27.470 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for LCFY: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:27.471 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED LCFY: 1 kill filter(s) triggered
+2026-03-11 20:28:27.471 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 148% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:27.471 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES LCFY: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:27.471 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:27.471 | INFO     | pennystock.algorithm:log_func:868 -   KILLED LCFY: RECENT SPIKE: Stock had a 148% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:28:28.153 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: AUR has 'going concern' in 1 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:28.243 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES AUR: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:28:28.244 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:28.244 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 1247.3M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:28:28.244 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY AUR: -27pts (2 issue(s))
+2026-03-11 20:28:29.410 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for AUR
+2026-03-11 20:28:29.491 | INFO     | pennystock.algorithm:log_func:868 -   Stage 2: 80/100 (57 killed, 23 scored)
+2026-03-11 20:28:31.915 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for PHK
+2026-03-11 20:28:32.628 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: ACHV has 'going concern' in 4 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:32.844 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for ACHV: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:32.845 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES ACHV: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:32.845 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:32.845 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY ACHV: -12pts (1 issue(s))
+2026-03-11 20:28:34.178 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for ACHV
+2026-03-11 20:28:35.219 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: CYH has 'going concern' in 2 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:35.445 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for CYH: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:35.445 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED CYH: 1 kill filter(s) triggered
+2026-03-11 20:28:35.445 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> NEGATIVE EQUITY: Book value per share is $-10.41. Balance sheet is underwater.
+2026-03-11 20:28:35.445 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES CYH: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:35.446 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:35.446 | INFO     | pennystock.algorithm:log_func:868 -   KILLED CYH: NEGATIVE EQUITY: Book value per share is $-10.41. Balance sheet is underwater....
+2026-03-11 20:28:36.774 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for LXRX: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:36.774 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED LXRX: 1 kill filter(s) triggered
+2026-03-11 20:28:36.774 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 66% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:36.775 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES LXRX: 1 penalty(ies), total deduction: -15pts
+2026-03-11 20:28:36.775 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 417.8M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:28:36.776 | INFO     | pennystock.algorithm:log_func:868 -   KILLED LXRX: RECENT SPIKE: Stock had a 66% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:28:37.786 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: AGIG has 'going concern' in 5 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:37.992 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for AGIG: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:37.992 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED AGIG: 3 kill filter(s) triggered
+2026-03-11 20:28:37.993 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 218% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:37.993 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> PUMP-AND-DUMP AFTERMATH: Stock spiked 3x in 3 trading days (peak $20.00), then crashed 91% from peak. The party is over -- this is post-manipulation dead money.
+2026-03-11 20:28:37.993 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> CASH DEATH SPIRAL: Only 3.5 months of cash remaining ($1,512,157 cash / $429,850/month burn). Threshold: 6 months.
+2026-03-11 20:28:37.993 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES AGIG: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:28:37.993 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:37.993 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXTREME DECAY (-15pts): Price $1.85 is 92.8% below 52-week high $25.56 (ratio 0.0724). Could be deep value or could be dead.
+2026-03-11 20:28:37.993 | INFO     | pennystock.algorithm:log_func:868 -   KILLED AGIG: RECENT SPIKE: Stock had a 218% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:28:38.736 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: DTI has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:38.835 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES DTI: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:38.836 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:38.836 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY DTI: -12pts (1 issue(s))
+2026-03-11 20:28:40.309 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for DTI
+2026-03-11 20:28:41.219 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: SPAI has 'going concern' in 4 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:41.278 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED SPAI: 1 kill filter(s) triggered
+2026-03-11 20:28:41.278 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 84% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:41.278 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES SPAI: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:41.278 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:41.278 | INFO     | pennystock.algorithm:log_func:868 -   KILLED SPAI: RECENT SPIKE: Stock had a 84% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:28:41.876 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: NEOV has 'going concern' in 4 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:41.963 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED NEOV: 2 kill filter(s) triggered
+2026-03-11 20:28:41.964 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 154% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:41.964 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> CASH DEATH SPIRAL: Only 0.4 months of cash remaining ($242,434 cash / $629,374/month burn). Threshold: 6 months.
+2026-03-11 20:28:41.964 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES NEOV: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:41.965 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:41.965 | INFO     | pennystock.algorithm:log_func:868 -   KILLED NEOV: RECENT SPIKE: Stock had a 154% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:28:42.641 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: CVU has 'going concern' in 1 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:42.876 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for CVU: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:42.877 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES CVU: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:42.877 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:42.877 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY CVU: -12pts (1 issue(s))
+2026-03-11 20:28:44.100 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for CVU
+2026-03-11 20:28:44.918 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: VYNE has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:45.024 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for VYNE: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:45.024 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES VYNE: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:45.025 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:45.025 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY VYNE: -12pts (1 issue(s))
+2026-03-11 20:28:46.301 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for VYNE
+2026-03-11 20:28:46.388 | INFO     | pennystock.algorithm:log_func:868 -   Stage 2: 90/100 (62 killed, 28 scored)
+2026-03-11 20:28:47.044 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: LAC has 'going concern' in 10 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:47.131 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED LAC: 3 kill filter(s) triggered
+2026-03-11 20:28:47.132 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 62% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:47.132 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> SHELL COMPANY: Zero revenue AND zero reported employees
+2026-03-11 20:28:47.132 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> PRE-REVENUE BURN: Revenue $0 (< $1,000,000) with $55.3M/year cash burn (> $50M/year max). Pre-revenue company burning through cash with no product revenue.
+2026-03-11 20:28:47.132 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES LAC: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:28:47.133 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:47.133 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 278.6M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:28:47.133 | INFO     | pennystock.algorithm:log_func:868 -   KILLED LAC: RECENT SPIKE: Stock had a 62% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:28:48.077 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: CNVS has 'going concern' in 2 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:48.302 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for CNVS: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:48.303 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED CNVS: 2 kill filter(s) triggered
+2026-03-11 20:28:48.303 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 94% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:48.303 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> CASH DEATH SPIRAL: Only 2.7 months of cash remaining ($2,461,000 cash / $903,500/month burn). Threshold: 6 months.
+2026-03-11 20:28:48.303 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES CNVS: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:48.303 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:48.303 | INFO     | pennystock.algorithm:log_func:868 -   KILLED CNVS: RECENT SPIKE: Stock had a 94% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:28:48.980 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: NGEN has 'going concern' in 6 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:49.069 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED NGEN: 2 kill filter(s) triggered
+2026-03-11 20:28:49.069 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> SHELL COMPANY: Zero revenue AND zero reported employees
+2026-03-11 20:28:49.069 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> NEGATIVE EQUITY: Book value per share is $-0.03. Balance sheet is underwater.
+2026-03-11 20:28:49.069 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES NGEN: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:49.069 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:49.069 | INFO     | pennystock.algorithm:log_func:868 -   KILLED NGEN: SHELL COMPANY: Zero revenue AND zero reported employees...
+2026-03-11 20:28:49.861 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: VGZ has 'going concern' in 4 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:50.115 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for VGZ: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:50.115 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES VGZ: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:28:50.116 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:50.116 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 120.0M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:28:50.116 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY VGZ: -27pts (2 issue(s))
+2026-03-11 20:28:51.737 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for VGZ
+2026-03-11 20:28:52.495 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: AREC has 'going concern' in 9 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:52.615 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED AREC: 3 kill filter(s) triggered
+2026-03-11 20:28:52.615 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 81% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:52.615 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> CASH DEATH SPIRAL: Only 1.9 months of cash remaining ($2,081,780 cash / $1,092,537/month burn). Threshold: 6 months.
+2026-03-11 20:28:52.615 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> NEGATIVE EQUITY: Book value per share is $-0.94. Balance sheet is underwater.
+2026-03-11 20:28:52.615 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES AREC: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:28:52.615 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:52.615 | INFO     | pennystock.algorithm:log_func:868 -   KILLED AREC: RECENT SPIKE: Stock had a 81% spike (high/low range) in the last 40 trading days...
+2026-03-11 20:28:53.258 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: NNDM has 'going concern' in 1 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:53.399 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for NNDM: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:53.399 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES NNDM: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:28:53.400 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:53.400 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 206.5M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:28:53.400 | INFO     | pennystock.algorithm:log_func:868 -   PENALTY NNDM: -27pts (2 issue(s))
+2026-03-11 20:28:55.005 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for NNDM
+2026-03-11 20:28:55.802 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: SBEV has 'going concern' in 6 recent 10-K/10-Q filing(s)
+2026-03-11 20:28:55.883 | DEBUG    | pennystock.data.yahoo_client:has_recent_reverse_split:201 - Reverse split check failed for SBEV: Cannot compare tz-naive and tz-aware timestamps
+2026-03-11 20:28:55.884 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED SBEV: 3 kill filter(s) triggered
+2026-03-11 20:28:55.884 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 276% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:28:55.885 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> PUMP-AND-DUMP AFTERMATH: Stock spiked 3x in 5 trading days (peak $8.00), then crashed 93% from peak. The party is over -- this is post-manipulation dead money.
+2026-03-11 20:28:55.885 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> CASH DEATH SPIRAL: Only 0.6 months of cash remaining ($265,667 cash / $454,104/month burn). Threshold: 6 months.
+2026-03-11 20:28:55.886 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES SBEV: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:28:55.886 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:55.886 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXTREME DECAY (-15pts): Price $0.54 is 94.5% below 52-week high $9.79 (ratio 0.0553). Could be deep value or could be dead.
+2026-03-11 20:28:55.886 | INFO     | pennystock.algorithm:log_func:868 -   KILLED SBEV: RECENT SPIKE: Stock had a 276% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:28:57.286 | INFO     | pennystock.data.sec_client:check_going_concern:264 - KILL FLAG: LAES has 'going concern' in 5 recent 20-F/6-K filing(s)
+2026-03-11 20:28:57.357 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED LAES: 1 kill filter(s) triggered
+2026-03-11 20:28:57.370 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> EXTREME LOSSES: Profit margin -277% (< -200% threshold). Company is losing money at a catastrophic rate.
+2026-03-11 20:28:57.370 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES LAES: 2 penalty(ies), total deduction: -27pts
+2026-03-11 20:28:57.370 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:28:57.370 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> EXCESSIVE FLOAT (-15pts): 121.6M shares float (> 100M max). Harder to squeeze but not impossible with enough catalyst.
+2026-03-11 20:28:57.371 | INFO     | pennystock.algorithm:log_func:868 -   KILLED LAES: EXTREME LOSSES: Profit margin -277% (< -200% threshold). Company is losing money...
+2026-03-11 20:28:59.949 | DEBUG    | pennystock.data.stocktwits_client:get_messages:60 - StockTwits returned 403 for RSKD
+2026-03-11 20:29:00.753 | INFO     | pennystock.data.sec_client:check_going_concern:257 - KILL FLAG: MAIA has 'going concern' in 5 recent 10-K/10-Q filing(s)
+2026-03-11 20:29:00.864 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:400 - KILLED MAIA: 1 kill filter(s) triggered
+2026-03-11 20:29:00.864 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:402 -   -> RECENT SPIKE: Stock had a 131% spike (high/low range) in the last 40 trading days (threshold: 60%). This stock already had its big move -- don't chase.
+2026-03-11 20:29:00.864 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:405 - PENALTIES MAIA: 1 penalty(ies), total deduction: -12pts
+2026-03-11 20:29:00.864 | INFO     | pennystock.analysis.quality_gate:run_kill_filters:410 -   -> GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in low-priced stocks but still a red flag.
+2026-03-11 20:29:00.864 | INFO     | pennystock.algorithm:log_func:868 -   KILLED MAIA: RECENT SPIKE: Stock had a 131% spike (high/low range) in the last 40 trading day...
+2026-03-11 20:29:00.864 | INFO     | pennystock.algorithm:log_func:868 - ============================================================
+2026-03-11 20:29:00.864 | INFO     | pennystock.algorithm:log_func:868 - RESULTS: 69 stocks KILLED by quality filters, 31 survived scoring
+2026-03-11 20:29:00.864 | INFO     | pennystock.algorithm:log_func:868 -   31 stocks scored below minimum threshold (55pts) and were excluded
+2026-03-11 20:29:00.865 | INFO     | pennystock.algorithm:log_func:868 - NO STOCKS MEET MINIMUM QUALITY THRESHOLD.
+2026-03-11 20:29:00.865 | INFO     | pennystock.algorithm:log_func:868 - All 31 survivors scored below 55pts.
+2026-03-11 20:29:00.865 | INFO     | pennystock.algorithm:log_func:868 - This means the current market has no penny stocks worth recommending.
+2026-03-11 20:29:00.866 | INFO     | pennystock.algorithm:log_func:868 - This is BETTER than recommending garbage -- sit on cash.
+2026-03-11 20:29:00.866 | INFO     | pennystock.algorithm:log_func:868 - ============================================================
