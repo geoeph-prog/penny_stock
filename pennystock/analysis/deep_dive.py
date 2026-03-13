@@ -580,6 +580,13 @@ def _print_fundamental_score(p, fund):
     p(f"\n  Squeeze Composite:   {sq.get('score', 0):.0f}/100")
     p(f"    Is Squeeze Setup:  {'YES' if sq.get('is_squeeze_setup') else 'No'}")
 
+    ib = fund.get("insider_buying", {})
+    p(f"\n  Insider Buying:")
+    p(f"    Recent Buys:       {ib.get('recent_buys', 0)}")
+    p(f"    Recent Sells:      {ib.get('recent_sells', 0)}")
+    p(f"    Net Buys:          {ib.get('net_buys', 0)}")
+    p(f"    Bonus:             {ib.get('bonus', 0):+d}pts" if ib.get("bonus", 0) != 0 else "    Bonus:             None")
+
     dr = fund.get("dilution_risk", {})
     p(f"\n  Dilution Risk:")
     p(f"    Dilution Filings:  {dr.get('dilution_filings_6m', 0)} in last 6 months")
@@ -626,7 +633,7 @@ def _print_catalyst(p, cat, news_list):
 
 
 def _print_sentiment(p, sent):
-    """Print full sentiment analysis with social media data."""
+    """Print full sentiment analysis with raw social media comments."""
     p(f"\n  Combined Sentiment Score: {sent.get('score', 0):.0f}/100")
     p(f"  Combined Sentiment: {sent.get('combined_sentiment', 0):+.3f} (-1 to +1)")
     p(f"  Total Mentions: {sent.get('total_mentions', 0)}")
@@ -635,30 +642,43 @@ def _print_sentiment(p, sent):
     if aliases:
         p(f"  Search Aliases: {', '.join(aliases)}  (company name matches included)")
 
-    # Reddit
+    # ── Reddit ─────────────────────────────────────────────────────
     reddit = sent.get("reddit", {})
     p(f"\n  Reddit ({reddit.get('mentions', 0)} mentions):")
     if reddit.get("mentions", 0) > 0:
         p(f"    Avg Sentiment:   {reddit.get('avg_sentiment', 0):+.3f}")
-        p(f"    Positive:        {reddit.get('positive_pct', 0):.0%}")
+        p(f"    Positive:        {reddit.get('positive_pct', 0):.0f}%")
         sub_counts = reddit.get("subreddit_counts", {})
         if sub_counts:
-            p(f"    Subreddits:")
-            for sub, count in sorted(sub_counts.items(), key=lambda x: x[1], reverse=True)[:5]:
-                p(f"      r/{sub}: {count} mention(s)")
-        # Print actual post titles/snippets if available
+            active_subs = {k: v for k, v in sub_counts.items() if v > 0}
+            if active_subs:
+                p(f"    Active Subreddits:")
+                for sub, count in sorted(active_subs.items(), key=lambda x: x[1], reverse=True)[:5]:
+                    p(f"      r/{sub}: {count} mention(s)")
+
         posts = reddit.get("posts", [])
         if posts:
-            p(f"\n    Top Reddit Posts:")
-            for post in posts[:8]:
-                title = post.get("title", "")[:70]
-                score = post.get("sentiment", 0)
+            # Sort by sentiment score descending for relevance
+            sorted_posts = sorted(posts, key=lambda x: abs(x.get("sentiment", 0)), reverse=True)
+            p(f"\n    ── Reddit Comments ({len(posts)} posts) ──")
+            for i, post in enumerate(sorted_posts[:15]):
+                title = post.get("title", "")[:80]
+                sent_val = post.get("sentiment", 0)
                 sub = post.get("subreddit", "")
-                p(f"      [{score:+.2f}] r/{sub}: {title}")
+                upvotes = post.get("score", 0)
+                comments = post.get("num_comments", 0)
+                sent_marker = "+" if sent_val > 0.05 else "-" if sent_val < -0.05 else "~"
+                p(f"      {sent_marker}[{sent_val:+.2f}] r/{sub} ({upvotes}pts, {comments}c)")
+                p(f"        {title}")
+                # Show text snippet if available
+                text = post.get("text", "").strip()
+                if text and text != title:
+                    snippet = text[:150].replace('\n', ' ')
+                    p(f"        > {snippet}{'...' if len(text) > 150 else ''}")
     else:
         p(f"    No Reddit mentions found")
 
-    # StockTwits
+    # ── StockTwits ─────────────────────────────────────────────────
     st = sent.get("stocktwits", {})
     p(f"\n  StockTwits ({st.get('total', 0)} messages):")
     if st.get("total", 0) > 0:
@@ -668,33 +688,41 @@ def _print_sentiment(p, sent):
         p(f"    Bullish:         {bull} ({bull/max(1,total):.0%})")
         p(f"    Bearish:         {bear} ({bear/max(1,total):.0%})")
         p(f"    Avg Sentiment:   {st.get('avg_sentiment', 0):+.3f}")
-        # Print actual messages if available
+
         messages = st.get("messages", [])
         if messages:
-            p(f"\n    Recent StockTwits:")
-            for msg in messages[:8]:
-                body = msg.get("body", "")[:70]
+            p(f"\n    ── StockTwits Messages ({len(messages)} messages) ──")
+            for msg in messages[:15]:
+                body = msg.get("body", "")[:120]
                 label = msg.get("label", "")
-                p(f"      [{label:>7}] {body}")
+                sent_val = msg.get("sentiment", 0)
+                label_str = f"[{label:>8}]" if label else f"[{sent_val:+.2f}  ]"
+                p(f"      {label_str} {body}")
     else:
         p(f"    No StockTwits data found")
 
-    # Twitter
+    # ── Twitter/X ──────────────────────────────────────────────────
     tw = sent.get("twitter", {})
-    p(f"\n  Twitter ({tw.get('total', 0)} tweets):")
+    source = tw.get("source", "unknown")
+    source_label = f" (via {source})" if source and source != "unknown" else ""
+    p(f"\n  Twitter/X ({tw.get('total', 0)} results{source_label}):")
     if tw.get("total", 0) > 0:
         p(f"    Avg Sentiment:   {tw.get('avg_sentiment', 0):+.3f}")
+
         tweets = tw.get("tweets", [])
         if tweets:
-            p(f"\n    Recent Tweets:")
-            for tweet in tweets[:8]:
-                text = tweet.get("text", "")[:70]
-                score = tweet.get("sentiment", 0)
-                p(f"      [{score:+.2f}] {text}")
+            p(f"\n    ── Twitter/X Posts ({len(tweets)} results) ──")
+            for tweet in tweets[:15]:
+                text = tweet.get("text", "")[:120]
+                sent_val = tweet.get("sentiment", 0)
+                user = tweet.get("user", "")
+                user_str = f"@{user}: " if user else ""
+                sent_marker = "+" if sent_val > 0.05 else "-" if sent_val < -0.05 else "~"
+                p(f"      {sent_marker}[{sent_val:+.2f}] {user_str}{text}")
     elif not tw.get("enabled", False):
-        p(f"    Twitter analysis disabled (no account configured)")
+        p(f"    Twitter analysis disabled")
     else:
-        p(f"    No tweets found")
+        p(f"    No Twitter/X data found")
 
 
 def _print_risk(p, price, atr, support):

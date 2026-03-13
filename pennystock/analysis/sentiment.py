@@ -152,12 +152,32 @@ def analyze(ticker: str, company_name: str = "") -> dict:
 
     # ── Reddit (uses bulk cache if available, zero API calls) ──────
     reddit_data = reddit_scraper.get_ticker_mentions(ticker, use_bulk=True, aliases=aliases)
+    reddit_posts_scored = []
+    for p in reddit_data["posts"]:
+        combined_text = f"{p['title']} {p['text']}"
+        sent_val = score_text(combined_text, analyzer)
+        reddit_posts_scored.append({
+            "title": p.get("title", ""),
+            "text": p.get("text", "")[:300],
+            "subreddit": p.get("subreddit", ""),
+            "score": p.get("score", 0),
+            "num_comments": p.get("num_comments", 0),
+            "sentiment": round(sent_val, 3),
+        })
     reddit_texts = [f"{p['title']} {p['text']}" for p in reddit_data["posts"]]
     reddit_sentiment = score_texts(reddit_texts, analyzer)
 
     # ── StockTwits (respects rate limits) ───────────────────────────
-    # StockTwits is a structured API — always uses ticker, no aliases needed
     st_data = stocktwits_client.get_messages(ticker)
+    st_messages_scored = []
+    for m in st_data["messages"]:
+        sent_val = score_text(m["body"], analyzer)
+        st_messages_scored.append({
+            "body": m.get("body", "")[:300],
+            "label": m.get("sentiment") or "",
+            "created": m.get("created", ""),
+            "sentiment": round(sent_val, 3),
+        })
     st_texts = [m["body"] for m in st_data["messages"]]
     st_sentiment = score_texts(st_texts, analyzer)
 
@@ -165,8 +185,18 @@ def analyze(ticker: str, company_name: str = "") -> dict:
     st_total = st_data["total_count"] or 1
     st_label_score = (st_data["bullish_count"] - st_data["bearish_count"]) / st_total
 
-    # ── Twitter (optional, respects rate limits) ────────────────────
+    # ── Twitter (web search scraping + optional twikit) ────────────
     tw_data = twitter_scraper.get_cashtag_tweets(ticker, aliases=aliases)
+    tw_tweets_scored = []
+    for t in tw_data["tweets"]:
+        sent_val = score_text(t["text"], analyzer)
+        tw_tweets_scored.append({
+            "text": t.get("text", "")[:300],
+            "user": t.get("user", ""),
+            "created": t.get("created", ""),
+            "likes": t.get("likes", 0),
+            "sentiment": round(sent_val, 3),
+        })
     tw_texts = [t["text"] for t in tw_data["tweets"]]
     tw_sentiment = score_texts(tw_texts, analyzer)
 
@@ -226,16 +256,20 @@ def analyze(ticker: str, company_name: str = "") -> dict:
             "avg_sentiment": round(reddit_sentiment["avg_sentiment"], 3),
             "positive_pct": round(reddit_sentiment["positive_pct"], 1),
             "subreddit_counts": reddit_data["subreddit_counts"],
+            "posts": reddit_posts_scored,
         },
         "stocktwits": {
             "total": st_data["total_count"],
             "bullish": st_data["bullish_count"],
             "bearish": st_data["bearish_count"],
             "avg_sentiment": round(st_sentiment["avg_sentiment"], 3),
+            "messages": st_messages_scored,
         },
         "twitter": {
             "total": tw_data["total_count"],
             "avg_sentiment": round(tw_sentiment["avg_sentiment"], 3),
             "enabled": tw_data["enabled"],
+            "source": tw_data.get("source", "unknown"),
+            "tweets": tw_tweets_scored,
         },
     }
