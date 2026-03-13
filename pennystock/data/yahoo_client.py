@@ -188,7 +188,13 @@ def has_recent_reverse_split(ticker: str, months: int = 6) -> dict:
 
         for date, ratio in splits.items():
             split_date = pd.Timestamp(date)
-            if split_date >= pd.Timestamp(cutoff) and ratio < 1.0:
+            cutoff_ts = pd.Timestamp(cutoff)
+            # Match timezone awareness to avoid comparison errors
+            if split_date.tzinfo is not None and cutoff_ts.tzinfo is None:
+                cutoff_ts = cutoff_ts.tz_localize(split_date.tzinfo)
+            elif split_date.tzinfo is None and cutoff_ts.tzinfo is not None:
+                cutoff_ts = cutoff_ts.tz_localize(None)
+            if split_date >= cutoff_ts and ratio < 1.0:
                 return {
                     "has_reverse_split": True,
                     "split_ratio": float(ratio),

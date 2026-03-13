@@ -12,6 +12,7 @@ Setup (Gmail example):
 
 import smtplib
 import ssl
+import time
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from datetime import datetime
@@ -52,19 +53,28 @@ def send_email(subject: str, body_html: str, body_text: str = "",
         msg.attach(MIMEText(body_text, "plain"))
     msg.attach(MIMEText(body_html, "html"))
 
-    try:
-        context = ssl.create_default_context()
-        with smtplib.SMTP(smtp_server, smtp_port, timeout=30) as server:
-            server.ehlo()
-            server.starttls(context=context)
-            server.ehlo()
-            server.login(sender, password)
-            server.sendmail(sender, recipient, msg.as_string())
-        logger.info(f"Email sent: {subject}")
-        return True
-    except Exception as e:
-        logger.error(f"Email send failed: {e}")
-        return False
+    max_retries = 3
+    for attempt in range(1, max_retries + 1):
+        try:
+            context = ssl.create_default_context()
+            with smtplib.SMTP(smtp_server, smtp_port, timeout=30) as server:
+                server.ehlo()
+                server.starttls(context=context)
+                server.ehlo()
+                server.login(sender, password)
+                server.sendmail(sender, recipient, msg.as_string())
+            logger.info(f"Email sent: {subject}")
+            return True
+        except smtplib.SMTPAuthenticationError as e:
+            logger.error(f"Email auth failed (check App Password): {e}")
+            return False  # Don't retry auth errors
+        except Exception as e:
+            logger.error(f"Email send failed (attempt {attempt}/{max_retries}): {e}")
+            if attempt < max_retries:
+                time.sleep(2 ** attempt)  # Exponential backoff: 2s, 4s
+            else:
+                return False
+    return False
 
 
 # ── Pre-built alert templates ───────────────────────────────────
