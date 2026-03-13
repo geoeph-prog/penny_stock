@@ -1,4 +1,5 @@
 {
+<<<<<<< Updated upstream
   "cash": 5000.0,
   "initial_capital": 5000.0,
   "positions": [],
@@ -8,4 +9,414 @@
   "insights": [],
   "created": "2026-03-11T10:07:56.736772",
   "last_updated": "2026-03-11T10:07:56.736785"
+=======
+  "cash": 488.37999999999937,
+  "initial_capital": 5000.0,
+  "positions": [
+    {
+      "ticker": "PSEC",
+      "company": "Prospect Capital Corp",
+      "shares": 185,
+      "entry_price": 2.7,
+      "entry_date": "2026-03-11T10:35:47.238715",
+      "entry_score": 49.6,
+      "entry_confidence": "",
+      "pre_pump_confidence": "MEDIUM",
+      "pre_pump_confluence": 3,
+      "sub_scores": {
+        "setup": 56.5,
+        "technical": 61.9,
+        "pre_pump": 63.3,
+        "fundamental": 48.8,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 45.8,
+        "sector": 50
+      },
+      "current_price": 2.66,
+      "high_since_entry": 2.81,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-11T16:37:15.155801"
+    },
+    {
+      "ticker": "DTI",
+      "company": "Drilling Tools International Corporation",
+      "shares": 134,
+      "entry_price": 3.73,
+      "entry_date": "2026-03-11T10:35:47.239417",
+      "entry_score": 47.2,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 2,
+      "sub_scores": {
+        "setup": 59.0,
+        "technical": 70.7,
+        "pre_pump": 54.6,
+        "fundamental": 48.4,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 49.5,
+        "sector": 65
+      },
+      "current_price": 3.61,
+      "high_since_entry": 3.924,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-11T16:37:15.155801"
+    },
+    {
+      "ticker": "VYNE",
+      "company": "VYNE Therapeutics Inc",
+      "shares": 834,
+      "entry_price": 0.6,
+      "entry_date": "2026-03-11T10:35:47.239490",
+      "entry_score": 46.8,
+      "entry_confidence": "",
+      "pre_pump_confidence": "MEDIUM",
+      "pre_pump_confluence": 3,
+      "sub_scores": {
+        "setup": 51.5,
+        "technical": 69.4,
+        "pre_pump": 56.8,
+        "fundamental": 49.7,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 43.2,
+        "sector": 40
+      },
+      "current_price": 0.6,
+      "high_since_entry": 0.609,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-11T16:37:15.155801"
+    },
+    {
+      "ticker": "GAMB",
+      "company": "Gambling.com Group Ltd",
+      "shares": 120,
+      "entry_price": 4.14,
+      "entry_date": "2026-03-11T10:35:47.239543",
+      "entry_score": 46.3,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 2,
+      "sub_scores": {
+        "setup": 74.0,
+        "technical": 57.5,
+        "pre_pump": 52.0,
+        "fundamental": 49.8,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 45.8,
+        "sector": 50
+      },
+      "current_price": 4.14,
+      "high_since_entry": 4.53,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-11T16:37:15.155801"
+    },
+    {
+      "ticker": "RSKD",
+      "company": "Riskified Ltd",
+      "shares": 113,
+      "entry_price": 4.43,
+      "entry_date": "2026-03-11T10:35:47.239592",
+      "entry_score": 45.4,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 1,
+      "sub_scores": {
+        "setup": 34.8,
+        "technical": 67.2,
+        "pre_pump": 40.8,
+        "fundamental": 47.9,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 43.2,
+        "sector": 40
+      },
+      "current_price": 4.36,
+      "high_since_entry": 4.565,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-11T16:37:15.155801"
+    },
+    {
+      "ticker": "EPM",
+      "company": "Evolution Petroleum Corporation",
+      "shares": 108,
+      "entry_price": 4.61,
+      "entry_date": "2026-03-11T10:35:47.239640",
+      "entry_score": 42.0,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 1,
+      "sub_scores": {
+        "setup": 38.5,
+        "technical": 81.8,
+        "pre_pump": 47.6,
+        "fundamental": 49.9,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 49.5,
+        "sector": 65
+      },
+      "current_price": 4.78,
+      "high_since_entry": 4.8,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-11T16:37:15.155801"
+    },
+    {
+      "ticker": "FBIO",
+      "company": "Fortress Biotech Inc",
+      "shares": 156,
+      "entry_price": 3.22,
+      "entry_date": "2026-03-11T10:35:47.239686",
+      "entry_score": 41.4,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 0,
+      "sub_scores": {
+        "setup": 47.8,
+        "technical": 73.7,
+        "pre_pump": 45.5,
+        "fundamental": 65.9,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 43.2,
+        "sector": 40
+      },
+      "current_price": 3.22,
+      "high_since_entry": 3.47,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-11T16:37:15.155801"
+    },
+    {
+      "ticker": "FF",
+      "company": "Futurefuel Corp",
+      "shares": 113,
+      "entry_price": 4.42,
+      "entry_date": "2026-03-11T10:35:47.239730",
+      "entry_score": 38.7,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 1,
+      "sub_scores": {
+        "setup": 46.5,
+        "technical": 75.1,
+        "pre_pump": 45.6,
+        "fundamental": 30.1,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 45.8,
+        "sector": 50
+      },
+      "current_price": 4.45,
+      "high_since_entry": 4.64,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-11T16:37:15.155801"
+    },
+    {
+      "ticker": "HOVR",
+      "company": "New Horizon Aircraft Ltd",
+      "shares": 259,
+      "entry_price": 1.95,
+      "entry_date": "2026-03-11T10:35:47.239777",
+      "entry_score": 36.5,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 0,
+      "sub_scores": {
+        "setup": 46.2,
+        "technical": 72.6,
+        "pre_pump": 42.0,
+        "fundamental": 47.9,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 39.5,
+        "sector": 25
+      },
+      "current_price": 1.92,
+      "high_since_entry": 2.04,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-11T16:37:15.155801"
+    }
+  ],
+  "trade_history": [
+    {
+      "ticker": "PSEC",
+      "action": "BUY",
+      "shares": 185,
+      "price": 2.7,
+      "date": "2026-03-11T10:35:47.238828",
+      "cost": 499.5,
+      "entry_score": 49.6,
+      "entry_confidence": "",
+      "description": "Pick #1, Score 49.6"
+    },
+    {
+      "ticker": "VRA",
+      "action": "BUY",
+      "shares": 196,
+      "price": 2.54,
+      "date": "2026-03-11T10:35:47.239327",
+      "cost": 497.84,
+      "entry_score": 47.4,
+      "entry_confidence": "",
+      "description": "Pick #2, Score 47.4"
+    },
+    {
+      "ticker": "DTI",
+      "action": "BUY",
+      "shares": 134,
+      "price": 3.73,
+      "date": "2026-03-11T10:35:47.239451",
+      "cost": 499.82,
+      "entry_score": 47.2,
+      "entry_confidence": "",
+      "description": "Pick #3, Score 47.2"
+    },
+    {
+      "ticker": "VYNE",
+      "action": "BUY",
+      "shares": 834,
+      "price": 0.6,
+      "date": "2026-03-11T10:35:47.239516",
+      "cost": 500.4,
+      "entry_score": 46.8,
+      "entry_confidence": "",
+      "description": "Pick #4, Score 46.8"
+    },
+    {
+      "ticker": "GAMB",
+      "action": "BUY",
+      "shares": 120,
+      "price": 4.14,
+      "date": "2026-03-11T10:35:47.239568",
+      "cost": 496.8,
+      "entry_score": 46.3,
+      "entry_confidence": "",
+      "description": "Pick #5, Score 46.3"
+    },
+    {
+      "ticker": "RSKD",
+      "action": "BUY",
+      "shares": 113,
+      "price": 4.43,
+      "date": "2026-03-11T10:35:47.239617",
+      "cost": 500.59,
+      "entry_score": 45.4,
+      "entry_confidence": "",
+      "description": "Pick #6, Score 45.4"
+    },
+    {
+      "ticker": "EPM",
+      "action": "BUY",
+      "shares": 108,
+      "price": 4.61,
+      "date": "2026-03-11T10:35:47.239664",
+      "cost": 497.88,
+      "entry_score": 42.0,
+      "entry_confidence": "",
+      "description": "Pick #7, Score 42.0"
+    },
+    {
+      "ticker": "FBIO",
+      "action": "BUY",
+      "shares": 156,
+      "price": 3.22,
+      "date": "2026-03-11T10:35:47.239710",
+      "cost": 502.32,
+      "entry_score": 41.4,
+      "entry_confidence": "",
+      "description": "Pick #8, Score 41.4"
+    },
+    {
+      "ticker": "FF",
+      "action": "BUY",
+      "shares": 113,
+      "price": 4.42,
+      "date": "2026-03-11T10:35:47.239755",
+      "cost": 499.46,
+      "entry_score": 38.7,
+      "entry_confidence": "",
+      "description": "Pick #9, Score 38.7"
+    },
+    {
+      "ticker": "HOVR",
+      "action": "BUY",
+      "shares": 259,
+      "price": 1.95,
+      "date": "2026-03-11T10:35:47.239800",
+      "cost": 505.05,
+      "entry_score": 36.5,
+      "entry_confidence": "",
+      "description": "Pick #10, Score 36.5"
+    },
+    {
+      "ticker": "VRA",
+      "action": "SELL",
+      "shares": 196,
+      "price": 2.49,
+      "entry_price": 2.54,
+      "date": "2026-03-11T16:37:15.172783",
+      "return_pct": -1.97,
+      "trade_pnl": -9.8,
+      "sell_reason": "trailing_stop",
+      "description": "Trailing stop: peaked at +11.0%, dropped to $2.4900",
+      "entry_score": 47.4,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 65.2,
+        "technical": 82.9,
+        "pre_pump": 47.6,
+        "fundamental": 47.5,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 45.8,
+        "sector": 50
+      }
+    }
+  ],
+  "score_performance": {
+    "score_40_50": {
+      "trades": 1,
+      "wins": 0,
+      "total_return": -1.97
+    },
+    "pp_LOW": {
+      "trades": 1,
+      "wins": 0,
+      "total_return": -1.97
+    },
+    "reason_trailing_stop": {
+      "trades": 1,
+      "wins": 0,
+      "total_return": -1.97
+    },
+    "dominant_technical": {
+      "trades": 1,
+      "wins": 0,
+      "total_return": -1.97
+    }
+  },
+  "sell_follow_ups": [
+    {
+      "ticker": "VRA",
+      "sell_date": "2026-03-11T16:37:15.172801",
+      "sell_price": 2.49,
+      "entry_price": 2.54,
+      "return_pct": -1.97,
+      "sell_reason": "trailing_stop",
+      "verdict": null,
+      "current_price": null
+    }
+  ],
+  "insights": [
+    {
+      "date": "2026-03-11T16:37:15.174287",
+      "text": "LOSS: VRA -2.0% via trailing_stop (score 47, pp=LOW)"
+    }
+  ],
+  "created": "2026-03-11T10:26:43.720680",
+  "last_updated": "2026-03-11T16:37:15.155801"
+>>>>>>> Stashed changes
 }
