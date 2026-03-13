@@ -938,11 +938,31 @@ class SimulationTab(QWidget):
         self.auto_run_btn.clicked.connect(self._toggle_auto_run)
         btn_row.addWidget(self.auto_run_btn)
 
-        self.reset_btn = QPushButton("Reset Portfolio")
-        self.reset_btn.setStyleSheet(
-            "QPushButton { background-color: #f38ba8; color: #1e1e2e; "
+        self.check_signals_btn = QPushButton("Check Sell Signals")
+        self.check_signals_btn.setStyleSheet(
+            "QPushButton { background-color: #f9e2af; color: #1e1e2e; "
             "padding: 10px 20px; font-weight: bold; }"
             "QPushButton:hover { background-color: #fab387; }"
+        )
+        self.check_signals_btn.clicked.connect(self._start_check_signals)
+        btn_row.addWidget(self.check_signals_btn)
+
+        self.exec_sells_btn = QPushButton("Execute Sell Signals")
+        self.exec_sells_btn.setStyleSheet(
+            "QPushButton { background-color: #f38ba8; color: #1e1e2e; "
+            "padding: 10px 20px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #eba0ac; }"
+            "QPushButton:disabled { background-color: #585b70; color: #6c7086; }"
+        )
+        self.exec_sells_btn.setEnabled(False)
+        self.exec_sells_btn.clicked.connect(self._execute_pending_sells)
+        btn_row.addWidget(self.exec_sells_btn)
+
+        self.reset_btn = QPushButton("Reset Portfolio")
+        self.reset_btn.setStyleSheet(
+            "QPushButton { background-color: #45475a; color: #cdd6f4; "
+            "padding: 10px 20px; font-weight: bold; }"
+            "QPushButton:hover { background-color: #585b70; }"
         )
         self.reset_btn.clicked.connect(self._reset_portfolio)
         btn_row.addWidget(self.reset_btn)
@@ -963,13 +983,13 @@ class SimulationTab(QWidget):
         layout.addWidget(pos_label)
 
         self.pos_table = QTableWidget()
-        self.pos_table.setColumnCount(9)
+        self.pos_table.setColumnCount(10)
         self.pos_table.setHorizontalHeaderLabels([
             "Ticker", "Company", "Shares", "Entry $", "Current $",
-            "P&L $", "P&L %", "Days Held", "Score",
+            "P&L $", "P&L %", "Days Held", "Score", "Action",
         ])
         self.pos_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        self.pos_table.setMaximumHeight(220)
+        self.pos_table.setMaximumHeight(250)
         layout.addWidget(self.pos_table)
 
         # ── Trade History & Learning split ─────────────────────
@@ -1019,8 +1039,10 @@ class SimulationTab(QWidget):
         layout.addWidget(self.log)
 
         self.setLayout(layout)
+        self._pending_sells = []
 
-        QTimer.singleShot(100, self._load_and_display)
+        # Load state and auto-refresh prices on startup
+        QTimer.singleShot(100, self._initial_load)
 
     def _get_engine(self):
         if self.engine is None:
@@ -1029,6 +1051,20 @@ class SimulationTab(QWidget):
         else:
             self.engine.state = self.engine._load_state()
         return self.engine
+
+    def _initial_load(self):
+        """Load saved state and auto-refresh prices if there are positions."""
+        engine = self._get_engine()
+        self._update_summary(engine.get_portfolio_summary())
+        self._update_positions(engine.state.get("positions", []))
+        self._update_history(engine.state.get("trade_history", []))
+        self._update_insights(engine)
+        # Auto-refresh prices on load if positions exist
+        if engine.state.get("positions"):
+            self._append_log("Loading saved simulation state...")
+            self._append_log(f"  {len(engine.state['positions'])} positions, "
+                             f"{len(engine.state.get('trade_history', []))} trades in history")
+            self._start_refresh()
 
     def _load_and_display(self):
         engine = self._get_engine()
@@ -1137,6 +1173,30 @@ class SimulationTab(QWidget):
                 if color:
                     item.setForeground(color)
                 self.pos_table.setItem(row, col, item)
+
+            # Sell button in last column
+            sell_btn = QPushButton("Sell")
+            sell_btn.setStyleSheet(
+                "QPushButton { background-color: #f38ba8; color: #1e1e2e; "
+                "padding: 4px 10px; font-size: 11px; font-weight: bold; }"
+            )
+            sell_btn.clicked.connect(lambda checked, t=pos["ticker"]: self._manual_sell(t))
+            self.pos_table.setCellWidget(row, 9, sell_btn)
+
+    def _manual_sell(self, ticker):
+        """Manually sell a simulation position."""
+        engine = self._get_engine()
+        pos = None
+        for p in engine.state["positions"]:
+            if p["ticker"] == ticker:
+                pos = p
+                break
+        if not pos:
+            return
+        sells = [(pos, "manual_sell", "Manual sell from GUI")]
+        engine.execute_sells(sells, progress_callback=self._append_log)
+        self._append_log(f"Manually sold {ticker}")
+        self._load_and_display()
 
     def _update_history(self, trade_history):
         trades = list(reversed(trade_history[-50:]))
@@ -1287,6 +1347,60 @@ class SimulationTab(QWidget):
         if self.worker and self.worker.isRunning():
             return  # Skip if already running
         self._start_auto_trade()
+
+    def _start_check_signals(self):
+        """Check sell signals for current positions without auto-executing."""
+        self.check_signals_btn.setEnabled(False)
+        self.progress_bar.setVisible(True)
+        self.log.clear()
+        self.status_label.setText("Checking sell signals...")
+        self.status_label.setStyleSheet("color: #89b4fa;")
+        engine = self._get_engine()
+
+        def _run(progress_callback=None):
+            engine.refresh_prices(progress_callback=progress_callback)
+            return engine.check_sell_signals()
+
+        self.worker = Worker(_run)
+        self.worker.progress.connect(self._append_log)
+        self.worker.finished.connect(self._check_signals_done)
+        self.worker.start()
+
+    def _check_signals_done(self, sells):
+        self.progress_bar.setVisible(False)
+        self.check_signals_btn.setEnabled(True)
+        self._pending_sells = sells or []
+        if sells:
+            self._append_log(f"\n{len(sells)} sell signal(s) triggered:")
+            for pos, reason, desc in sells:
+                entry = pos["entry_price"]
+                current = pos.get("current_price", entry)
+                ret = ((current - entry) / entry) * 100
+                self._append_log(f"  SELL {pos['ticker']}: {desc} ({ret:+.1f}%)")
+            self.exec_sells_btn.setEnabled(True)
+            self.status_label.setText(f"{len(sells)} sell signal(s) — click Execute to sell")
+            self.status_label.setStyleSheet("color: #f38ba8; font-weight: bold;")
+        else:
+            self.exec_sells_btn.setEnabled(False)
+            self._append_log("No sell signals triggered.")
+            self.status_label.setText("No sell signals")
+            self.status_label.setStyleSheet("color: #a6e3a1; font-weight: bold;")
+        self._load_and_display()
+
+    def _execute_pending_sells(self):
+        """Execute the sell signals found by _start_check_signals."""
+        sells = getattr(self, "_pending_sells", [])
+        if not sells:
+            return
+        engine = self._get_engine()
+        engine.execute_sells(sells, progress_callback=self._append_log)
+        tickers = [pos["ticker"] for pos, _, _ in sells]
+        self._append_log(f"\nExecuted sells: {', '.join(tickers)}")
+        self._pending_sells = []
+        self.exec_sells_btn.setEnabled(False)
+        self.status_label.setText(f"Sold {len(tickers)} position(s)")
+        self.status_label.setStyleSheet("color: #fab387; font-weight: bold;")
+        self._load_and_display()
 
     def _reset_portfolio(self):
         engine = self._get_engine()
@@ -1650,9 +1764,25 @@ class MyPortfolioTab(QWidget):
         self._load_and_display()
 
     def _check_sell_signals(self):
+        self.check_signals_btn.setEnabled(False)
+        self.progress_bar.setVisible(True)
+        self.log.clear()
+        self.status_label.setText("Checking sell signals...")
+        self.status_label.setStyleSheet("color: #89b4fa;")
         mgr = self._get_manager()
-        mgr.refresh_prices(progress_callback=self._append_log)
-        sells = mgr.check_sell_signals()
+
+        def _run(progress_callback=None):
+            mgr.refresh_prices(progress_callback=progress_callback)
+            return mgr.check_sell_signals()
+
+        self.worker = Worker(_run)
+        self.worker.progress.connect(self._append_log)
+        self.worker.finished.connect(self._check_signals_done)
+        self.worker.start()
+
+    def _check_signals_done(self, sells):
+        self.progress_bar.setVisible(False)
+        self.check_signals_btn.setEnabled(True)
         if sells:
             self._append_log(f"\n{len(sells)} sell signal(s) triggered:")
             for pos, reason, desc in sells:
