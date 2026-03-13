@@ -1,7 +1,28 @@
 {
-  "positions": [],
-  "trade_history": [],
+  "positions": [
+    {
+      "ticker": "FOSL",
+      "company": "",
+      "shares": 208,
+      "entry_price": 4.769,
+      "entry_date": "2026-03-13T14:09:04.447062",
+      "current_price": 4.77,
+      "high_since_entry": 4.99,
+      "trailing_stop_active": false,
+      "last_updated": "2026-03-13T14:09:14.261215"
+    }
+  ],
+  "trade_history": [
+    {
+      "ticker": "FOSL",
+      "action": "BUY",
+      "shares": 208,
+      "price": 4.769,
+      "date": "2026-03-13T14:09:04.447081",
+      "cost": 991.95
+    }
+  ],
   "watchlist": [],
   "created": "2026-03-10T16:46:00.924157",
-  "last_updated": "2026-03-10T16:46:00.924167"
+  "last_updated": "2026-03-13T14:09:14.261215"
 }
