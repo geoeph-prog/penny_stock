@@ -279,40 +279,52 @@ class AlertMonitor:
         now = datetime.now()
 
         # 1. Check positions + sell triggers
-        sells = self.check_positions()
-        if sells:
-            self._log(f"{len(sells)} sell trigger(s) detected!")
-            for pos, reason, desc in sells:
-                self._log(f"  SELL {pos['ticker']}: {desc}")
-            self.send_sell_alerts(sells)
+        try:
+            sells = self.check_positions()
+            if sells:
+                self._log(f"{len(sells)} sell trigger(s) detected!")
+                for pos, reason, desc in sells:
+                    self._log(f"  SELL {pos['ticker']}: {desc}")
+                self.send_sell_alerts(sells)
+        except Exception as e:
+            self._log(f"Position check failed: {e}")
+            logger.exception("Position check error")
 
         # 2. Scan for new picks (on schedule)
-        last_scan = self.state.get("last_scan")
-        hours_since_scan = 999
-        if last_scan:
-            try:
-                last_dt = datetime.fromisoformat(last_scan)
-                hours_since_scan = (now - last_dt).total_seconds() / 3600
-            except Exception:
-                pass
-
-        if hours_since_scan >= ALERT_SCAN_HOURS:
-            picks = self.scan_for_picks()
-            if picks:
-                self.send_buy_alerts(picks)
-
-        # 3. Daily summary near market close
-        if _market_close_today():
-            last_summary = self.state.get("last_daily_summary")
-            sent_today = False
-            if last_summary:
+        try:
+            last_scan = self.state.get("last_scan")
+            hours_since_scan = 999
+            if last_scan:
                 try:
-                    last_dt = datetime.fromisoformat(last_summary)
-                    sent_today = last_dt.date() == now.date()
+                    last_dt = datetime.fromisoformat(last_scan)
+                    hours_since_scan = (now - last_dt).total_seconds() / 3600
                 except Exception:
                     pass
-            if not sent_today:
-                self.send_daily_summary()
+
+            if hours_since_scan >= ALERT_SCAN_HOURS:
+                picks = self.scan_for_picks()
+                if picks:
+                    self.send_buy_alerts(picks)
+        except Exception as e:
+            self._log(f"Pick scan failed: {e}")
+            logger.exception("Pick scan error")
+
+        # 3. Daily summary near market close
+        try:
+            if _market_close_today():
+                last_summary = self.state.get("last_daily_summary")
+                sent_today = False
+                if last_summary:
+                    try:
+                        last_dt = datetime.fromisoformat(last_summary)
+                        sent_today = last_dt.date() == now.date()
+                    except Exception:
+                        pass
+                if not sent_today:
+                    self.send_daily_summary()
+        except Exception as e:
+            self._log(f"Daily summary failed: {e}")
+            logger.exception("Daily summary error")
 
     def start(self, log_callback=None):
         """Start the monitoring loop in a background thread."""

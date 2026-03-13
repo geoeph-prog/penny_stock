@@ -202,7 +202,10 @@ def send_portfolio_summary(summary: dict, positions: list) -> bool:
             <td style="padding:6px;">{trail}</td>
         </tr>"""
 
-    val_color = "#a6e3a1" if summary["total_return_pct"] >= 0 else "#f38ba8"
+    total_pnl = summary.get("total_pnl", summary.get("total_return", 0))
+    cost_basis = summary.get("cost_basis", summary.get("initial_capital", 0))
+    total_return_pct = ((total_pnl / cost_basis) * 100) if cost_basis > 0 else 0
+    val_color = "#a6e3a1" if total_return_pct >= 0 else "#f38ba8"
 
     html = f"""
     <div style="font-family: monospace; background:#1e1e2e; color:#cdd6f4; padding:20px;">
@@ -215,11 +218,11 @@ def send_portfolio_summary(summary: dict, positions: list) -> bool:
                 <div style="font-size:20px; color:{val_color}; font-weight:bold;">
                     ${summary['total_value']:,.2f}
                 </div>
-                <div style="color:{val_color};">{summary['total_return_pct']:+.1f}%</div>
+                <div style="color:{val_color};">{total_return_pct:+.1f}%</div>
             </div>
             <div style="background:#313244; padding:12px 20px; border-radius:8px;">
-                <div style="color:#585b70; font-size:11px;">CASH</div>
-                <div style="font-size:20px;">${summary['cash']:,.2f}</div>
+                <div style="color:#585b70; font-size:11px;">UNREALIZED P&amp;L</div>
+                <div style="font-size:20px;">${summary.get('unrealized_pnl', 0):+,.2f}</div>
             </div>
             <div style="background:#313244; padding:12px 20px; border-radius:8px;">
                 <div style="color:#585b70; font-size:11px;">WIN RATE</div>
@@ -243,13 +246,13 @@ def send_portfolio_summary(summary: dict, positions: list) -> bool:
     </div>"""
 
     text = (
-        f"PORTFOLIO: ${summary['total_value']:,.2f} ({summary['total_return_pct']:+.1f}%)\n"
-        f"Cash: ${summary['cash']:,.2f} | Positions: {summary['num_positions']}\n"
+        f"PORTFOLIO: ${summary['total_value']:,.2f} ({total_return_pct:+.1f}%)\n"
+        f"Unrealized: ${summary.get('unrealized_pnl', 0):+,.2f} | Positions: {summary['num_positions']}\n"
         f"Win Rate: {summary['win_rate']:.0f}% ({summary['total_trades']} trades)\n"
     )
 
     return send_email(
-        subject=f"Portfolio: ${summary['total_value']:,.2f} ({summary['total_return_pct']:+.1f}%)",
+        subject=f"Portfolio: ${summary['total_value']:,.2f} ({total_return_pct:+.1f}%)",
         body_html=html,
         body_text=text,
     )
