@@ -153,8 +153,10 @@ class AlertMonitor:
                 high_s = high_s.dropna()
 
                 if not close_s.empty:
-                    pos["current_price"] = round(float(close_s.iloc[-1]), 4)
-                    recent_high = float(high_s.max())
+                    last_close = close_s.iloc[-1]
+                    pos["current_price"] = round(float(last_close.item() if hasattr(last_close, 'item') else last_close), 4)
+                    high_max = high_s.max()
+                    recent_high = float(high_max.item() if hasattr(high_max, 'item') else high_max)
                     if recent_high > pos.get("high_since_entry", 0):
                         pos["high_since_entry"] = round(recent_high, 4)
                     pos["last_updated"] = now.isoformat()

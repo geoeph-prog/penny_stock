@@ -243,6 +243,7 @@ def score_fundamentals(ticker: str, info: dict = None) -> dict:
     cash = _score_cash_position(info)
     squeeze = _score_squeeze_composite(info)
     dilution = _score_dilution_risk(ticker)
+    insider_buy = _score_insider_buying(ticker)
 
     composite = (
         rev["score"] * FUNDAMENTAL_WEIGHTS["revenue_growth"] +
@@ -254,8 +255,13 @@ def score_fundamentals(ticker: str, info: dict = None) -> dict:
     squeeze_adj = (squeeze["score"] - 50) * 0.10
     # Dilution risk as penalty (-0 to -8 pts)
     dilution_adj = -dilution["penalty"]
+    # Insider buying bonus (+0 to +7 pts)
+    # VRA validation: CEO bought 514K shares at $1.89-2.00 three months
+    # before the 36% earnings-driven pump. Insider buying on micro-caps
+    # is a strong conviction signal — management putting their own money in.
+    insider_adj = insider_buy["bonus"]
 
-    composite = max(0, min(100, composite + squeeze_adj + dilution_adj))
+    composite = max(0, min(100, composite + squeeze_adj + dilution_adj + insider_adj))
 
     return {
         "score": round(composite, 1),
@@ -264,6 +270,7 @@ def score_fundamentals(ticker: str, info: dict = None) -> dict:
         "cash_position": cash,
         "squeeze_composite": squeeze,
         "dilution_risk": dilution,
+        "insider_buying": insider_buy,
     }
 
 
@@ -433,6 +440,47 @@ def _score_cash_position(info: dict) -> dict:
         "total_debt": total_debt,
         "operating_cashflow": operating_cf,
         "current_ratio": current_ratio,
+    }
+
+
+def _score_insider_buying(ticker: str) -> dict:
+    """
+    Score recent insider buying activity.
+    Insider purchases on micro/small-cap stocks are a strong conviction signal.
+
+    VRA: CEO Ian Bickley bought 514K shares at $1.89-2.00 in Dec 2025,
+    three months before the stock pumped 36% on earnings. Management
+    putting their own money in = they know something good is coming.
+
+    Uses SEC EDGAR insider transaction data (already fetched by
+    get_insider_transactions but previously not scored in composite).
+    """
+    try:
+        insider = get_insider_transactions(ticker, days_back=90)
+    except Exception:
+        return {"bonus": 0, "net_buys": 0, "recent_buys": 0, "recent_sells": 0}
+
+    buys = insider.get("recent_buys", 0)
+    sells = insider.get("recent_sells", 0)
+    net = buys - sells
+
+    # Bonus for net insider buying (capped at +7 pts)
+    if net >= 5:
+        bonus = 7    # Heavy insider accumulation (multiple insiders buying)
+    elif net >= 3:
+        bonus = 5    # Strong insider buying
+    elif net >= 1:
+        bonus = 3    # Some insider buying
+    elif net <= -3:
+        bonus = -3   # Significant insider selling (mild penalty)
+    else:
+        bonus = 0
+
+    return {
+        "bonus": bonus,
+        "net_buys": net,
+        "recent_buys": buys,
+        "recent_sells": sells,
     }
 
 
