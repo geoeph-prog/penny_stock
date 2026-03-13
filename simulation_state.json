@@ -1,5 +1,5 @@
 {
-  "cash": 0.3399999999993497,
+  "cash": 488.37999999999937,
   "initial_capital": 5000.0,
   "positions": [
     {
@@ -22,35 +22,10 @@
         "market": 45.8,
         "sector": 50
       },
-      "current_price": 2.68,
+      "current_price": 2.66,
       "high_since_entry": 2.81,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-11T10:46:25.818681"
-    },
-    {
-      "ticker": "VRA",
-      "company": "Vera Bradley Inc",
-      "shares": 196,
-      "entry_price": 2.54,
-      "entry_date": "2026-03-11T10:35:47.239254",
-      "entry_score": 47.4,
-      "entry_confidence": "",
-      "pre_pump_confidence": "LOW",
-      "pre_pump_confluence": 1,
-      "sub_scores": {
-        "setup": 65.2,
-        "technical": 82.9,
-        "pre_pump": 47.6,
-        "fundamental": 47.5,
-        "catalyst": 55,
-        "sentiment": 50.0,
-        "market": 45.8,
-        "sector": 50
-      },
-      "current_price": 2.585,
-      "high_since_entry": 2.82,
-      "trailing_stop_active": false,
-      "last_updated": "2026-03-11T10:46:25.818681"
+      "last_updated": "2026-03-11T16:37:15.155801"
     },
     {
       "ticker": "DTI",
@@ -72,10 +47,10 @@
         "market": 49.5,
         "sector": 65
       },
-      "current_price": 3.7904,
+      "current_price": 3.61,
       "high_since_entry": 3.924,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-11T10:46:25.818681"
+      "last_updated": "2026-03-11T16:37:15.155801"
     },
     {
       "ticker": "VYNE",
@@ -97,10 +72,10 @@
         "market": 43.2,
         "sector": 40
       },
-      "current_price": 0.5969,
+      "current_price": 0.6,
       "high_since_entry": 0.609,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-11T10:46:25.818681"
+      "last_updated": "2026-03-11T16:37:15.155801"
     },
     {
       "ticker": "GAMB",
@@ -122,10 +97,10 @@
         "market": 45.8,
         "sector": 50
       },
-      "current_price": 4.1465,
+      "current_price": 4.14,
       "high_since_entry": 4.53,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-11T10:46:25.818681"
+      "last_updated": "2026-03-11T16:37:15.155801"
     },
     {
       "ticker": "RSKD",
@@ -147,10 +122,10 @@
         "market": 43.2,
         "sector": 40
       },
-      "current_price": 4.4512,
+      "current_price": 4.36,
       "high_since_entry": 4.565,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-11T10:46:25.818681"
+      "last_updated": "2026-03-11T16:37:15.155801"
     },
     {
       "ticker": "EPM",
@@ -172,10 +147,10 @@
         "market": 49.5,
         "sector": 65
       },
-      "current_price": 4.64,
+      "current_price": 4.78,
       "high_since_entry": 4.8,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-11T10:46:25.818681"
+      "last_updated": "2026-03-11T16:37:15.155801"
     },
     {
       "ticker": "FBIO",
@@ -197,10 +172,10 @@
         "market": 43.2,
         "sector": 40
       },
-      "current_price": 3.24,
+      "current_price": 3.22,
       "high_since_entry": 3.47,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-11T10:46:25.818681"
+      "last_updated": "2026-03-11T16:37:15.155801"
     },
     {
       "ticker": "FF",
@@ -222,10 +197,10 @@
         "market": 45.8,
         "sector": 50
       },
-      "current_price": 4.485,
+      "current_price": 4.45,
       "high_since_entry": 4.64,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-11T10:46:25.818681"
+      "last_updated": "2026-03-11T16:37:15.155801"
     },
     {
       "ticker": "HOVR",
@@ -247,10 +222,10 @@
         "market": 39.5,
         "sector": 25
       },
-      "current_price": 1.94,
+      "current_price": 1.92,
       "high_since_entry": 2.04,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-11T10:46:25.818681"
+      "last_updated": "2026-03-11T16:37:15.155801"
     }
   ],
   "trade_history": [
@@ -363,11 +338,73 @@
       "entry_score": 36.5,
       "entry_confidence": "",
       "description": "Pick #10, Score 36.5"
+    },
+    {
+      "ticker": "VRA",
+      "action": "SELL",
+      "shares": 196,
+      "price": 2.49,
+      "entry_price": 2.54,
+      "date": "2026-03-11T16:37:15.172783",
+      "return_pct": -1.97,
+      "trade_pnl": -9.8,
+      "sell_reason": "trailing_stop",
+      "description": "Trailing stop: peaked at +11.0%, dropped to $2.4900",
+      "entry_score": 47.4,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 65.2,
+        "technical": 82.9,
+        "pre_pump": 47.6,
+        "fundamental": 47.5,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 45.8,
+        "sector": 50
+      }
     }
   ],
-  "score_performance": {},
-  "sell_follow_ups": [],
-  "insights": [],
+  "score_performance": {
+    "score_40_50": {
+      "trades": 1,
+      "wins": 0,
+      "total_return": -1.97
+    },
+    "pp_LOW": {
+      "trades": 1,
+      "wins": 0,
+      "total_return": -1.97
+    },
+    "reason_trailing_stop": {
+      "trades": 1,
+      "wins": 0,
+      "total_return": -1.97
+    },
+    "dominant_technical": {
+      "trades": 1,
+      "wins": 0,
+      "total_return": -1.97
+    }
+  },
+  "sell_follow_ups": [
+    {
+      "ticker": "VRA",
+      "sell_date": "2026-03-11T16:37:15.172801",
+      "sell_price": 2.49,
+      "entry_price": 2.54,
+      "return_pct": -1.97,
+      "sell_reason": "trailing_stop",
+      "verdict": null,
+      "current_price": null
+    }
+  ],
+  "insights": [
+    {
+      "date": "2026-03-11T16:37:15.174287",
+      "text": "LOSS: VRA -2.0% via trailing_stop (score 47, pp=LOW)"
+    }
+  ],
   "created": "2026-03-11T10:26:43.720680",
-  "last_updated": "2026-03-11T10:46:25.818681"
+  "last_updated": "2026-03-11T16:37:15.155801"
 }
