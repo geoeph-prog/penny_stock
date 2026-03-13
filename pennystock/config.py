@@ -3,7 +3,7 @@
 # ── Algorithm Version ─────────────────────────────────────────────
 # Bump on every change. Major.Minor.Patch
 # Major = new strategy/architecture, Minor = new signals, Patch = tuning
-ALGORITHM_VERSION = "5.1.0"
+ALGORITHM_VERSION = "5.1.1"
 
 # ── Price & Volume Filters ──────────────────────────────────────────
 MIN_PRICE = 0.50   # Expanded from $0.10 to include more reputable sub-$5 stocks
@@ -180,12 +180,17 @@ PENALTY_MICRO_EMPLOYEES_THRESHOLD = 10  # < 10 FTEs = suspicious
 # v3.0: Rebalanced for pre-pump detection. Setup + pre-pump signals dominate.
 # v5.0: Expanded to $0.50-$5.00. Fundamentals still secondary to setup signals,
 # but the wider range now includes more legitimate companies.
+# v5.1.1: Catalyst weight bumped 10%->13% after VRA validation (earnings beat
+# on thin-volume micro-cap with moderate SI -> +36%). Catalyst-driven squeezes
+# on earnings surprises are high-conviction setups. Fundamental weight bumped
+# 10%->12% (insider buying + earnings growth are strong predictors).
+# Pre-pump reduced 35%->30% to compensate -- still the largest single weight.
 WEIGHTS = {
     "setup":        0.25,   # Float, insider ownership, proximity-to-low, P/B
     "technical":    0.20,   # RSI, MACD, StochRSI, volume, price trend, ADX
-    "pre_pump":     0.35,   # NEW: Short interest change, float rotation, volume accel, compliance risk
-    "fundamental":  0.10,   # Revenue growth, short interest, cash position
-    "catalyst":     0.10,   # News-based catalysts
+    "pre_pump":     0.30,   # Short interest change, float rotation, volume accel, compliance risk
+    "fundamental":  0.12,   # Revenue growth, short interest, cash position, insider buying
+    "catalyst":     0.13,   # News-based catalysts (earnings beats, partnerships, FDA)
 }
 
 # Pre-pump conviction bonus: when the pre-pump module has HIGH confidence
@@ -336,6 +341,12 @@ POSITIVE_CATALYSTS = [
     "deal", "award", "milestone", "collaboration", "agreement",
     "buyback", "repurchase", "analyst upgrade", "price target",
     "forbes", "featured in", "accelerating",
+    # v5.1.1: Added after VRA validation — earnings catalyst + turnaround
+    # VRA beat EPS estimate by 800% and returned to profitability -> +36%
+    "return to profit", "profitability", "earnings surprise",
+    "beats estimate", "exceeds expectations", "record quarter",
+    "transformation", "turnaround", "new ceo", "new chairman",
+    "insider buying", "insider purchase",
 ]
 NEGATIVE_CATALYSTS = [
     "dilution", "offering", "lawsuit", "delisting", "bankruptcy",

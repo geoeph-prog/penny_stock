@@ -726,6 +726,8 @@ def pick_stocks(top_n=5, progress_callback=None):
                     "si_change_pct": pre_pump_result.get("signals", {}).get("short_interest_change", {}).get("change_pct", 0),
                     "float_rotation": pre_pump_result.get("signals", {}).get("float_rotation", {}).get("rotation", 0),
                     "supply_lock_score": pre_pump_result.get("signals", {}).get("supply_lock", {}).get("score", 0),
+                    "insider_buying_bonus": fund_result.get("insider_buying", {}).get("bonus", 0),
+                    "insider_net_buys": fund_result.get("insider_buying", {}).get("net_buys", 0),
                 },
                 "risk_management": _compute_risk_management(
                     candidate.get("price", 0),
