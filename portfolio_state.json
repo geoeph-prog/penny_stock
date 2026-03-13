@@ -6,10 +6,10 @@
       "shares": 208,
       "entry_price": 4.769,
       "entry_date": "2026-03-13T14:09:04.447062",
-      "current_price": 4.77,
+      "current_price": 4.74,
       "high_since_entry": 4.99,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-13T14:09:14.261215"
+      "last_updated": "2026-03-13T14:40:21.467489"
     }
   ],
   "trade_history": [
@@ -24,5 +24,5 @@
   ],
   "watchlist": [],
   "created": "2026-03-10T16:46:00.924157",
-  "last_updated": "2026-03-13T14:09:14.261215"
+  "last_updated": "2026-03-13T14:40:21.467489"
 }

@@ -1,0 +1,260 @@
+
+════════════════════════════════════════════════════════════════════════
+  DEEP DIVE: FOSL  |  Stock Analyzer v5.1.1
+  Generated: 2026-03-13 14:42:58
+════════════════════════════════════════════════════════════════════════
+
+  Fetching data...
+
+────────────────────────────────────────────────────────────────────────
+  Fossil Group, Inc. (FOSL)
+────────────────────────────────────────────────────────────────────────
+  Sector: Consumer Cyclical  |  Industry: Footwear & Accessories  |  Country: United States
+  Price: $4.7000
+
+────────────────────────────────────────────────────────────────────────
+  PRICE MOVEMENTS
+────────────────────────────────────────────────────────────────────────
+
+  Period         Change        High         Low
+  ────────────────────────────────────────────
+  1 Day           -1.4%         N/A         N/A
+  1 Week         +17.2%     $4.9900     $3.7700
+  1 Month        +20.8%     $5.0000     $3.6100
+  3 Month        +22.7%     $5.0000     $3.2400
+  6 Month           N/A     $5.0000     $1.7000
+  1 Year            N/A     $5.0000     $0.8600
+  3 Year         +31.5%         N/A         N/A
+
+  52-Week Range: $0.8600 - $5.0000
+  52-Week Position: 92.8% (0%=at low, 100%=at high)
+
+  Avg Volume (50d): 670,433
+  Avg Volume (10d): 1,195,880
+  Volume Trend: 1.78x (increasing)
+
+────────────────────────────────────────────────────────────────────────
+  COMPANY FUNDAMENTALS
+────────────────────────────────────────────────────────────────────────
+
+  Market Cap:          $265.02M
+  Shares Outstanding:  56,387,431
+  Float Shares:        45,588,779
+  Float Ratio:         80.8%
+  Insider Ownership:   10.2%
+  Institutional Own:   60.9%
+  Employees:           N/A
+
+  Revenue (TTM):       $1,004.40M
+  Revenue Growth:      -18.1%
+  Earnings Growth:     0.0%
+  Gross Margins:       56.1%
+  Profit Margins:      -7.8%
+  Operating Margins:   7.1%
+
+  Total Cash:          $95.80M
+  Total Debt:          $282.20M
+  Operating Cashflow:  N/A
+  Free Cash Flow:      N/A
+  Current Ratio:       1.55
+  Debt/Equity:         325.115
+  Book Value/Share:    $1.56
+  Price/Book:          3.016688
+
+  Short Interest:
+    Shares Short:      6,149,857
+    Shares Short Prior:5,733,320
+    SI Change:         +7.3%
+    Short % of Float:  11.0%
+    Short Ratio (DTC): 8.65
+
+────────────────────────────────────────────────────────────────────────
+  QUALITY GATE  (12 Kill Filters + 6 Penalty Checks)
+────────────────────────────────────────────────────────────────────────
+
+  PASSED all 12 kill filters
+  No penalties applied
+
+────────────────────────────────────────────────────────────────────────
+  PRE-PUMP SIGNAL DETECTION  (7 Signals)
+────────────────────────────────────────────────────────────────────────
+
+  Overall: 47.0/100  |  Confluence: 2/7 bullish  |  Confidence: LOW
+
+  Signal                    Score  Status                Details
+  ────────────────────────────────────────────────────────────────────
+     short_interest_change     40  bearish               SI change: +7.3% (6,149,857 vs 5,733,320)
+     float_rotation            25  bearish               rotation=0.026 (vol=1,195,880 / float=45,588,779)
+     compliance_risk           50  neutral               price=$4.7000 below_$1=False
+  >>>volume_acceleration       73  BULLISH               10d/avg ratio=1.78x unusual_days=2
+     supply_lock               50  neutral               insider=10.2% float=45,588,779
+  >>>squeeze_setup             70  BULLISH               SI%=11.0% DTC=8.7
+     beaten_down               25  bearish               52w pos=92.8% ($0.86-$5.00)
+
+────────────────────────────────────────────────────────────────────────
+  TECHNICAL ANALYSIS
+────────────────────────────────────────────────────────────────────────
+
+  Overall Technical Score: 74.3/100
+
+  Momentum Indicators:
+    RSI (14):          49.2
+    StochRSI:          9.8
+    MACD Histogram:    -0.0074
+    Stochastic %K:     78.5
+    MFI:               63.5
+
+  Trend Indicators:
+    ADX:               32.3
+    +DI / -DI:         29.4 / 24.9
+    Trend:             BULLISH (moderate, ADX=32)
+    OBV Trend:         up
+
+  Price Trends:
+     5d Change:        +17.2%
+    20d Change:        +24.0%
+
+  Volatility:
+    ATR:               0.3382
+    Volume Spike:      0.65x average
+    BB Squeeze:        No (intensity: 0.162)
+    BB Position:       0.73 (0=lower band, 1=upper)
+
+  Patterns:
+    Consolidating:     No (score: 0)
+    Unusual Volume:    2 days (accumulating: No)
+    Vol/Price Diverg:  neutral
+    Candlestick:       hammer, doji
+
+  Support/Resistance:
+    Support:           $3.6550 (22.8% away)
+    Resistance:        N/A
+
+────────────────────────────────────────────────────────────────────────
+  SETUP SCORE  (Float, Insider, Proximity, P/B)
+────────────────────────────────────────────────────────────────────────
+
+  Overall Setup Score: 32.2/100
+
+  Float Tightness:     40/100
+    Float Shares:      45,588,779
+    Shares Outstanding:56,387,431
+    Float Ratio:       80.8%
+
+  Insider Ownership:   40/100
+    Insider %:         10.2%
+    Institutional %:   60.9%
+
+  Proximity to Low:    15/100
+    Position:          92.8% (0%=at low, 100%=at high)
+    Range:             $0.8600 - $5.0000
+
+  Price/Book:          30/100
+    P/B Ratio:         3.017
+    Book Value:        $1.56
+
+────────────────────────────────────────────────────────────────────────
+  FUNDAMENTAL SCORE  (Revenue, Short Interest, Cash, Squeeze)
+────────────────────────────────────────────────────────────────────────
+
+  Overall Fundamental Score: 48.5/100
+
+  Revenue Growth:      38/100
+    YoY Growth:        -18.1%
+    TTM Revenue:       $1,004.4M
+
+  Short Interest:      85/100
+    SI % of Float:     11.0%
+    Days to Cover:     8.7
+    Shares Short:      6,149,857
+    Prior Period:      5,733,320
+
+  Cash Position:       52/100
+    Cash:              $95.8M
+    Debt:              $282.2M
+    Current Ratio:     1.55
+
+  Squeeze Composite:   52/100
+    Is Squeeze Setup:  No
+
+  Dilution Risk:
+    Dilution Filings:  2 in last 6 months
+    Penalty:           -8pts
+
+────────────────────────────────────────────────────────────────────────
+  CATALYST ASSESSMENT  (News Analysis)
+────────────────────────────────────────────────────────────────────────
+
+  Catalyst Score: 55/100
+  Articles Found: 10
+  Catalyst Density: 0.00
+
+  Recent News (10 articles):
+
+────────────────────────────────────────────────────────────────────────
+  SENTIMENT ANALYSIS  (Reddit + StockTwits + Twitter)
+────────────────────────────────────────────────────────────────────────
+
+  Combined Sentiment Score: 32/100
+  Combined Sentiment: -0.272 (-1 to +1)
+  Total Mentions: 1
+  Buzz Score: 13.9/100
+  Search Aliases: Fossil  (company name matches included)
+
+  Reddit (1 mentions):
+    Avg Sentiment:   -0.272
+    Positive:        0%
+    Subreddits:
+      r/StockMarket: 1 mention(s)
+      r/pennystocks: 0 mention(s)
+      r/RobinHoodPennyStocks: 0 mention(s)
+      r/Shortsqueeze: 0 mention(s)
+      r/stocks: 0 mention(s)
+
+  StockTwits (0 messages):
+    No StockTwits data found
+
+  Twitter (0 tweets):
+    Twitter analysis disabled (no account configured)
+
+────────────────────────────────────────────────────────────────────────
+  COMPOSITE SCORE  (v5.1.1 MEGA-ALGORITHM)
+────────────────────────────────────────────────────────────────────────
+  Component             Score  Weight  Contribution
+  ────────────────────────────────────────────────────
+  Setup                  32.2    25%           8.1
+  Technical              74.3    20%          14.9
+  Pre-Pump               47.0    30%          14.1
+  Fundamental            48.5    12%           5.8
+  Catalyst               55.0    13%           7.2
+  ────────────────────────────────────────────────────
+  Base Score                                  50.0
+  ────────────────────────────────────────────────────
+  FINAL SCORE                                 50.0
+  CONFIDENCE                                   LOW
+
+  *** WEAK SIGNAL -- Consider passing or waiting for better entry ***
+
+────────────────────────────────────────────────────────────────────────
+  RISK MANAGEMENT
+────────────────────────────────────────────────────────────────────────
+
+  ATR-Based Stop Loss:
+    ATR (14):          $0.3382
+    Stop (2x ATR):     $4.0236
+    Risk:              14.4%
+
+  Support-Based Stop:
+    Support Level:     $3.6550
+    Stop (3% below):   $3.5453
+    Risk:              24.6%
+
+  Position Sizing (1% account risk):
+    $ 1,000 account:    14 shares ($   65.80 position)
+    $ 5,000 account:    73 shares ($  343.10 position)
+    $10,000 account:   147 shares ($  690.90 position)
+
+════════════════════════════════════════════════════════════════════════
+  Analysis completed in 63.0s
+════════════════════════════════════════════════════════════════════════
+

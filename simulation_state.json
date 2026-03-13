@@ -22,10 +22,10 @@
         "market": 45.8,
         "sector": 50
       },
-      "current_price": 2.62,
+      "current_price": 2.6099,
       "high_since_entry": 2.81,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-13T13:44:22.632240"
+      "last_updated": "2026-03-13T14:41:02.011660"
     },
     {
       "ticker": "DTI",
@@ -47,10 +47,10 @@
         "market": 49.5,
         "sector": 65
       },
-      "current_price": 3.66,
+      "current_price": 3.58,
       "high_since_entry": 3.924,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-13T13:44:22.632240"
+      "last_updated": "2026-03-13T14:41:02.011660"
     },
     {
       "ticker": "VYNE",
@@ -72,10 +72,10 @@
         "market": 43.2,
         "sector": 40
       },
-      "current_price": 0.6,
+      "current_price": 0.5969,
       "high_since_entry": 0.609,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-13T13:44:22.632240"
+      "last_updated": "2026-03-13T14:41:02.011660"
     },
     {
       "ticker": "GAMB",
@@ -97,10 +97,10 @@
         "market": 45.8,
         "sector": 50
       },
-      "current_price": 4.225,
+      "current_price": 4.175,
       "high_since_entry": 4.551,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-13T13:44:22.632240"
+      "last_updated": "2026-03-13T14:41:02.011660"
     },
     {
       "ticker": "RSKD",
@@ -122,10 +122,10 @@
         "market": 43.2,
         "sector": 40
       },
-      "current_price": 4.13,
+      "current_price": 4.145,
       "high_since_entry": 4.565,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-13T13:44:22.632240"
+      "last_updated": "2026-03-13T14:41:02.011660"
     },
     {
       "ticker": "EPM",
@@ -147,10 +147,10 @@
         "market": 49.5,
         "sector": 65
       },
-      "current_price": 4.7161,
+      "current_price": 4.722,
       "high_since_entry": 4.86,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-13T13:44:22.632240"
+      "last_updated": "2026-03-13T14:41:02.011660"
     },
     {
       "ticker": "FBIO",
@@ -175,7 +175,7 @@
       "current_price": 3.14,
       "high_since_entry": 3.47,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-13T13:44:22.632240"
+      "last_updated": "2026-03-13T14:41:02.011660"
     },
     {
       "ticker": "FF",
@@ -197,10 +197,10 @@
         "market": 45.8,
         "sector": 50
       },
-      "current_price": 4.235,
+      "current_price": 4.225,
       "high_since_entry": 4.64,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-13T13:44:22.632240"
+      "last_updated": "2026-03-13T14:41:02.011660"
     },
     {
       "ticker": "HOVR",
@@ -222,10 +222,10 @@
         "market": 39.5,
         "sector": 25
       },
-      "current_price": 1.8522,
+      "current_price": 1.8114,
       "high_since_entry": 2.04,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-13T13:44:22.632240"
+      "last_updated": "2026-03-13T14:41:02.011660"
     },
     {
       "ticker": "FOSL",
@@ -247,10 +247,10 @@
         "market": 33.0,
         "sector": 50
       },
-      "current_price": 4.72,
-      "high_since_entry": 4.72,
+      "current_price": 4.735,
+      "high_since_entry": 4.99,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-13T13:58:02.530554"
+      "last_updated": "2026-03-13T14:41:02.011660"
     }
   ],
   "trade_history": [
@@ -442,5 +442,5 @@
     }
   ],
   "created": "2026-03-11T10:26:43.720680",
-  "last_updated": "2026-03-13T13:44:22.632240"
+  "last_updated": "2026-03-13T14:41:02.011660"
 }
