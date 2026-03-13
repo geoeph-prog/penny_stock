@@ -1,5 +1,6 @@
 {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   "cash": 5000.0,
   "initial_capital": 5000.0,
   "positions": [],
@@ -10,6 +11,8 @@
   "created": "2026-03-11T10:07:56.736772",
   "last_updated": "2026-03-11T10:07:56.736785"
 =======
+=======
+>>>>>>> Stashed changes
   "cash": 488.37999999999937,
   "initial_capital": 5000.0,
   "positions": [
@@ -418,5 +421,8 @@
   ],
   "created": "2026-03-11T10:26:43.720680",
   "last_updated": "2026-03-11T16:37:15.155801"
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }
