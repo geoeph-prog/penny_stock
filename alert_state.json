@@ -1,9 +1,9 @@
 {
-  "last_scan": "2026-03-17T14:26:13.177762",
-  "last_price_check": "2026-03-17T17:44:39.124910",
+  "last_scan": "2026-03-17T18:49:07.750041",
+  "last_price_check": "2026-03-17T18:38:54.115389",
   "last_daily_summary": "2026-03-10T16:24:21.029011",
-  "alerts_sent": 3,
-  "buy_alerts": 2,
+  "alerts_sent": 4,
+  "buy_alerts": 3,
   "sell_alerts": 0,
   "summary_alerts": 1,
   "history": [
@@ -21,6 +21,11 @@
       "time": "2026-03-10T20:45:37.990483",
       "type": "BUY",
       "detail": "MARPS"
+    },
+    {
+      "time": "2026-03-17T18:49:09.872317",
+      "type": "BUY",
+      "detail": "VBIX"
     }
   ]
 }
