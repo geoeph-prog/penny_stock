@@ -43,18 +43,32 @@ class SimulationEngine:
     # ─── State persistence ────────────────────────────────────
 
     def _load_state(self) -> dict:
-        if os.path.exists(STATE_PATH):
-            try:
-                with open(STATE_PATH, "r", encoding="utf-8") as f:
-                    return json.load(f)
-            except Exception as e:
-                logger.error(f"Failed to load simulation state: {e}")
+        bak_path = STATE_PATH + ".bak"
+        for path in [STATE_PATH, bak_path]:
+            if os.path.exists(path):
+                try:
+                    with open(path, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                    if path == bak_path:
+                        logger.warning("Loaded simulation state from backup file")
+                    return data
+                except Exception as e:
+                    logger.error(f"Failed to load {path}: {e}")
         return self._initial_state()
 
     def _save_state(self):
         try:
-            with open(STATE_PATH, "w", encoding="utf-8") as f:
+            tmp_path = STATE_PATH + ".tmp"
+            bak_path = STATE_PATH + ".bak"
+            with open(tmp_path, "w", encoding="utf-8") as f:
                 json.dump(self.state, f, indent=2)
+            # Backup current file before replacing
+            if os.path.exists(STATE_PATH):
+                try:
+                    os.replace(STATE_PATH, bak_path)
+                except OSError:
+                    pass
+            os.replace(tmp_path, STATE_PATH)
         except Exception as e:
             logger.error(f"Failed to save simulation state: {e}")
 

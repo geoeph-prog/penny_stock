@@ -13,3 +13,5 @@ build/
 venv/
 .venv/
 alert_config.json
+*.tmp
+*.bak
