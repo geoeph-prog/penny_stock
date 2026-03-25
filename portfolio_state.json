@@ -6,10 +6,10 @@
       "shares": 820,
       "entry_price": 0.6,
       "entry_date": "2026-03-11T20:20:32.943092",
-      "current_price": 0.6052,
+      "current_price": 0.617,
       "high_since_entry": 0.63,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-25T14:17:36.968974"
+      "last_updated": "2026-03-25T17:56:56.899743"
     },
     {
       "ticker": "PSEC",
@@ -17,10 +17,10 @@
       "shares": 185,
       "entry_price": 2.66,
       "entry_date": "2026-03-11T20:20:50.118108",
-      "current_price": 2.63,
+      "current_price": 2.615,
       "high_since_entry": 2.81,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-25T14:17:36.968974"
+      "last_updated": "2026-03-25T17:56:56.899743"
     },
     {
       "ticker": "VRA",
@@ -28,10 +28,10 @@
       "shares": 190,
       "entry_price": 2.49,
       "entry_date": "2026-03-11T20:21:04.089652",
-      "current_price": 3.44,
+      "current_price": 3.49,
       "high_since_entry": 3.8,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-25T14:17:36.968974"
+      "last_updated": "2026-03-25T17:56:56.899743"
     },
     {
       "ticker": "DTI",
@@ -39,10 +39,10 @@
       "shares": 130,
       "entry_price": 3.61,
       "entry_date": "2026-03-11T20:21:16.151860",
-      "current_price": 3.68,
+      "current_price": 3.635,
       "high_since_entry": 3.924,
       "trailing_stop_active": false,
-      "last_updated": "2026-03-25T14:17:36.968974"
+      "last_updated": "2026-03-25T17:56:56.899743"
     }
   ],
   "trade_history": [
@@ -81,5 +81,5 @@
   ],
   "watchlist": [],
   "created": "2026-03-10T16:46:00.924157",
-  "last_updated": "2026-03-25T14:17:36.968974"
+  "last_updated": "2026-03-25T17:56:56.899743"
 }
