@@ -1,9 +1,9 @@
 {
-  "last_scan": "2026-03-25T19:12:05.118152",
-  "last_price_check": "2026-03-25T22:01:05.879094",
+  "last_scan": "2026-03-26T14:31:39.243317",
+  "last_price_check": "2026-03-26T14:24:15.463505",
   "last_daily_summary": "2026-03-10T16:24:21.029011",
-  "alerts_sent": 5,
-  "buy_alerts": 4,
+  "alerts_sent": 6,
+  "buy_alerts": 5,
   "sell_alerts": 0,
   "summary_alerts": 1,
   "history": [
@@ -31,6 +31,11 @@
       "time": "2026-03-25T14:27:10.720786",
       "type": "BUY",
       "detail": "DNUT"
+    },
+    {
+      "time": "2026-03-26T14:31:41.529884",
+      "type": "BUY",
+      "detail": "UAVS"
     }
   ]
 }
