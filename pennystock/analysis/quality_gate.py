@@ -2,6 +2,7 @@
 Quality Gate: Kill filters + scoring penalties for stock screening.
 
 LAYER 1 of the two-layer scoring system.
+v6.0: Reworked for $2-$5 range (more liquid, tangible companies).
 
 Two tiers of red flags:
 
@@ -14,33 +15,20 @@ HARD KILLS (instant disqualification, score 0):
   - Cash runway exhaustion (< 6 months of cash left at current burn)
   - Pre-revenue burn (< $1M revenue + burning > $50M/year)
   - Already pumped (> 100% gain in 5 days = too late, chasing the pump)
-  - Recent spike history (> 80% high/low range in 20 days = already had its move)
-  - Pump-and-dump aftermath (>200% spike in <30 days then >70% crash)
+  - Recent spike history (> 60% high/low range in 40 days)
+  - Pump-and-dump aftermath (>2x spike in <30 days then >70% crash)
   - Negative shareholder equity (balance sheet is underwater)
-  - Sub-$0.50 price (illiquid, manipulated)
+  - Sub-$2.00 price (below our target range)
   - Extreme profit margin losses (< -200% = hemorrhaging money)
 
 SCORING PENALTIES (reduce score but don't kill):
-  "Normal penny stock shadiness" -- bad signs but not fatal:
-  - Going concern (auditor doubt -- common in penny land)
-  - Delisting / compliance notices (often resolved, stock can recover)
-  - Extreme price decay (85%+ from 52w high -- scaled, 95%+ hits harder)
+  Common red flags -- bad signs but not fatal:
+  - Going concern (auditor doubt)
+  - Delisting / compliance notices (often resolved)
+  - Extreme price decay (85%+ from 52w high -- scaled)
   - Recent reverse splits (scaled -- 1-for-50+ gets heavier penalty)
-  - Excessive float (> 100M shares -- harder to squeeze but not impossible)
-  - Micro-employee count (< 10 employees = likely shell/zombie company)
-
-The key insight: catch stocks BEFORE the pump, not after. The "Already Pumped"
-filter is the most important -- a stock up >100% in 5 days has already moved.
-
-Real-world examples:
-  - QNCX (Quince): "Phase 3 failed" in news + zero revenue shell -> KILL
-  - AZI (Autozi): 1.6% gross margin -> KILL (toxic margins)
-  - AGL (Agilon): fraud lawsuit + $20M/month cash burn -> KILL
-  - GUTS: $3K revenue, -$86M/year burn -> KILL (pre-revenue burn)
-  - ZONE (CleanCore): going concern in 10-K -> PENALTY (not kill)
-  - OPAD (Offerpad): delisting notice -> PENALTY (not kill)
-  - DXST: 95% decay, reverse split -> PENALTIES (accumulated)
-  - SOPA: going concern + reverse split + decay -> PENALTIES (stacked)
+  - Excessive float (> 100M shares -- harder to squeeze)
+  - Micro-employee count (< 10 employees = likely shell/zombie)
 """
 
 from loguru import logger
@@ -269,14 +257,14 @@ def run_kill_filters(ticker: str, info: dict = None, news: list = None) -> dict:
                 f"${book_value:.2f}. Balance sheet is underwater."
             )
 
-    # ── Kill 10: Sub-$0.50 Stock Price ───────────────────────────
-    # Stocks below $0.50 are often illiquid, manipulated, or dying.
-    # Would have killed: BYAH ($0.05), sub-dime stocks
+    # ── Kill 10: Below $2.00 Stock Price ──────────────────────────
+    # Stocks below $2.00 are outside our target range.
+    # We focus on $2-$5 for more liquid, tangible companies.
     if price > 0 and price < KILL_MIN_PRICE:
         kill_reasons.append(
-            f"BELOW MIN PRICE: Stock at ${price:.4f} "
+            f"BELOW MIN PRICE: Stock at ${price:.2f} "
             f"(< ${KILL_MIN_PRICE:.2f} minimum). "
-            f"Stocks this cheap are often illiquid and manipulated."
+            f"Below our $2-$5 target range for liquid stocks."
         )
 
     # ── Kill 11: Extreme Profit Margin Losses ────────────────────

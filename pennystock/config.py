@@ -3,12 +3,12 @@
 # ── Algorithm Version ─────────────────────────────────────────────
 # Bump on every change. Major.Minor.Patch
 # Major = new strategy/architecture, Minor = new signals, Patch = tuning
-ALGORITHM_VERSION = "5.1.1"
+ALGORITHM_VERSION = "6.0.0"
 
 # ── Price & Volume Filters ──────────────────────────────────────────
-MIN_PRICE = 0.50   # Expanded from $0.10 to include more reputable sub-$5 stocks
-MAX_PRICE = 5.00   # Expanded from $1.00 -- covers micro-cap/small-cap territory
-MIN_VOLUME = 50_000
+MIN_PRICE = 2.00   # Focus on $2-$5 range: more liquid, tangible companies
+MAX_PRICE = 5.00   # Upper bound of low-priced stock territory
+MIN_VOLUME = 100_000  # Higher volume floor for liquidity (was 50K)
 
 # ── Technical Analysis Parameters ───────────────────────────────────
 RSI_PERIOD = 14
@@ -23,7 +23,7 @@ STOCHRSI_PERIOD = 14  # StochRSI lookback on RSI values
 
 # ── Screening ───────────────────────────────────────────────────────
 STAGE1_KEEP_TOP_N = 100       # Stocks to pass from Stage 1 -> Stage 2 (raised from 50)
-STAGE2_RETURN_TOP_N = 10      # Final picks returned to user (expanded for wider $0.50-$5 range)
+STAGE2_RETURN_TOP_N = 10      # Final picks returned to user
 MIN_RECOMMENDATION_SCORE = 35 # Don't recommend stocks scoring below this
 HISTORY_PERIOD = "6mo"        # Price history for technical analysis
 SHORT_HISTORY_PERIOD = "3mo"  # Shorter window for recent patterns
@@ -97,8 +97,8 @@ KILL_NEGATIVE_EQUITY = True
 # Would have killed: SMXT (-$11.78M equity), XPON (-$65M equity)
 
 # -- Kill: Sub-50-cent stock price (untradeable, manipulated) --------
-KILL_MIN_PRICE = 0.50             # Stocks below $0.50 are illiquid garbage
-# Would have killed: BYAH ($0.05), sub-dime stocks
+KILL_MIN_PRICE = 2.00             # Stocks below $2.00 are too illiquid/speculative
+# Enforces $2-$5 focus on more tangible, liquid companies
 
 # -- Kill: Extreme profit margin losses (hemorrhaging money) --------
 KILL_EXTREME_LOSS_MARGIN = -2.0   # -200% profit margin = burning faster than revenue
@@ -178,19 +178,16 @@ PENALTY_MICRO_EMPLOYEES_THRESHOLD = 10  # < 10 FTEs = suspicious
 
 # -- Category-level weights (must sum to 1.0) ----------------------
 # v3.0: Rebalanced for pre-pump detection. Setup + pre-pump signals dominate.
-# v5.0: Expanded to $0.50-$5.00. Fundamentals still secondary to setup signals,
-# but the wider range now includes more legitimate companies.
-# v5.1.1: Catalyst weight bumped 10%->13% after VRA validation (earnings beat
-# on thin-volume micro-cap with moderate SI -> +36%). Catalyst-driven squeezes
-# on earnings surprises are high-conviction setups. Fundamental weight bumped
-# 10%->12% (insider buying + earnings growth are strong predictors).
-# Pre-pump reduced 35%->30% to compensate -- still the largest single weight.
+# v6.0: Reworked for $2-$5 range. More liquid, tangible companies.
+# Fundamentals weighted higher since $2-$5 stocks tend to have real businesses.
+# Pre-pump reduced since compliance risk signal removed (not sub-$1 anymore).
+# Catalyst and fundamental bumped to reflect more legitimate company profiles.
 WEIGHTS = {
-    "setup":        0.25,   # Float, insider ownership, proximity-to-low, P/B
-    "technical":    0.20,   # RSI, MACD, StochRSI, volume, price trend, ADX
-    "pre_pump":     0.30,   # Short interest change, float rotation, volume accel, compliance risk
-    "fundamental":  0.12,   # Revenue growth, short interest, cash position, insider buying
-    "catalyst":     0.13,   # News-based catalysts (earnings beats, partnerships, FDA)
+    "setup":        0.20,   # Float, insider ownership, proximity-to-low, P/B
+    "technical":    0.25,   # RSI, MACD, StochRSI, volume, price trend, ADX
+    "pre_pump":     0.20,   # Short interest change, float rotation, volume accel, squeeze setup
+    "fundamental":  0.20,   # Revenue growth, short interest, cash position, insider buying
+    "catalyst":     0.15,   # News-based catalysts (earnings beats, partnerships, FDA)
 }
 
 # Pre-pump conviction bonus: when the pre-pump module has HIGH confidence
@@ -423,7 +420,7 @@ BACKTEST_STOP_LOSS_PCT = -15.0  # -15% stop-loss (negative number)
 # Trailing stop 10/5 was the standout finding: 63% win rate, +5.2% median.
 # SL and TP kept as safety rails despite "off" being marginally better for
 # avg return — protecting against catastrophic losses matters more.
-SELL_MAX_HOLD_DAYS = 10           # Max hold period (trading days) — extended from 7 for $0.50-$5.00 range
+SELL_MAX_HOLD_DAYS = 10           # Max hold period (trading days)
 SELL_STOP_LOSS_PCT = -15.0        # Sell if price drops below this % from entry
 SELL_TAKE_PROFIT_PCT = 20.0       # Sell if price rises above this % from entry
 SELL_TRAILING_STOP_ACTIVATE = 10  # Activate trailing stop after +10% gain

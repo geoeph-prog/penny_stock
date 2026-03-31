@@ -1,29 +1,20 @@
 """
-The ONE algorithm for low-priced stock prediction ($0.50-$5.00).
-v3.0: MEGA-ALGORITHM with pre-pump detection.
-v4.1.1: Stage 1 now uses blended ranking (60% technical + 40% pre-pump hints)
-        and analyzes top 100 instead of 50 to avoid missing setups.
-v5.0.0: Expanded from penny stocks ($0.10-$1.00) to $0.50-$5.00 range
-        for better coverage of legitimate cheap stocks.
+The ONE algorithm for low-priced stock prediction ($2-$5).
+v6.0.0: Reworked for $2-$5 range. More liquid, tangible companies.
+        Replaced compliance risk with institutional accumulation.
+        Rebalanced weights: higher fundamental + technical, lower pre-pump.
 
 Two-layer architecture:
   LAYER 1: Kill Filters  - Instantly disqualify broken stocks (quality_gate.py)
   LAYER 2: Positive Score - Rank survivors by setup + technical + pre_pump + fundamental + catalyst
 
 Scoring formula (Layer 2):
-  final_score = setup(25%) + technical(20%) + pre_pump(35%) + fundamental(10%) + catalyst(10%)
+  final_score = setup(20%) + technical(25%) + pre_pump(20%) + fundamental(20%) + catalyst(15%)
                 + conviction_bonus (up to +8 for HIGH pre-pump confidence)
-
-  Setup (25%):     float_tightness(35%) + insider_own(25%) + proximity_low(25%) + P/B(15%)
-  Technical (20%): RSI(20%) + MACD(20%) + StochRSI(20%) + volume(15%) + OBV(10%) + BB(5%) + trend(10%)
-  Pre-Pump (35%):  short_interest_change(20%) + supply_lock(20%) + float_rotation(15%)
-                   + squeeze_setup(15%) + compliance_risk(10%) + volume_accel(10%) + beaten_down(10%)
-  Fundamental(10%): revenue_growth(40%) + short_interest(30%) + cash_position(30%)
-  Catalyst (10%):  news-based positive/negative catalyst detection
 
 Functions:
   build_algorithm()  - Tab 1: Learn what predicts winners from 3 months of data
-  pick_stocks()      - Tab 2: Apply the learned algorithm to find today's top 5
+  pick_stocks()      - Tab 2: Apply the learned algorithm to find today's top picks
 """
 
 import json
@@ -65,10 +56,10 @@ RUNS_DIR = "runs"
 
 def build_algorithm(progress_callback=None):
     """
-    Learn what predicts penny stock winners by analyzing the last 3 months.
+    Learn what predicts winners in the $2-$5 range by analyzing the last 3 months.
 
     Steps:
-      1. Get ALL stocks from Finviz ($0.50-$5.00)
+      1. Get ALL stocks from Finviz ($2-$5)
       2. Get 3-month price history for each
       3. Classify: WINNER = gained >15% over 2 weeks AND >20% over 4 weeks
       4. Extract technical features for ALL stocks (fast)
@@ -86,11 +77,11 @@ def build_algorithm(progress_callback=None):
 
     start = time.time()
     _log("=" * 60)
-    _log("BUILDING ALGORITHM FROM RECENT STOCK DATA ($0.50-$5.00)")
+    _log("BUILDING ALGORITHM FROM RECENT STOCK DATA ($2-$5)")
     _log("=" * 60)
 
     # ── Step 1: Get all stocks in range ───────────────────────────────
-    _log("Step 1: Discovering stocks via Finviz ($0.50-$5.00)...")
+    _log("Step 1: Discovering stocks via Finviz ($2-$5)...")
     stocks = get_penny_stocks()
     if not stocks:
         _log("ERROR: No stocks found. Check network connection.")
@@ -408,44 +399,42 @@ def _stage1_pre_pump_hint(hist, price: float, market_cap_str: str = "") -> float
 
 def pick_stocks(top_n=5, progress_callback=None):
     """
-    Apply the two-layer system to find today's best penny stock picks.
+    Apply the two-layer system to find today's best $2-$5 stock picks.
 
     LAYER 1: Quality Gate (quality_gate.py)
       Hard Kills (instant disqualification):
-        - Already pumped (>100% in 5 days) -> KILL (most important!)
-        - Pump-and-dump aftermath (>300% spike + >80% crash) -> KILL
+        - Already pumped (>100% in 5 days) -> KILL
+        - Pump-and-dump aftermath (>2x spike + >70% crash) -> KILL
         - Fraud / SEC investigation in news -> KILL
         - Core product failure in news -> KILL
         - Shell company indicators -> KILL
         - Toxic gross margins (<5%) -> KILL
         - Cash runway exhaustion (<6 months) -> KILL
         - Pre-revenue massive burn -> KILL
-        - Negative shareholder equity -> KILL (balance sheet underwater)
-        - Sub-$0.50 price -> KILL (illiquid garbage)
-        - Extreme profit margin losses (<-200%) -> KILL (hemorrhaging money)
+        - Negative shareholder equity -> KILL
+        - Sub-$2.00 price -> KILL (below target range)
+        - Extreme profit margin losses (<-200%) -> KILL
 
       Scoring Penalties (reduce score, don't kill):
-        - Going concern in SEC filings -> PENALTY (-12pts)
+        - Going concern -> PENALTY (-12pts)
         - Delisting / compliance notice -> PENALTY (-30pts)
-        - Extreme price decay (85%+ from 52w high) -> PENALTY (-15 to -30pts scaled)
-        - Recent reverse split -> PENALTY (-20 to -35pts scaled for extreme ratios)
+        - Extreme price decay -> PENALTY (-15 to -30pts)
+        - Recent reverse split -> PENALTY (-20 to -35pts)
         - Excessive float (>100M shares) -> PENALTY (-15pts)
         - Micro-employees (<10 FTEs) -> PENALTY (-20pts)
 
-    LAYER 2: Positive Scoring (v3.0 MEGA-ALGORITHM)
-      - Setup quality (25%): float, insider ownership, proximity-to-low, P/B
-      - Technical (20%): RSI, MACD, StochRSI, volume, OBV, BB, trend
-      - Pre-Pump (35%): SI change, float rotation, supply lock, squeeze, compliance, vol accel
-      - Fundamental (10%): revenue growth, short interest, cash position
-      - Catalyst (10%): news-based catalyst detection
+    LAYER 2: Positive Scoring
+      - Setup quality (20%): float, insider ownership, proximity-to-low, P/B
+      - Technical (25%): RSI, MACD, StochRSI, volume, OBV, BB, trend
+      - Pre-Pump (20%): SI change, float rotation, supply lock, squeeze, institutional, vol accel
+      - Fundamental (20%): revenue growth, short interest, cash position
+      - Catalyst (15%): news-based catalyst detection
       + Conviction bonus: +8pts for HIGH pre-pump confidence, +3pts for MEDIUM
 
     Steps:
       1. Load saved algorithm
-      2. Get ALL current penny stocks from Finviz
+      2. Get ALL current stocks from Finviz ($2-$5)
       3. Stage 1: Blended score (60% technical + 40% pre-pump hints)
-         Pre-pump hints use price history only (no extra API calls):
-         beaten-down position, volume acceleration, compliance risk
       4. Stage 2: On top 100 (STAGE1_KEEP_TOP_N):
          a. Run quality gate -- kill broken stocks, penalize sketchy ones
          b. Score survivors -- rank by composite score minus penalties
@@ -465,15 +454,15 @@ def pick_stocks(top_n=5, progress_callback=None):
 
     start = time.time()
     _log("=" * 60)
-    _log(f"PICKING TOP STOCKS $0.50-$5.00 (v{ALGORITHM_VERSION}: MEGA-ALGORITHM)")
+    _log(f"PICKING TOP STOCKS $2-$5 (v{ALGORITHM_VERSION})")
     _log(f"Using algorithm from {algorithm.get('built_date', 'unknown')}")
     _log(f"Weights: setup={WEIGHTS['setup']:.0%} tech={WEIGHTS['technical']:.0%} "
          f"pre_pump={WEIGHTS['pre_pump']:.0%} fund={WEIGHTS['fundamental']:.0%} "
          f"cat={WEIGHTS['catalyst']:.0%}")
     _log("=" * 60)
 
-    # ── Get current penny stocks ────────────────────────────────────
-    _log("Discovering current penny stocks...")
+    # ── Get current stocks in range ────────────────────────────────
+    _log("Discovering current $2-$5 stocks...")
     stocks = get_penny_stocks()
     if not stocks:
         _log("ERROR: No stocks found.")
@@ -662,7 +651,7 @@ def pick_stocks(top_n=5, progress_callback=None):
             sent_adj = (sent_score - 50) * 0.03  # +/- 1.5 points max
 
             # Market & sector sentiment: meaningful factor for timing
-            # A bearish market drags penny stocks down regardless of setup.
+            # A bearish market drags low-priced stocks down regardless of setup.
             # A hot sector gives tailwinds. These are real indicators.
             mkt_adj = (mkt_score - 50) * 0.10    # +/- 5.0 points max
             sector_perf = mkt_result.get("sector_performance", {})
@@ -670,7 +659,7 @@ def pick_stocks(top_n=5, progress_callback=None):
 
             # Apply quality gate penalty deductions (going concern,
             # delisting notices, price decay, reverse splits, excessive float).
-            # These are "normal penny stock shadiness" -- bad signs that
+            # These are common red flags in low-priced stocks -- bad signs that
             # reduce the score but don't kill outright.
             penalty_adj = -penalty_deduction
 
@@ -762,7 +751,7 @@ def pick_stocks(top_n=5, progress_callback=None):
     if not picks:
         _log("NO STOCKS MEET MINIMUM QUALITY THRESHOLD.")
         _log(f"All {len(final_results)} survivors scored below {MIN_RECOMMENDATION_SCORE}pts.")
-        _log("This means the current market has no penny stocks worth recommending.")
+        _log("This means the current market has no $2-$5 stocks worth recommending.")
         _log("This is BETTER than recommending garbage -- sit on cash.")
         _log("=" * 60)
         return []

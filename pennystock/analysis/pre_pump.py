@@ -3,27 +3,17 @@ Pre-Pump Signal Detection: The MEGA-ALGORITHM layer.
 
 v3.0: Combines signals from 10+ strategies to detect stocks
 BEFORE they pump, not after.
+v6.0: Reworked for $2-$5 range. Replaced Nasdaq compliance risk
+(irrelevant above $1) with institutional accumulation signal.
 
 Strategies integrated:
-  1. Short Interest Change Rate (YIBO's SI dropped 74.9% before pump)
+  1. Short Interest Change Rate (collapsing SI = shorts covering)
   2. Float Rotation Potential (volume/float ratio capacity)
-  3. Nasdaq Compliance Risk ($1 threshold = management incentive to pump)
+  3. Institutional Accumulation (rising institutional ownership = smart money)
   4. Volume Acceleration (multi-day sigma patterns)
   5. Signal Confluence (count independent bullish signals)
   6. Insider Ownership Lock (>70% = supply constrained)
   7. Short Squeeze Setup (low float + high SI + high DTC)
-
-Key insight from YIBO (2/18/2026):
-  - Short interest collapsed 74.9% (reported 5 days before pump)
-  - Ultra-low float (7.13M) + 93% insider ownership
-  - Below $1 Nasdaq compliance risk + reverse split authority
-  - NO specific news catalyst -- pure setup/supply-demand play
-  - Our algorithm found it as #1 but scored it too conservatively
-
-Key insight from other 2/18/2026 pumps:
-  - RXT (+242%): Partnership catalyst on extremely beaten-down stock
-  - IBRX (+42%): EU approval -- PREDICTABLE from Dec CHMP positive opinion
-  - RIME (+325%): AI narrative + contract wins + conference presentations
 """
 
 import numpy as np
@@ -64,12 +54,12 @@ def score_pre_pump(ticker: str, info: dict = None, tech_features: dict = None) -
     fr_result = _score_float_rotation(info)
     signals["float_rotation"] = fr_result
 
-    # ── Signal 3: Nasdaq Compliance Risk ─────────────────────────
-    # Stocks below $1.00 with low floats have a strong compliance
-    # incentive to boost the price above $1 (Nasdaq listing threshold).
-    # Only applies to the sub-$1 subset of our $0.50-$5.00 range.
-    nc_result = _score_compliance_risk(info)
-    signals["compliance_risk"] = nc_result
+    # ── Signal 3: Institutional Accumulation ────────────────────
+    # Rising institutional ownership in $2-$5 stocks = smart money
+    # positioning before a catalyst. More relevant than compliance
+    # risk for this price range.
+    ia_result = _score_institutional_accumulation(info)
+    signals["institutional_accumulation"] = ia_result
 
     # ── Signal 4: Volume Acceleration ────────────────────────────
     # Use multi-day unusual volume from tech features if available.
@@ -100,11 +90,11 @@ def score_pre_pump(ticker: str, info: dict = None, tech_features: dict = None) -
 
     # Weighted composite of all signals
     weights = {
-        "short_interest_change": 0.20,   # Strongest predictor (YIBO proof)
-        "supply_lock": 0.20,             # Supply constraint = explosive moves
+        "short_interest_change": 0.20,   # Strongest predictor (shorts covering)
+        "supply_lock": 0.18,             # Supply constraint = explosive moves
         "float_rotation": 0.15,          # Volume capacity
         "squeeze_setup": 0.15,           # Squeeze fuel
-        "compliance_risk": 0.10,         # Incentive alignment
+        "institutional_accumulation": 0.12,  # Smart money positioning
         "volume_acceleration": 0.10,     # Early accumulation
         "beaten_down": 0.10,             # Reversal setup
     }
@@ -225,39 +215,46 @@ def _score_float_rotation(info: dict) -> dict:
     }
 
 
-def _score_compliance_risk(info: dict) -> dict:
+def _score_institutional_accumulation(info: dict) -> dict:
     """
-    Score Nasdaq compliance risk as a POSITIVE pump catalyst.
-    Stocks below $1 need to get above $1 or face delisting.
-    Management has strong incentive to pump. This is bullish for
-    short-term price action even if the company is garbage.
+    Score institutional accumulation as a pre-pump signal.
+    Rising institutional ownership in $2-$5 stocks = smart money
+    positioning before a catalyst or breakout.
     """
-    price = info.get("price", 0) or 0
-    market_cap = info.get("market_cap", 0) or 0
+    institution_pct = info.get("institution_percent_held", 0) or 0
     float_shares = info.get("float_shares", 0) or 0
+    market_cap = info.get("market_cap", 0) or 0
 
-    if price <= 0:
-        return {"score": 50, "below_dollar": False, "signal": "no_data"}
+    if institution_pct <= 0:
+        return {"score": 50, "institution_pct": 0, "signal": "no_data"}
 
-    below_dollar = price < 1.00
-    tiny_float = float_shares > 0 and float_shares < 15_000_000
-    micro_cap = 0 < market_cap < 50_000_000
+    score = 30  # Baseline
 
-    score = 50
-    if below_dollar:
-        score += 20  # Strong compliance incentive
-    if below_dollar and tiny_float:
-        score += 15  # Easy to pump with low float
-    if below_dollar and micro_cap:
-        score += 10  # Small market cap = less capital needed to move
+    # Institutional ownership level
+    if institution_pct >= 0.50:
+        score += 30   # Heavy institutional interest
+    elif institution_pct >= 0.30:
+        score += 22   # Strong institutional presence
+    elif institution_pct >= 0.15:
+        score += 15   # Moderate institutional interest
+    elif institution_pct >= 0.05:
+        score += 8    # Some institutional interest
+
+    # Small cap with institutional interest = they see something
+    if 0 < market_cap < 100_000_000 and institution_pct >= 0.15:
+        score += 15
+
+    # Tight float with institutional ownership = supply squeeze potential
+    if 0 < float_shares < 20_000_000 and institution_pct >= 0.20:
+        score += 15
 
     score = min(100, score)
 
     return {
         "score": score,
-        "below_dollar": below_dollar,
-        "price": price,
-        "signal": "compliance_pump_candidate" if below_dollar and tiny_float else "normal",
+        "institution_pct": round(institution_pct * 100, 1) if institution_pct else 0,
+        "market_cap": market_cap,
+        "signal": "accumulating" if score >= 65 else "normal",
     }
 
 

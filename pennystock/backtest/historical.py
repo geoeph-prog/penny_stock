@@ -112,10 +112,10 @@ def run_historical_backtest(
     all_hist = get_batch_history(tickers, period="2y")
     _log(f"  Got history for {len(all_hist)}/{len(stocks)} stocks")
 
-    # ── 4. Filter to penny stocks AS OF target date ────────────────
-    _log(f"\n  Filtering to penny stocks as of {target_date_str}...")
+    # ── 4. Filter to stocks in range AS OF target date ─────────────
+    _log(f"\n  Filtering to $2-$5 stocks as of {target_date_str}...")
     candidates = _filter_historical_candidates(stocks, all_hist, target)
-    _log(f"  Found {len(candidates)} penny stocks on {target_date_str}")
+    _log(f"  Found {len(candidates)} stocks in range on {target_date_str}")
 
     if not candidates:
         _log("  No candidates found for this date. Is the date a trading day?")
@@ -285,7 +285,7 @@ def run_historical_backtest(
 # ────────────────────────────────────────────────────────────────────
 
 def _filter_historical_candidates(stocks, all_hist, target):
-    """Filter to stocks that were penny stocks on the target date."""
+    """Filter to stocks that were in the $2-$5 range on the target date."""
     candidates = []
     for stock in stocks:
         ticker = stock["ticker"]

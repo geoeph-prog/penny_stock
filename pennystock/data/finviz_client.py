@@ -1,4 +1,4 @@
-"""Stock discovery via Finviz screener. No API key required."""
+"""Stock discovery via Finviz screener ($2-$5 range). No API key required."""
 
 from loguru import logger
 
@@ -7,7 +7,7 @@ from pennystock.config import MIN_PRICE, MAX_PRICE, MIN_VOLUME
 
 def get_penny_stocks(min_price=None, max_price=None, min_volume=None):
     """
-    Screen Finviz for stocks in our price range ($0.50-$5.00).
+    Screen Finviz for stocks in our price range ($2-$5).
 
     Returns list of dicts with at least: ticker, price, volume, company, sector.
     Falls back to an empty list on failure (caller should handle fallback).
@@ -24,7 +24,7 @@ def get_penny_stocks(min_price=None, max_price=None, min_volume=None):
         # Finviz filter keys
         filters = {
             "Price": "Under $5",
-            "Average Volume": "Over 50K",
+            "Average Volume": "Over 100K",
         }
         foverview.set_filter(filters_dict=filters)
         df = foverview.screener_view()
@@ -91,7 +91,7 @@ def get_high_gainers(months=6, min_gain_pct=100):
 
         filters = {
             "Price": "Under $5",
-            "Average Volume": "Over 50K",
+            "Average Volume": "Over 100K",
             "Performance": perf_filter,
         }
         foverview.set_filter(filters_dict=filters)

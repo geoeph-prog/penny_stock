@@ -449,8 +449,8 @@ def _print_pre_pump(p, pp):
             detail = f"SI change: {sig.get('change_pct', 0):+.1f}% ({sig.get('shares_short', 0):,} vs {sig.get('shares_short_prior', 0):,})"
         elif name == "float_rotation":
             detail = f"rotation={sig.get('rotation', 0):.3f} (vol={sig.get('volume', 0):,.0f} / float={sig.get('float', 0):,.0f})"
-        elif name == "compliance_risk":
-            detail = f"price=${sig.get('price', 0):.4f} below_$1={sig.get('below_dollar', False)}"
+        elif name == "institutional_accumulation":
+            detail = f"institution_pct={sig.get('institution_pct', 0):.1f}% mkt_cap=${sig.get('market_cap', 0):,.0f}"
         elif name == "volume_acceleration":
             detail = f"10d/avg ratio={sig.get('ratio', 0):.2f}x unusual_days={sig.get('multiday_unusual', 0)}"
         elif name == "supply_lock":
