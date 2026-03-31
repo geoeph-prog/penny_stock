@@ -85,6 +85,8 @@ class AlertMonitor:
             "sell_alerts": 0,
             "summary_alerts": 0,
             "history": [],
+            "pending_sell_alerts": {},
+            "pending_buy_alerts": {},
         }
 
     def _save_state(self):
@@ -229,33 +231,103 @@ class AlertMonitor:
             self._log(f"Scan failed: {e}")
             return []
 
+    # ─── Alert deduplication ──────────────────────────────────
+
+    def _sell_already_alerted(self, ticker: str, reason: str) -> bool:
+        """Check if we already sent (or tried) this sell alert today."""
+        pending = self.state.get("pending_sell_alerts", {})
+        key = f"{ticker}:{reason}"
+        if key in pending:
+            last = pending[key]
+            try:
+                last_dt = datetime.fromisoformat(last["time"])
+                if last_dt.date() == datetime.now().date():
+                    return True
+            except Exception:
+                pass
+        return False
+
+    def _mark_sell_alerted(self, ticker: str, reason: str, sent: bool):
+        """Record that a sell alert was attempted (sent or failed)."""
+        pending = self.state.setdefault("pending_sell_alerts", {})
+        key = f"{ticker}:{reason}"
+        pending[key] = {
+            "time": datetime.now().isoformat(),
+            "sent": sent,
+        }
+
+    def _buy_already_alerted(self, ticker: str) -> bool:
+        """Check if we already sent a buy alert for this ticker today."""
+        pending = self.state.get("pending_buy_alerts", {})
+        if ticker in pending:
+            try:
+                last_dt = datetime.fromisoformat(pending[ticker]["time"])
+                if last_dt.date() == datetime.now().date():
+                    return True
+            except Exception:
+                pass
+        return False
+
+    def _mark_buy_alerted(self, ticker: str, sent: bool):
+        pending = self.state.setdefault("pending_buy_alerts", {})
+        pending[ticker] = {
+            "time": datetime.now().isoformat(),
+            "sent": sent,
+        }
+
     # ─── Alert dispatch ─────────────────────────────────────
 
     def send_sell_alerts(self, sells: list):
-        """Send email for sell triggers."""
+        """Send email for sell triggers, with deduplication."""
         if not sells or not ALERT_ON_SELL:
             return
+        # Filter out alerts already sent/attempted today
+        new_sells = [
+            (pos, reason, desc) for pos, reason, desc in sells
+            if not self._sell_already_alerted(pos["ticker"], reason)
+        ]
+        if not new_sells:
+            self._log("Sell triggers already alerted today — skipping")
+            return
+
         from pennystock.alerts.email_sender import send_sell_alert
-        if send_sell_alert(sells):
+        tickers = [pos["ticker"] for pos, _, _ in new_sells]
+        sent = send_sell_alert(new_sells)
+        for pos, reason, _ in new_sells:
+            self._mark_sell_alerted(pos["ticker"], reason, sent)
+        if sent:
             self.state["alerts_sent"] += 1
             self.state["sell_alerts"] += 1
-            tickers = [pos["ticker"] for pos, _, _ in sells]
             self._add_history("SELL", f"{', '.join(tickers)}")
-            self._save_state()
             self._log(f"SELL alert sent for {', '.join(tickers)}")
+        else:
+            self._add_history("SELL_FAILED", f"{', '.join(tickers)} (email failed)")
+            self._log(f"SELL alert FAILED for {', '.join(tickers)} — will retry tomorrow")
+        self._save_state()
 
     def send_buy_alerts(self, picks: list):
-        """Send email for new buy signals."""
+        """Send email for new buy signals, with deduplication."""
         if not picks or not ALERT_ON_BUY:
             return
+        new_picks = [p for p in picks if not self._buy_already_alerted(p["ticker"])]
+        if not new_picks:
+            self._log("Buy alerts already sent today — skipping")
+            return
+
         from pennystock.alerts.email_sender import send_buy_alert
-        if send_buy_alert(picks):
+        tickers = [p["ticker"] for p in new_picks]
+        sent = send_buy_alert(new_picks)
+        for p in new_picks:
+            self._mark_buy_alerted(p["ticker"], sent)
+        if sent:
             self.state["alerts_sent"] += 1
             self.state["buy_alerts"] += 1
-            tickers = [p["ticker"] for p in picks]
             self._add_history("BUY", f"{', '.join(tickers)}")
-            self._save_state()
             self._log(f"BUY alert sent for {', '.join(tickers)}")
+        else:
+            self._add_history("BUY_FAILED", f"{', '.join(tickers)} (email failed)")
+            self._log(f"BUY alert FAILED for {', '.join(tickers)} — will retry tomorrow")
+        self._save_state()
 
     def send_daily_summary(self):
         """Send end-of-day portfolio summary."""
@@ -266,13 +338,17 @@ class AlertMonitor:
         manager = PortfolioManager()
         summary = manager.get_portfolio_summary()
         positions = manager.state.get("positions", [])
-        if send_portfolio_summary(summary, positions):
+        sent = send_portfolio_summary(summary, positions)
+        if sent:
             self.state["alerts_sent"] += 1
             self.state["summary_alerts"] += 1
             self.state["last_daily_summary"] = datetime.now().isoformat()
             self._add_history("SUMMARY", f"${summary['total_value']:,.2f}")
-            self._save_state()
             self._log(f"Daily summary sent: ${summary['total_value']:,.2f}")
+        else:
+            self._add_history("SUMMARY_FAILED", f"${summary['total_value']:,.2f} (email failed)")
+            self._log(f"Daily summary email FAILED — portfolio value: ${summary['total_value']:,.2f}")
+        self._save_state()
 
     # ─── Main loop ──────────────────────────────────────────
 
