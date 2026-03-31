@@ -1,9 +1,9 @@
 {
-  "last_scan": "2026-03-31T14:34:55.067633",
-  "last_price_check": "2026-03-31T17:41:23.035539",
+  "last_scan": "2026-03-31T18:49:27.836034",
+  "last_price_check": "2026-03-31T18:38:34.093977",
   "last_daily_summary": "2026-03-10T16:24:21.029011",
-  "alerts_sent": 11,
-  "buy_alerts": 10,
+  "alerts_sent": 12,
+  "buy_alerts": 11,
   "sell_alerts": 0,
   "summary_alerts": 1,
   "history": [
@@ -59,6 +59,11 @@
     },
     {
       "time": "2026-03-31T14:34:56.245712",
+      "type": "BUY",
+      "detail": "GTEC"
+    },
+    {
+      "time": "2026-03-31T18:49:29.376007",
       "type": "BUY",
       "detail": "GTEC"
     }
