@@ -1,9 +1,9 @@
 {
-  "last_scan": "2026-03-30T19:07:11.934492",
-  "last_price_check": "2026-03-30T22:03:43.211829",
+  "last_scan": "2026-03-31T14:34:55.067633",
+  "last_price_check": "2026-03-31T14:25:54.512704",
   "last_daily_summary": "2026-03-10T16:24:21.029011",
-  "alerts_sent": 10,
-  "buy_alerts": 9,
+  "alerts_sent": 11,
+  "buy_alerts": 10,
   "sell_alerts": 0,
   "summary_alerts": 1,
   "history": [
@@ -56,6 +56,11 @@
       "time": "2026-03-30T19:07:14.051806",
       "type": "BUY",
       "detail": "IMPP, GTEC"
+    },
+    {
+      "time": "2026-03-31T14:34:56.245712",
+      "type": "BUY",
+      "detail": "GTEC"
     }
   ]
 }
