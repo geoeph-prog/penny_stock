@@ -1,10 +1,10 @@
 {
   "last_scan": "2026-03-31T18:49:27.836034",
-  "last_price_check": "2026-03-31T19:41:12.223056",
+  "last_price_check": "2026-03-31T20:25:38.564885",
   "last_daily_summary": "2026-03-10T16:24:21.029011",
-  "alerts_sent": 12,
+  "alerts_sent": 13,
   "buy_alerts": 11,
-  "sell_alerts": 0,
+  "sell_alerts": 1,
   "summary_alerts": 1,
   "history": [
     {
@@ -66,6 +66,11 @@
       "time": "2026-03-31T18:49:29.376007",
       "type": "BUY",
       "detail": "GTEC"
+    },
+    {
+      "time": "2026-03-31T20:25:40.477516",
+      "type": "SELL",
+      "detail": "VYNE, PSEC, VRA, DTI"
     }
   ]
 }
