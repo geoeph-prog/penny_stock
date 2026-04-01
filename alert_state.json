@@ -1,10 +1,10 @@
 {
   "last_scan": "2026-04-01T19:09:40.759296",
-  "last_price_check": "2026-04-01T18:58:14.011730",
+  "last_price_check": "2026-04-01T19:58:57.901737",
   "last_daily_summary": "2026-03-10T16:24:21.029011",
-  "alerts_sent": 19,
+  "alerts_sent": 20,
   "buy_alerts": 12,
-  "sell_alerts": 6,
+  "sell_alerts": 7,
   "summary_alerts": 1,
   "history": [
     {
@@ -101,6 +101,11 @@
       "time": "2026-04-01T19:09:42.399311",
       "type": "BUY",
       "detail": "EPM, SYPR"
+    },
+    {
+      "time": "2026-04-01T19:58:59.272141",
+      "type": "SELL",
+      "detail": "VYNE, PSEC, VRA, DTI"
     }
   ]
 }
