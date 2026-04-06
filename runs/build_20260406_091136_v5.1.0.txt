@@ -1,0 +1,193 @@
+Stock Analyzer v5.1.0
+Run type: build
+Timestamp: 2026-04-06 10:11:31
+======================================================================
+
+============================================================
+BUILDING ALGORITHM FROM RECENT STOCK DATA ($0.50-$5.00)
+============================================================
+Step 1: Discovering stocks via Finviz ($0.50-$5.00)...
+  Found 1019 stocks
+Step 2: Downloading price history and classifying winners...
+  Progress: 25/1019 (4 winners, 21 losers) ~3850s remaining
+  Progress: 50/1019 (8 winners, 41 losers) ~2050s remaining
+  Progress: 75/1019 (16 winners, 58 losers) ~1440s remaining
+  Progress: 100/1019 (20 winners, 79 losers) ~1131s remaining
+  Progress: 125/1019 (27 winners, 97 losers) ~944s remaining
+  Progress: 150/1019 (32 winners, 117 losers) ~889s remaining
+  Progress: 175/1019 (33 winners, 141 losers) ~781s remaining
+  Progress: 200/1019 (41 winners, 157 losers) ~697s remaining
+  Progress: 225/1019 (47 winners, 176 losers) ~633s remaining
+  Progress: 250/1019 (53 winners, 195 losers) ~578s remaining
+  Progress: 275/1019 (56 winners, 216 losers) ~532s remaining
+  Progress: 300/1019 (60 winners, 237 losers) ~492s remaining
+  Progress: 325/1019 (67 winners, 255 losers) ~457s remaining
+  Progress: 350/1019 (71 winners, 276 losers) ~426s remaining
+  Progress: 375/1019 (75 winners, 297 losers) ~398s remaining
+  Progress: 400/1019 (82 winners, 315 losers) ~372s remaining
+  Progress: 425/1019 (87 winners, 335 losers) ~349s remaining
+  Progress: 450/1019 (92 winners, 355 losers) ~327s remaining
+  Progress: 475/1019 (96 winners, 376 losers) ~307s remaining
+  Progress: 500/1019 (103 winners, 394 losers) ~288s remaining
+  Progress: 525/1019 (107 winners, 415 losers) ~269s remaining
+  Progress: 550/1019 (111 winners, 436 losers) ~251s remaining
+  Progress: 575/1019 (116 winners, 456 losers) ~235s remaining
+  Progress: 600/1019 (118 winners, 479 losers) ~218s remaining
+  Progress: 625/1019 (123 winners, 499 losers) ~202s remaining
+  Progress: 650/1019 (127 winners, 520 losers) ~187s remaining
+  Progress: 675/1019 (132 winners, 540 losers) ~172s remaining
+  Progress: 700/1019 (138 winners, 559 losers) ~158s remaining
+  Progress: 725/1019 (142 winners, 580 losers) ~144s remaining
+  Progress: 750/1019 (150 winners, 597 losers) ~131s remaining
+  Progress: 775/1019 (155 winners, 616 losers) ~118s remaining
+  Progress: 800/1019 (159 winners, 637 losers) ~106s remaining
+  Progress: 825/1019 (165 winners, 656 losers) ~93s remaining
+  Progress: 850/1019 (168 winners, 678 losers) ~81s remaining
+  Progress: 875/1019 (172 winners, 699 losers) ~68s remaining
+  Progress: 900/1019 (177 winners, 719 losers) ~56s remaining
+  Progress: 925/1019 (183 winners, 738 losers) ~44s remaining
+  Progress: 950/1019 (188 winners, 758 losers) ~32s remaining
+  Progress: 975/1019 (193 winners, 778 losers) ~21s remaining
+  Progress: 1000/1019 (198 winners, 798 losers) ~9s remaining
+  Classification done: 201 winners, 814 losers
+Step 3: Analyzing technical patterns...
+  Technical features analyzed: 17 factors
+Step 4: Analyzing sentiment & fundamentals (winners + loser sample)...
+  Pre-downloading Reddit posts (bulk mode)...
+  Deep analysis: 5/603
+  Deep analysis: 10/603
+  Deep analysis: 15/603
+  Deep analysis: 20/603
+  Deep analysis: 25/603
+  Deep analysis: 30/603
+  Deep analysis: 35/603
+  Deep analysis: 40/603
+  Deep analysis: 45/603
+  Deep analysis: 50/603
+  Deep analysis: 55/603
+  Deep analysis: 60/603
+  Deep analysis: 65/603
+  Deep analysis: 70/603
+  Deep analysis: 75/603
+  Deep analysis: 80/603
+  Deep analysis: 85/603
+  Deep analysis: 90/603
+  Deep analysis: 95/603
+  Deep analysis: 100/603
+  Deep analysis: 105/603
+  Deep analysis: 110/603
+  Deep analysis: 115/603
+  Deep analysis: 120/603
+  Deep analysis: 125/603
+  Deep analysis: 130/603
+  Deep analysis: 135/603
+  Deep analysis: 140/603
+  Deep analysis: 145/603
+  Deep analysis: 150/603
+  Deep analysis: 155/603
+  Deep analysis: 160/603
+  Deep analysis: 165/603
+  Deep analysis: 170/603
+  Deep analysis: 175/603
+  Deep analysis: 180/603
+  Deep analysis: 185/603
+  Deep analysis: 190/603
+  Deep analysis: 195/603
+  Deep analysis: 200/603
+  Deep analysis: 205/603
+  Deep analysis: 210/603
+  Deep analysis: 215/603
+  Deep analysis: 220/603
+  Deep analysis: 225/603
+  Deep analysis: 230/603
+  Deep analysis: 235/603
+  Deep analysis: 240/603
+  Deep analysis: 245/603
+  Deep analysis: 250/603
+  Deep analysis: 255/603
+  Deep analysis: 260/603
+  Deep analysis: 265/603
+  Deep analysis: 270/603
+  Deep analysis: 275/603
+  Deep analysis: 280/603
+  Deep analysis: 285/603
+  Deep analysis: 290/603
+  Deep analysis: 295/603
+  Deep analysis: 300/603
+  Deep analysis: 305/603
+  Deep analysis: 310/603
+  Deep analysis: 315/603
+  Deep analysis: 320/603
+  Deep analysis: 325/603
+  Deep analysis: 330/603
+  Deep analysis: 335/603
+  Deep analysis: 340/603
+  Deep analysis: 345/603
+  Deep analysis: 350/603
+  Deep analysis: 355/603
+  Deep analysis: 360/603
+  Deep analysis: 365/603
+  Deep analysis: 370/603
+  Deep analysis: 375/603
+  Deep analysis: 380/603
+  Deep analysis: 385/603
+  Deep analysis: 390/603
+  Deep analysis: 395/603
+  Deep analysis: 400/603
+  Deep analysis: 405/603
+  Deep analysis: 410/603
+  Deep analysis: 415/603
+  Deep analysis: 420/603
+  Deep analysis: 425/603
+  Deep analysis: 430/603
+  Deep analysis: 435/603
+  Deep analysis: 440/603
+  Deep analysis: 445/603
+  Deep analysis: 450/603
+  Deep analysis: 455/603
+  Deep analysis: 460/603
+  Deep analysis: 465/603
+  Deep analysis: 470/603
+  Deep analysis: 475/603
+  Deep analysis: 480/603
+  Deep analysis: 485/603
+  Deep analysis: 490/603
+  Deep analysis: 495/603
+  Deep analysis: 500/603
+  Deep analysis: 505/603
+  Deep analysis: 510/603
+  Deep analysis: 515/603
+  Deep analysis: 520/603
+  Deep analysis: 525/603
+  Deep analysis: 530/603
+  Deep analysis: 535/603
+  Deep analysis: 540/603
+  Deep analysis: 545/603
+  Deep analysis: 550/603
+  Deep analysis: 555/603
+  Deep analysis: 560/603
+  Deep analysis: 565/603
+  Deep analysis: 570/603
+  Deep analysis: 575/603
+  Deep analysis: 580/603
+  Deep analysis: 585/603
+  Deep analysis: 590/603
+  Deep analysis: 595/603
+  Deep analysis: 600/603
+  Sentiment factors: 5
+  Fundamental factors: 24
+Step 5: Building unified algorithm...
+============================================================
+ALGORITHM BUILT in 3595s
+  Winners analyzed: 201
+  Losers analyzed: 814
+  Total factors: 46
+  Category weights: {'technical': np.float64(0.464), 'fundamental': np.float64(0.312), 'sentiment': np.float64(0.224)}
+  Top 5 most predictive factors:
+    price_trend_60d           (technical   ) separation=0.955 W=17.848 L=-27.335
+    position_52w              (fundamental ) separation=0.531 W=0.328 L=0.194
+    volatility_20d            (technical   ) separation=0.311 W=7.692 L=6.193
+    short_ratio               (fundamental ) separation=0.261 W=2.877 L=3.946
+    bb_squeeze_intensity      (technical   ) separation=0.250 W=0.167 L=0.117
+  Saved to: algorithm.json
+============================================================

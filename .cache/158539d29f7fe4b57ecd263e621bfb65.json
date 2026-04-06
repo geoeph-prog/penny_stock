@@ -1,9 +1,1 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-{"timestamp": 1773275163.7753136, "value": {"score": 35, "trend": "bearish", "spy_price": 676.33, "above_20sma": false, "above_50sma": false, "change_5d_pct": -0.7, "change_20d_pct": -2.3}}
-=======
-{"timestamp": 1773266552.96701, "value": {"score": 35, "trend": "bearish", "spy_price": 676.33, "above_20sma": false, "above_50sma": false, "change_5d_pct": -0.7, "change_20d_pct": -2.3}}
->>>>>>> Stashed changes
-=======
-{"timestamp": 1773266552.96701, "value": {"score": 35, "trend": "bearish", "spy_price": 676.33, "above_20sma": false, "above_50sma": false, "change_5d_pct": -0.7, "change_20d_pct": -2.3}}
->>>>>>> Stashed changes
+{"timestamp": 1775489903.1476147, "value": {"score": 45, "trend": "neutral", "spy_price": 656.62, "above_20sma": false, "above_50sma": false, "change_5d_pct": 3.9, "change_20d_pct": -2.9}}
