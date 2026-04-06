@@ -452,6 +452,13 @@ def pick_stocks(top_n=5, progress_callback=None):
         _log("ERROR: No algorithm found. Run 'Build Algorithm' first (Tab 1).")
         return []
 
+    # Warn if the algorithm has no learned factors (empty/reset state)
+    if not algorithm.get("factors"):
+        _log("WARNING: Algorithm has no learned factors (version 0.0 / reset state).")
+        _log("  Stage 1 will use only direct technical analysis + pre-pump hints.")
+        _log("  Stage 2 scoring still works (setup, technical, fundamental, catalyst, pre-pump).")
+        _log("  For better results, run 'Build Algorithm' first (Tab 1).")
+
     start = time.time()
     _log("=" * 60)
     _log(f"PICKING TOP STOCKS $2-$5 (v{ALGORITHM_VERSION})")

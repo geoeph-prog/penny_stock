@@ -223,9 +223,12 @@ class AlertMonitor:
                 self._log("Scan found no picks above threshold")
                 return []
 
-            # Only alert on HIGH confidence picks (score >= 55)
-            high_conf = [p for p in picks if p.get("final_score", 0) >= 55]
-            self._log(f"Scan found {len(picks)} picks, {len(high_conf)} high-confidence")
+            # Alert on promising picks (score >= 45)
+            # Previously 55 was too strict — most penny stocks score 35-55
+            # and the quality gate already filters out garbage. A 45+ stock
+            # with good pre-pump signals is worth knowing about.
+            high_conf = [p for p in picks if p.get("final_score", 0) >= 45]
+            self._log(f"Scan found {len(picks)} picks, {len(high_conf)} alert-worthy (>=45)")
             return high_conf
         except Exception as e:
             self._log(f"Scan failed: {e}")
