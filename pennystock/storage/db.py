@@ -9,7 +9,10 @@ from datetime import datetime
 from loguru import logger
 
 
-DB_FILE = "pennystock.db"
+# Anchor to project root so the DB isn't created under a stray cwd.
+DB_FILE = os.path.normpath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "pennystock.db")
+)
 
 
 class Database:
