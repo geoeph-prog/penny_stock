@@ -1,0 +1,61 @@
+Stock Analyzer v6.0.0
+Run type: build
+Timestamp: 2026-04-17 10:49:56
+======================================================================
+
+============================================================
+BUILDING ALGORITHM FROM RECENT STOCK DATA ($2-$5)
+============================================================
+Step 1: Discovering stocks via Finviz ($2-$5)...
+  Found 162 stocks
+Step 2: Downloading price history and classifying winners...
+  Progress: 25/162 (7 winners, 18 losers) ~436s remaining
+  Progress: 50/162 (15 winners, 35 losers) ~195s remaining
+  Progress: 75/162 (20 winners, 55 losers) ~110s remaining
+  Progress: 100/162 (27 winners, 73 losers) ~64s remaining
+  Progress: 125/162 (31 winners, 94 losers) ~33s remaining
+  Progress: 150/162 (34 winners, 116 losers) ~9s remaining
+  Classification done: 37 winners, 125 losers
+Step 3: Analyzing technical patterns...
+  Technical features analyzed: 17 factors
+Step 4: Analyzing sentiment & fundamentals (winners + loser sample)...
+  Pre-downloading Reddit posts (bulk mode)...
+  Deep analysis: 5/111
+  Deep analysis: 10/111
+  Deep analysis: 15/111
+  Deep analysis: 20/111
+  Deep analysis: 25/111
+  Deep analysis: 30/111
+  Deep analysis: 35/111
+  Deep analysis: 40/111
+  Deep analysis: 45/111
+  Deep analysis: 50/111
+  Deep analysis: 55/111
+  Deep analysis: 60/111
+  Deep analysis: 65/111
+  Deep analysis: 70/111
+  Deep analysis: 75/111
+  Deep analysis: 80/111
+  Deep analysis: 85/111
+  Deep analysis: 90/111
+  Deep analysis: 95/111
+  Deep analysis: 100/111
+  Deep analysis: 105/111
+  Deep analysis: 110/111
+  Sentiment factors: 5
+  Fundamental factors: 24
+Step 5: Building unified algorithm...
+============================================================
+ALGORITHM BUILT in 3198s
+  Winners analyzed: 37
+  Losers analyzed: 125
+  Total factors: 46
+  Category weights: {'sentiment': 0.286, 'technical': 0.429, 'fundamental': 0.286}
+  Top 5 most predictive factors:
+    reddit_sentiment          (sentiment   ) separation=3.751 W=-0.029 L=0.689
+    combined_sentiment        (sentiment   ) separation=2.642 W=0.056 L=0.689
+    buzz_score                (sentiment   ) separation=1.414 W=38.140 L=27.292
+    price_trend_60d           (technical   ) separation=1.333 W=43.118 L=-17.366
+    rsi                       (technical   ) separation=0.620 W=57.894 L=68.784
+  Saved to: /Users/philipgeorge/ClaudeProjects/pennystock/penny_stock/algorithm.json
+============================================================
