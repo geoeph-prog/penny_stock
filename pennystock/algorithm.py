@@ -46,8 +46,11 @@ from pennystock.analysis.quality_gate import run_kill_filters
 from pennystock.analysis.pre_pump import score_pre_pump
 from pennystock.storage.db import Database
 
-ALGORITHM_FILE = "algorithm.json"
-RUNS_DIR = "runs"
+# Anchor file paths to the project root so saves don't depend on cwd
+# (matches the pattern used by simulation/engine.py and portfolio/manager.py).
+_PROJECT_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
+ALGORITHM_FILE = os.path.join(_PROJECT_ROOT, "algorithm.json")
+RUNS_DIR = os.path.join(_PROJECT_ROOT, "runs")
 
 
 # ════════════════════════════════════════════════════════════════════
@@ -1036,19 +1039,32 @@ def _compute_risk_management(price: float, atr: float, support: float = None) ->
 
 
 def _save_algorithm(algorithm: dict):
-    """Save algorithm to permanent JSON file."""
-    with open(ALGORITHM_FILE, "w") as f:
+    """Save algorithm to permanent JSON file (atomic write + backup)."""
+    tmp_path = ALGORITHM_FILE + ".tmp"
+    bak_path = ALGORITHM_FILE + ".bak"
+    with open(tmp_path, "w", encoding="utf-8") as f:
         json.dump(algorithm, f, indent=2, default=str)
+    if os.path.exists(ALGORITHM_FILE):
+        try:
+            os.replace(ALGORITHM_FILE, bak_path)
+        except OSError:
+            pass
+    os.replace(tmp_path, ALGORITHM_FILE)
     logger.info(f"Algorithm saved to {ALGORITHM_FILE}")
 
 
 def load_algorithm() -> dict:
-    """Load the saved algorithm."""
-    if not os.path.exists(ALGORITHM_FILE):
-        return {}
-    try:
-        with open(ALGORITHM_FILE, "r") as f:
-            return json.load(f)
-    except Exception as e:
-        logger.error(f"Failed to load algorithm: {e}")
-        return {}
+    """Load the saved algorithm, falling back to backup if main is corrupt."""
+    bak_path = ALGORITHM_FILE + ".bak"
+    for path in [ALGORITHM_FILE, bak_path]:
+        if not os.path.exists(path):
+            continue
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            if path == bak_path:
+                logger.warning("Loaded algorithm from backup file")
+            return data
+        except Exception as e:
+            logger.error(f"Failed to load {path}: {e}")
+    return {}

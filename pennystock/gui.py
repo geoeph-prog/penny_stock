@@ -27,7 +27,7 @@ from PyQt6.QtGui import QFont, QColor
 
 from pennystock import __version__
 from pennystock.config import ALGORITHM_VERSION
-from pennystock.algorithm import build_algorithm, pick_stocks, load_algorithm
+from pennystock.algorithm import build_algorithm, pick_stocks, load_algorithm, ALGORITHM_FILE
 
 
 # ── Dark Theme ──────────────────────────────────────────────────────
@@ -239,9 +239,28 @@ class AlgorithmBuilderTab(QWidget):
         if result:
             n_factors = len(result.get("factors", []))
             n_winners = result.get("training_summary", {}).get("winners", 0)
-            self.build_status.setText(f"Done! {n_winners} winners, {n_factors} factors learned.")
-            self.build_status.setStyleSheet("color: #a6e3a1; font-weight: bold;")
-            self.build_log.append("\nAlgorithm saved to algorithm.json")
+            # Verify the on-disk file actually matches what we just built —
+            # catches cwd/permissions issues that would otherwise look fine.
+            saved = load_algorithm()
+            disk_factors = len(saved.get("factors", []))
+            disk_built = saved.get("built_date")
+            on_disk_matches = (
+                disk_factors == n_factors and disk_built == result.get("built_date")
+            )
+            if on_disk_matches:
+                self.build_status.setText(f"Done! {n_winners} winners, {n_factors} factors learned.")
+                self.build_status.setStyleSheet("color: #a6e3a1; font-weight: bold;")
+                self.build_log.append(f"\nAlgorithm saved to {ALGORITHM_FILE}")
+            else:
+                self.build_status.setText(
+                    "Built, but on-disk file doesn't match - check permissions/path."
+                )
+                self.build_status.setStyleSheet("color: #f9e2af; font-weight: bold;")
+                self.build_log.append(
+                    f"\nWARNING: algorithm.json at {ALGORITHM_FILE} "
+                    f"shows {disk_factors} factors (built {disk_built}); "
+                    f"expected {n_factors} factors (built {result.get('built_date')})."
+                )
         else:
             self.build_status.setText("Failed - check log for details.")
             self.build_status.setStyleSheet("color: #f38ba8; font-weight: bold;")
