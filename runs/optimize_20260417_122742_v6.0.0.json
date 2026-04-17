@@ -1,0 +1,458 @@
+{
+  "recommendations": {
+    "sell_strategy": {
+      "SELL_MAX_HOLD_DAYS": 20,
+      "SELL_STOP_LOSS_PCT": -15.0,
+      "SELL_TAKE_PROFIT_PCT": 0.0,
+      "SELL_TRAILING_STOP_ACTIVATE": 0.0,
+      "SELL_TRAILING_STOP_DISTANCE": 0.0,
+      "STAGE2_RETURN_TOP_N": 15,
+      "expected_win_rate": 43.9,
+      "expected_avg_return": 0.96
+    },
+    "scoring": {
+      "weights": {
+        "setup": 0.14,
+        "technical": 0.42,
+        "pre_pump": 0.14,
+        "fundamental": 0.16,
+        "catalyst": 0.14
+      },
+      "MIN_RECOMMENDATION_SCORE": 60,
+      "expected_win_rate": 53.1,
+      "expected_avg_return": 0.98
+    },
+    "correlations": {
+      "setup": 0.0049,
+      "technical": 0.0294,
+      "pre_pump": 0.003,
+      "fundamental": 0.0113,
+      "catalyst": 0.0
+    }
+  },
+  "sell_top_20": [
+    {
+      "top_n": 15,
+      "hold_days": 20,
+      "stop_loss": -15,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 43.9,
+      "avg_return": 0.96,
+      "median_return": -1.87,
+      "total_trades": 1020,
+      "worst": -15,
+      "best": 186.89
+    },
+    {
+      "top_n": 5,
+      "hold_days": 14,
+      "stop_loss": -10,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 40.6,
+      "avg_return": 0.95,
+      "median_return": -2.92,
+      "total_trades": 340,
+      "worst": -10,
+      "best": 181.97
+    },
+    {
+      "top_n": 15,
+      "hold_days": 20,
+      "stop_loss": -10,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 38.2,
+      "avg_return": 0.93,
+      "median_return": -6.34,
+      "total_trades": 1020,
+      "worst": -10,
+      "best": 186.89
+    },
+    {
+      "top_n": 10,
+      "hold_days": 14,
+      "stop_loss": -15,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 44.7,
+      "avg_return": 0.92,
+      "median_return": -1.4,
+      "total_trades": 680,
+      "worst": -15,
+      "best": 181.97
+    },
+    {
+      "top_n": 10,
+      "hold_days": 20,
+      "stop_loss": -15,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 42.6,
+      "avg_return": 0.91,
+      "median_return": -2.66,
+      "total_trades": 680,
+      "worst": -15,
+      "best": 186.89
+    },
+    {
+      "top_n": 10,
+      "hold_days": 20,
+      "stop_loss": -20,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 44.1,
+      "avg_return": 0.91,
+      "median_return": -1.88,
+      "total_trades": 680,
+      "worst": -20,
+      "best": 186.89
+    },
+    {
+      "top_n": 15,
+      "hold_days": 20,
+      "stop_loss": -15,
+      "take_profit": 50,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 43.9,
+      "avg_return": 0.87,
+      "median_return": -1.87,
+      "total_trades": 1020,
+      "worst": -15,
+      "best": 50
+    },
+    {
+      "top_n": 15,
+      "hold_days": 20,
+      "stop_loss": -20,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 45.2,
+      "avg_return": 0.87,
+      "median_return": -1.4,
+      "total_trades": 1020,
+      "worst": -20,
+      "best": 186.89
+    },
+    {
+      "top_n": 5,
+      "hold_days": 14,
+      "stop_loss": -15,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 44.1,
+      "avg_return": 0.84,
+      "median_return": -1.39,
+      "total_trades": 340,
+      "worst": -15,
+      "best": 181.97
+    },
+    {
+      "top_n": 10,
+      "hold_days": 14,
+      "stop_loss": -20,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 45.6,
+      "avg_return": 0.81,
+      "median_return": -1.14,
+      "total_trades": 680,
+      "worst": -20,
+      "best": 181.97
+    },
+    {
+      "top_n": 10,
+      "hold_days": 20,
+      "stop_loss": 0,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 44.6,
+      "avg_return": 0.81,
+      "median_return": -1.62,
+      "total_trades": 680,
+      "worst": -59.29,
+      "best": 186.89
+    },
+    {
+      "top_n": 5,
+      "hold_days": 14,
+      "stop_loss": -12,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 42.6,
+      "avg_return": 0.8,
+      "median_return": -1.84,
+      "total_trades": 340,
+      "worst": -12,
+      "best": 181.97
+    },
+    {
+      "top_n": 15,
+      "hold_days": 20,
+      "stop_loss": -10,
+      "take_profit": 50,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 38.2,
+      "avg_return": 0.79,
+      "median_return": -6.34,
+      "total_trades": 1020,
+      "worst": -10,
+      "best": 50
+    },
+    {
+      "top_n": 15,
+      "hold_days": 10,
+      "stop_loss": -15,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 47.6,
+      "avg_return": 0.78,
+      "median_return": -0.39,
+      "total_trades": 1020,
+      "worst": -15,
+      "best": 98.7
+    },
+    {
+      "top_n": 10,
+      "hold_days": 20,
+      "stop_loss": -25,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 44.4,
+      "avg_return": 0.76,
+      "median_return": -1.76,
+      "total_trades": 680,
+      "worst": -25,
+      "best": 186.89
+    },
+    {
+      "top_n": 15,
+      "hold_days": 10,
+      "stop_loss": -10,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 44.7,
+      "avg_return": 0.76,
+      "median_return": -1.15,
+      "total_trades": 1020,
+      "worst": -10,
+      "best": 98.7
+    },
+    {
+      "top_n": 15,
+      "hold_days": 10,
+      "stop_loss": -20,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 48.0,
+      "avg_return": 0.76,
+      "median_return": -0.34,
+      "total_trades": 1020,
+      "worst": -20,
+      "best": 98.7
+    },
+    {
+      "top_n": 15,
+      "hold_days": 20,
+      "stop_loss": -12,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 40.7,
+      "avg_return": 0.75,
+      "median_return": -4.15,
+      "total_trades": 1020,
+      "worst": -12,
+      "best": 186.89
+    },
+    {
+      "top_n": 15,
+      "hold_days": 20,
+      "stop_loss": -20,
+      "take_profit": 50,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 45.2,
+      "avg_return": 0.75,
+      "median_return": -1.4,
+      "total_trades": 1020,
+      "worst": -20,
+      "best": 50
+    },
+    {
+      "top_n": 7,
+      "hold_days": 14,
+      "stop_loss": -15,
+      "take_profit": 0,
+      "trail_activate": 0,
+      "trail_distance": 0,
+      "win_rate": 43.3,
+      "avg_return": 0.74,
+      "median_return": -1.61,
+      "total_trades": 476,
+      "worst": -15,
+      "best": 181.97
+    }
+  ],
+  "weight_top_10": [
+    {
+      "weights": {
+        "setup": 0.14,
+        "technical": 0.42,
+        "pre_pump": 0.14,
+        "fundamental": 0.16,
+        "catalyst": 0.14
+      },
+      "min_score": 60,
+      "win_rate": 53.1,
+      "avg_return": 0.98,
+      "total_picks": 49
+    },
+    {
+      "weights": {
+        "setup": 0.2,
+        "technical": 0.15,
+        "pre_pump": 0.45,
+        "fundamental": 0.1,
+        "catalyst": 0.1
+      },
+      "min_score": 35,
+      "win_rate": 46.8,
+      "avg_return": 0.39,
+      "total_picks": 340
+    },
+    {
+      "weights": {
+        "setup": 0.2,
+        "technical": 0.15,
+        "pre_pump": 0.45,
+        "fundamental": 0.1,
+        "catalyst": 0.1
+      },
+      "min_score": 40,
+      "win_rate": 46.8,
+      "avg_return": 0.39,
+      "total_picks": 340
+    },
+    {
+      "weights": {
+        "setup": 0.2,
+        "technical": 0.15,
+        "pre_pump": 0.45,
+        "fundamental": 0.1,
+        "catalyst": 0.1
+      },
+      "min_score": 45,
+      "win_rate": 46.8,
+      "avg_return": 0.39,
+      "total_picks": 340
+    },
+    {
+      "weights": {
+        "setup": 0.2,
+        "technical": 0.15,
+        "pre_pump": 0.45,
+        "fundamental": 0.1,
+        "catalyst": 0.1
+      },
+      "min_score": 50,
+      "win_rate": 44.4,
+      "avg_return": 0.29,
+      "total_picks": 266
+    },
+    {
+      "weights": {
+        "setup": 0.15,
+        "technical": 0.15,
+        "pre_pump": 0.5,
+        "fundamental": 0.1,
+        "catalyst": 0.1
+      },
+      "min_score": 35,
+      "win_rate": 46.2,
+      "avg_return": 0.21,
+      "total_picks": 340
+    },
+    {
+      "weights": {
+        "setup": 0.15,
+        "technical": 0.15,
+        "pre_pump": 0.5,
+        "fundamental": 0.1,
+        "catalyst": 0.1
+      },
+      "min_score": 40,
+      "win_rate": 46.2,
+      "avg_return": 0.21,
+      "total_picks": 340
+    },
+    {
+      "weights": {
+        "setup": 0.15,
+        "technical": 0.15,
+        "pre_pump": 0.5,
+        "fundamental": 0.1,
+        "catalyst": 0.1
+      },
+      "min_score": 45,
+      "win_rate": 46.2,
+      "avg_return": 0.21,
+      "total_picks": 340
+    },
+    {
+      "weights": {
+        "setup": 0.2,
+        "technical": 0.2,
+        "pre_pump": 0.4,
+        "fundamental": 0.1,
+        "catalyst": 0.1
+      },
+      "min_score": 35,
+      "win_rate": 46.2,
+      "avg_return": 0.19,
+      "total_picks": 340
+    },
+    {
+      "weights": {
+        "setup": 0.2,
+        "technical": 0.2,
+        "pre_pump": 0.4,
+        "fundamental": 0.1,
+        "catalyst": 0.1
+      },
+      "min_score": 40,
+      "win_rate": 46.2,
+      "avg_return": 0.19,
+      "total_picks": 340
+    }
+  ],
+  "correlations": {
+    "setup": 0.0049,
+    "technical": 0.0294,
+    "pre_pump": 0.003,
+    "fundamental": 0.0113,
+    "catalyst": 0.0
+  },
+  "total_picks": 2168,
+  "dates_tested": 70,
+  "version": "6.0.0",
+  "timestamp": "20260417_122742"
+}
