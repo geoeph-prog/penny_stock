@@ -31,6 +31,8 @@ SCORING PENALTIES (reduce score but don't kill):
   - Micro-employee count (< 10 employees = likely shell/zombie)
 """
 
+from __future__ import annotations
+
 from loguru import logger
 
 import numpy as np
