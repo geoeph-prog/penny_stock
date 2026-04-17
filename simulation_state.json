@@ -1,5 +1,5 @@
 {
-  "cash": 502.65939999999904,
+  "cash": 1.2493999999990137,
   "initial_capital": 5000.0,
   "positions": [
     {
@@ -226,6 +226,31 @@
       "high_since_entry": 2.6,
       "trailing_stop_active": false,
       "last_updated": "2026-04-17T13:10:46.701251"
+    },
+    {
+      "ticker": "MIN",
+      "company": "MFS Intermediate Income Trust",
+      "shares": 203,
+      "entry_price": 2.47,
+      "entry_date": "2026-04-17T13:31:45.872481",
+      "entry_score": 57.7,
+      "entry_confidence": "",
+      "pre_pump_confidence": "MEDIUM",
+      "pre_pump_confluence": 3,
+      "sub_scores": {
+        "setup": 41.5,
+        "technical": 66.3,
+        "pre_pump": 63.1,
+        "fundamental": 27.9,
+        "catalyst": 52,
+        "sentiment": 96.3,
+        "market": 74.5,
+        "sector": 50
+      },
+      "current_price": 2.47,
+      "high_since_entry": 2.47,
+      "trailing_stop_active": false,
+      "last_updated": "2026-04-17T13:31:45.872503"
     }
   ],
   "trade_history": [
@@ -759,6 +784,17 @@
         "market": 74.5,
         "sector": 50
       }
+    },
+    {
+      "ticker": "MIN",
+      "action": "BUY",
+      "shares": 203,
+      "price": 2.47,
+      "date": "2026-04-17T13:31:45.872505",
+      "cost": 501.41,
+      "entry_score": 57.7,
+      "entry_confidence": "",
+      "description": "Pick #1, Score 57.7"
     }
   ],
   "score_performance": {

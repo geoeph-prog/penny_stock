@@ -1,10 +1,38 @@
 {
-  "last_scan": "2026-03-26T17:14:03.107515",
+  "last_scan": "2026-04-17T13:31:45.877809",
   "last_price_check": "2026-03-26T17:14:09.072655",
   "last_daily_summary": null,
-  "alerts_sent": 0,
-  "buy_alerts": 0,
+  "alerts_sent": 1,
+  "buy_alerts": 1,
   "sell_alerts": 0,
   "summary_alerts": 0,
-  "history": []
+  "history": [
+    {
+      "time": "2026-04-17T13:31:47.324846",
+      "type": "BUY",
+      "detail": "VVR, MIN, AXG, IMPP, SRG"
+    }
+  ],
+  "pending_buy_alerts": {
+    "VVR": {
+      "time": "2026-04-17T13:31:47.324802",
+      "sent": true
+    },
+    "MIN": {
+      "time": "2026-04-17T13:31:47.324816",
+      "sent": true
+    },
+    "AXG": {
+      "time": "2026-04-17T13:31:47.324823",
+      "sent": true
+    },
+    "IMPP": {
+      "time": "2026-04-17T13:31:47.324828",
+      "sent": true
+    },
+    "SRG": {
+      "time": "2026-04-17T13:31:47.324833",
+      "sent": true
+    }
+  }
 }

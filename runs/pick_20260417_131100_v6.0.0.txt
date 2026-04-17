@@ -1,0 +1,682 @@
+Stock Analyzer v6.0.0
+Run type: pick
+Timestamp: 2026-04-17 13:31:45
+======================================================================
+
+============================================================
+PICKING TOP STOCKS $2-$5 (v6.0.0)
+Using algorithm from 2026-04-17 10:49:56
+Weights: setup=20% tech=25% pre_pump=20% fund=20% cat=15%
+============================================================
+Discovering current $2-$5 stocks...
+Found 398 stocks. Running Stage 1 screen (technical + pre-pump hints)...
+  Stage 1: 25/398 ~1204s remaining
+  Stage 1: 50/398 ~582s remaining
+  Stage 1: 75/398 ~373s remaining
+  Stage 1: 100/398 ~268s remaining
+  Stage 1: 125/398 ~203s remaining
+  Stage 1: 150/398 ~159s remaining
+  Stage 1: 175/398 ~126s remaining
+  Stage 1: 200/398 ~101s remaining
+  Stage 1: 225/398 ~81s remaining
+  Stage 1: 250/398 ~64s remaining
+  Stage 1: 275/398 ~50s remaining
+  Stage 1: 300/398 ~37s remaining
+  Stage 1: 325/398 ~26s remaining
+  Stage 1: 350/398 ~17s remaining
+  Stage 1: 375/398 ~8s remaining
+Stage 1 done: 398 stocks scored
+Pre-downloading Reddit posts (bulk mode)...
+Stage 2: Deep analysis on top 100 stocks...
+  Running LAYER 1 kill filters + LAYER 2 scoring...
+  KILLED KOS: RECENT SPIKE: Stock had a 82% spike (high/low range) in the last 40 trading days...
+  KILLED BATL: RECENT SPIKE: Stock had a 890% spike (high/low range) in the last 40 trading day...
+  KILLED AMTX: RECENT SPIKE: Stock had a 163% spike (high/low range) in the last 40 trading day...
+  KILLED WTI: RECENT SPIKE: Stock had a 73% spike (high/low range) in the last 40 trading days...
+  KILLED ADAG: RECENT SPIKE: Stock had a 71% spike (high/low range) in the last 40 trading days...
+  PENALTY GRO: -12pts (1 issue(s))
+  KILLED LRMR: RECENT SPIKE: Stock had a 136% spike (high/low range) in the last 40 trading day...
+  KILLED CNTX: RECENT SPIKE: Stock had a 74% spike (high/low range) in the last 40 trading days...
+  KILLED NAUT: RECENT SPIKE: Stock had a 99% spike (high/low range) in the last 40 trading days...
+  KILLED ALLO: RECENT SPIKE: Stock had a 141% spike (high/low range) in the last 40 trading day...
+  KILLED CNTB: RECENT SPIKE: Stock had a 61% spike (high/low range) in the last 40 trading days...
+  KILLED ANNA: RECENT SPIKE: Stock had a 349% spike (high/low range) in the last 40 trading day...
+  KILLED BIAF: RECENT SPIKE: Stock had a 498% spike (high/low range) in the last 40 trading day...
+  KILLED ACXP: RECENT SPIKE: Stock had a 469% spike (high/low range) in the last 40 trading day...
+  KILLED ANTX: RECENT SPIKE: Stock had a 591% spike (high/low range) in the last 40 trading day...
+  KILLED TRON: RECENT SPIKE: Stock had a 147% spike (high/low range) in the last 40 trading day...
+  KILLED NAMM: RECENT SPIKE: Stock had a 130% spike (high/low range) in the last 40 trading day...
+  KILLED KLXE: NEGATIVE EQUITY: Book value per share is $-4.03. Balance sheet is underwater....
+  PENALTY IMPP: -12pts (1 issue(s))
+  KILLED KGEI: RECENT SPIKE: Stock had a 63% spike (high/low range) in the last 40 trading days...
+  KILLED BTCZ: RECENT SPIKE: Stock had a 70% spike (high/low range) in the last 40 trading days...
+  KILLED INDO: RECENT SPIKE: Stock had a 194% spike (high/low range) in the last 40 trading day...
+  PENALTY CLNE: -15pts (1 issue(s))
+  KILLED ALTO: RECENT SPIKE: Stock had a 133% spike (high/low range) in the last 40 trading day...
+  PENALTY MBOT: -12pts (1 issue(s))
+  Stage 2: 25/100 (21 killed, 4 scored)
+  PENALTY DSX: -12pts (1 issue(s))
+  KILLED RDGT: RECENT SPIKE: Stock had a 34825% spike (high/low range) in the last 40 trading d...
+  KILLED CVGI: RECENT SPIKE: Stock had a 212% spike (high/low range) in the last 40 trading day...
+  KILLED PMAX: RECENT SPIKE: Stock had a 1156% spike (high/low range) in the last 40 trading da...
+  KILLED CYCN: RECENT SPIKE: Stock had a 619% spike (high/low range) in the last 40 trading day...
+  KILLED ESPR: RECENT SPIKE: Stock had a 75% spike (high/low range) in the last 40 trading days...
+  KILLED MOBX: RECENT SPIKE: Stock had a 817% spike (high/low range) in the last 40 trading day...
+  KILLED OCGN: RECENT SPIKE: Stock had a 88% spike (high/low range) in the last 40 trading days...
+  KILLED DTI: RECENT SPIKE: Stock had a 66% spike (high/low range) in the last 40 trading days...
+  KILLED LPCN: RECENT SPIKE: Stock had a 478% spike (high/low range) in the last 40 trading day...
+  KILLED CATX: PRE-REVENUE BURN: Revenue $884,000 (< $1,000,000) with $82.5M/year cash burn (> ...
+  KILLED AIRS: RECENT SPIKE: Stock had a 131% spike (high/low range) in the last 40 trading day...
+  KILLED CDZI: CASH DEATH SPIRAL: Only 5.5 months of cash remaining ($8,599,000 cash / $1,577,5...
+  KILLED CCCC: RECENT SPIKE: Stock had a 104% spike (high/low range) in the last 40 trading day...
+  KILLED NMRA: RECENT SPIKE: Stock had a 98% spike (high/low range) in the last 40 trading days...
+  KILLED MVO: RECENT SPIKE: Stock had a 96% spike (high/low range) in the last 40 trading days...
+  PENALTY EPM: -12pts (1 issue(s))
+  KILLED REPL: RECENT SPIKE: Stock had a 507% spike (high/low range) in the last 40 trading day...
+  PENALTY SY: -12pts (1 issue(s))
+  PENALTY SABS: -12pts (1 issue(s))
+  KILLED XFOR: RECENT SPIKE: Stock had a 63% spike (high/low range) in the last 40 trading days...
+  KILLED NBIZ: RECENT SPIKE: Stock had a 554% spike (high/low range) in the last 40 trading day...
+  KILLED SND: RECENT SPIKE: Stock had a 60% spike (high/low range) in the last 40 trading days...
+  PENALTY GRNT: -32pts (2 issue(s))
+  PENALTY FLX: -12pts (1 issue(s))
+  KILLED IOVA: RECENT SPIKE: Stock had a 110% spike (high/low range) in the last 40 trading day...
+  KILLED GRCE: RECENT SPIKE: Stock had a 107% spike (high/low range) in the last 40 trading day...
+  PENALTY RLX: -15pts (1 issue(s))
+  KILLED NEOV: CASH DEATH SPIRAL: Only 0.4 months of cash remaining ($242,434 cash / $629,374/m...
+  KILLED JETD: RECENT SPIKE: Stock had a 76% spike (high/low range) in the last 40 trading days...
+  PENALTY WIT: -27pts (2 issue(s))
+  PENALTY HUYA: -12pts (1 issue(s))
+  Stage 2: 60/100 (44 killed, 16 scored)
+  PENALTY BTE: -27pts (2 issue(s))
+  KILLED ARQ: RECENT SPIKE: Stock had a 140% spike (high/low range) in the last 40 trading day...
+  KILLED NPT: RECENT SPIKE: Stock had a 702% spike (high/low range) in the last 40 trading day...
+  KILLED TRUG: RECENT SPIKE: Stock had a 301% spike (high/low range) in the last 40 trading day...
+  PENALTY BRBS: -12pts (1 issue(s))
+  Stage 2: 65/100 (47 killed, 18 scored)
+  KILLED YDDL: RECENT SPIKE: Stock had a 286% spike (high/low range) in the last 40 trading day...
+  PENALTY LODE: -12pts (1 issue(s))
+  KILLED ZENA: NEGATIVE EQUITY: Book value per share is $-0.20. Balance sheet is underwater....
+  KILLED VYGR: RECENT SPIKE: Stock had a 68% spike (high/low range) in the last 40 trading days...
+  KILLED CRCG: RECENT SPIKE: Stock had a 358% spike (high/low range) in the last 40 trading day...
+  KILLED TAOX: RECENT SPIKE: Stock had a 96% spike (high/low range) in the last 40 trading days...
+  PENALTY SJT: -12pts (1 issue(s))
+  KILLED KSCP: RECENT SPIKE: Stock had a 83% spike (high/low range) in the last 40 trading days...
+  KILLED ASPN: RECENT SPIKE: Stock had a 73% spike (high/low range) in the last 40 trading days...
+  KILLED BTOG: RECENT SPIKE: Stock had a 155% spike (high/low range) in the last 40 trading day...
+  PENALTY SIGA: -12pts (1 issue(s))
+  PENALTY TYGO: -12pts (1 issue(s))
+  PENALTY GAMB: -12pts (1 issue(s))
+  KILLED AGH: RECENT SPIKE: Stock had a 101% spike (high/low range) in the last 40 trading day...
+  PENALTY FF: -12pts (1 issue(s))
+  Stage 2: 80/100 (56 killed, 24 scored)
+  KILLED TII: RECENT SPIKE: Stock had a 78% spike (high/low range) in the last 40 trading days...
+  KILLED AREC: RECENT SPIKE: Stock had a 80% spike (high/low range) in the last 40 trading days...
+  KILLED CCLD: RECENT SPIKE: Stock had a 64% spike (high/low range) in the last 40 trading days...
+  KILLED INV: RECENT SPIKE: Stock had a 91% spike (high/low range) in the last 40 trading days...
+  KILLED PPSI: RECENT SPIKE: Stock had a 77% spike (high/low range) in the last 40 trading days...
+  KILLED FBIO: RECENT SPIKE: Stock had a 92% spike (high/low range) in the last 40 trading days...
+  KILLED GALT: RECENT SPIKE: Stock had a 61% spike (high/low range) in the last 40 trading days...
+  KILLED BTBD: RECENT SPIKE: Stock had a 103% spike (high/low range) in the last 40 trading day...
+  KILLED RPID: RECENT SPIKE: Stock had a 128% spike (high/low range) in the last 40 trading day...
+  Stage 2: 90/100 (65 killed, 25 scored)
+  PENALTY SRG: -12pts (1 issue(s))
+  KILLED ABOS: RECENT SPIKE: Stock had a 66% spike (high/low range) in the last 40 trading days...
+  KILLED ANGX: RECENT SPIKE: Stock had a 123% spike (high/low range) in the last 40 trading day...
+  PENALTY PGEN: -27pts (2 issue(s))
+  KILLED NMG: SHELL COMPANY: Zero revenue AND zero reported employees...
+  PENALTY NIU: -12pts (1 issue(s))
+  KILLED BAK: RECENT SPIKE: Stock had a 60% spike (high/low range) in the last 40 trading days...
+  KILLED QNTM: RECENT SPIKE: Stock had a 213% spike (high/low range) in the last 40 trading day...
+  KILLED XTIA: RECENT SPIKE: Stock had a 99% spike (high/low range) in the last 40 trading days...
+============================================================
+RESULTS: 71 stocks KILLED by quality filters, 29 survived scoring
+  5 stocks scored below minimum threshold (35pts) and were excluded
+TOP 5 PICKS (found in 1246s)
+============================================================
+  #1. VVR - $3.15 (Score: 59.2, Confidence: MEDIUM)
+      Invesco Senior Income Trust
+      Setup:43 Tech:65 PrePump:65 Fund:41 Cat:50
+      Float: 0 | Insider: 0% | 52w Pos: 0.144 | P/B: 0.844 | RSI: 55.59817856344896 | StochRSI: 37.398356427878234
+      Pre-Pump: confluence=3/7 confidence=MEDIUM SI-change=-36.4% float-rot=0.000
+      Bullish Pre-Pump: short_interest_change(85) | supply_lock(68) | beaten_down(75)
+      ADX: 14.131983985254672 | MFI: 54.881763132672205
+      Stop: $3.0236 (4.0% risk)
+  #2. MIN - $2.47 (Score: 57.7, Confidence: MEDIUM)
+      MFS Intermediate Income Trust
+      Setup:42 Tech:66 PrePump:63 Fund:28 Cat:52
+      Float: 0 | Insider: 0% | 52w Pos: 0.103 | P/B: 0.904 | RSI: 57.01929666791738 | StochRSI: 64.16682135563241
+      Pre-Pump: confluence=3/7 confidence=MEDIUM SI-change=-16.4% float-rot=0.000
+      Bullish Pre-Pump: short_interest_change(70) | supply_lock(68) | beaten_down(75)
+      Tech Signals: DILUTION-RISK(100)
+      ADX: 28.525102039543217 | MFI: 63.37529371693289
+      Stop: $2.4046 (2.6% risk)
+  #3. AXG - $3.51 (Score: 57.6, Confidence: MEDIUM)
+      Solowin Holdings
+      Setup:48 Tech:62 PrePump:43 Fund:71 Cat:50
+      Float: 50,988,878 | Insider: 100% | 52w Pos: 0.583 | P/B: 1.788 | RSI: 45.19572978120844 | StochRSI: 20.979656498871428
+      Pre-Pump: confluence=1/7 confidence=LOW SI-change=-3.4% float-rot=0.010
+      Bullish Pre-Pump: supply_lock(75)
+      ADX: 11.582754150927656 | MFI: 57.15085519485672
+      Stop: $3.0780 (12.3% risk)
+  #4. IMPP - $4.33 (Score: 53.4, Confidence: MEDIUM)
+      Imperial Petroleum Inc
+      Setup:64 Tech:68 PrePump:52 Fund:82 Cat:55
+      Float: 11,773,610 | Insider: 30% | 52w Pos: 0.459 | P/B: 0.311 | RSI: 40.707963853864904 | StochRSI: 67.21086835267616
+      Pre-Pump: confluence=2/7 confidence=LOW SI-change=-0.0% float-rot=0.046
+      Bullish Pre-Pump: institutional_accumulation(67) | supply_lock(65)
+      Tech Signals: BB-SQUEEZE | CONSOLIDATING
+      ADX: 29.342996266859952 | MFI: 38.58366412945413
+      Stop: $3.9408 (9.0% risk)
+      Penalties: -12pts (1 issue(s))
+        GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in 
+  #5. SRG - $2.69 (Score: 52.6, Confidence: MEDIUM)
+      Seritage Growth Properties
+      Setup:69 Tech:51 PrePump:53 Fund:77 Cat:55
+      Float: 39,875,569 | Insider: 33% | 52w Pos: 0.12 | P/B: 0.456 | RSI: 49.71427902144941 | StochRSI: 100.0
+      Pre-Pump: confluence=2/7 confidence=LOW SI-change=-1.8% float-rot=0.005
+      Bullish Pre-Pump: squeeze_setup(70) | beaten_down(75)
+      Tech Signals: DILUTION-RISK(1)
+      ADX: 22.529429250626258 | MFI: 44.96278513167922
+      Stop: $2.4578 (8.6% risk)
+      Penalties: -12pts (1 issue(s))
+        GOING CONCERN (-12pts): Auditor doubt about company survival found in recent SEC filings. Common in 
+============================================================
+
+
+======================================================================
+DETAILED RESULTS (JSON)
+======================================================================
+[
+  {
+    "ticker": "VVR",
+    "final_score": 59.2,
+    "company": "Invesco Senior Income Trust",
+    "price": 3.15,
+    "sub_scores": {
+      "setup": 42.8,
+      "technical": 65.3,
+      "pre_pump": 65.2,
+      "fundamental": 41.4,
+      "catalyst": 50,
+      "sentiment": 50.0,
+      "market": 74.5,
+      "sector": 50
+    },
+    "key_indicators": {
+      "float_shares": 0,
+      "insider_pct": 0.0,
+      "position_52w": 0.144,
+      "price_to_book": 0.844,
+      "rsi": 55.59817856344896,
+      "stochrsi": 37.398356427878234,
+      "volume_spike": 0.33440789872190924,
+      "revenue_growth": -0.175,
+      "short_pct_float": 0.0033000002,
+      "sentiment": 0.0,
+      "adx": 14.131983985254672,
+      "mfi": 54.881763132672205,
+      "bb_squeeze": "False",
+      "consolidating": "False",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 0,
+      "atr": 0.0632,
+      "pre_pump_confluence": 3,
+      "pre_pump_confidence": "MEDIUM",
+      "si_change_pct": -36.4,
+      "float_rotation": 0,
+      "supply_lock_score": 68,
+      "insider_buying_bonus": 0,
+      "insider_net_buys": 0
+    },
+    "penalty_deduction": 0,
+    "pre_pump_detail": {
+      "score": 65.2,
+      "signals": {
+        "short_interest_change": {
+          "score": 85,
+          "change_pct": -36.4,
+          "shares_short": 429594,
+          "shares_short_prior": 675267,
+          "signal": "bullish_covering"
+        },
+        "float_rotation": {
+          "score": 50,
+          "rotation": 0,
+          "signal": "no_data"
+        },
+        "institutional_accumulation": {
+          "score": 52,
+          "institution_pct": 37.1,
+          "market_cap": 484094208,
+          "signal": "normal"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.87,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 68,
+          "insider_pct": 0,
+          "float_shares": 0,
+          "signal": "normal"
+        },
+        "squeeze_setup": {
+          "score": 38,
+          "short_pct_float": 0.3,
+          "days_to_cover": 0.7,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 75,
+          "position_52w": 0.144,
+          "price": 3.145,
+          "52w_low": 3.03,
+          "52w_high": 3.83,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 3,
+      "total_signals": 7,
+      "confidence": "MEDIUM"
+    }
+  },
+  {
+    "ticker": "MIN",
+    "final_score": 57.7,
+    "company": "MFS Intermediate Income Trust",
+    "price": 2.47,
+    "sub_scores": {
+      "setup": 41.5,
+      "technical": 66.3,
+      "pre_pump": 63.1,
+      "fundamental": 27.9,
+      "catalyst": 52,
+      "sentiment": 96.3,
+      "market": 74.5,
+      "sector": 50
+    },
+    "key_indicators": {
+      "float_shares": 0,
+      "insider_pct": 0.0,
+      "position_52w": 0.103,
+      "price_to_book": 0.904,
+      "rsi": 57.01929666791738,
+      "stochrsi": 64.16682135563241,
+      "volume_spike": 0.3305780463481812,
+      "revenue_growth": -0.023,
+      "short_pct_float": 0,
+      "sentiment": -0.107,
+      "adx": 28.525102039543217,
+      "mfi": 63.37529371693289,
+      "bb_squeeze": "False",
+      "consolidating": "False",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 100,
+      "atr": 0.0327,
+      "pre_pump_confluence": 3,
+      "pre_pump_confidence": "MEDIUM",
+      "si_change_pct": -16.4,
+      "float_rotation": 0,
+      "supply_lock_score": 68,
+      "insider_buying_bonus": 0,
+      "insider_net_buys": 0
+    },
+    "penalty_deduction": 0,
+    "pre_pump_detail": {
+      "score": 63.1,
+      "signals": {
+        "short_interest_change": {
+          "score": 70,
+          "change_pct": -16.4,
+          "shares_short": 261613,
+          "shares_short_prior": 313071,
+          "signal": "bullish_covering"
+        },
+        "float_rotation": {
+          "score": 50,
+          "rotation": 0,
+          "signal": "no_data"
+        },
+        "institutional_accumulation": {
+          "score": 60,
+          "institution_pct": 53.4,
+          "market_cap": 281081664,
+          "signal": "normal"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.73,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 68,
+          "insider_pct": 0,
+          "float_shares": 0,
+          "signal": "normal"
+        },
+        "squeeze_setup": {
+          "score": 38,
+          "short_pct_float": 0,
+          "days_to_cover": 0.5,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 75,
+          "position_52w": 0.103,
+          "price": 2.47,
+          "52w_low": 2.44,
+          "52w_high": 2.73,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 3,
+      "total_signals": 7,
+      "confidence": "MEDIUM"
+    }
+  },
+  {
+    "ticker": "AXG",
+    "final_score": 57.6,
+    "company": "Solowin Holdings",
+    "price": 3.51,
+    "sub_scores": {
+      "setup": 47.8,
+      "technical": 61.7,
+      "pre_pump": 42.9,
+      "fundamental": 70.6,
+      "catalyst": 50,
+      "sentiment": 50.0,
+      "market": 74.5,
+      "sector": 50
+    },
+    "key_indicators": {
+      "float_shares": 50988878,
+      "insider_pct": 0.9954,
+      "position_52w": 0.583,
+      "price_to_book": 1.788,
+      "rsi": 45.19572978120844,
+      "stochrsi": 20.979656498871428,
+      "volume_spike": 0.31533369176656967,
+      "revenue_growth": 2.958,
+      "short_pct_float": 0.0049,
+      "sentiment": 0.0,
+      "adx": 11.582754150927656,
+      "mfi": 57.15085519485672,
+      "bb_squeeze": "False",
+      "consolidating": "False",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 0,
+      "atr": 0.216,
+      "pre_pump_confluence": 1,
+      "pre_pump_confidence": "LOW",
+      "si_change_pct": -3.4,
+      "float_rotation": 0.01,
+      "supply_lock_score": 75,
+      "insider_buying_bonus": 0,
+      "insider_net_buys": 0
+    },
+    "penalty_deduction": 0,
+    "pre_pump_detail": {
+      "score": 42.9,
+      "signals": {
+        "short_interest_change": {
+          "score": 55,
+          "change_pct": -3.4,
+          "shares_short": 708075,
+          "shares_short_prior": 732656,
+          "signal": "neutral"
+        },
+        "float_rotation": {
+          "score": 25,
+          "rotation": 0.01,
+          "volume": 510220,
+          "float": 50988878,
+          "signal": "normal"
+        },
+        "institutional_accumulation": {
+          "score": 30,
+          "institution_pct": 0.6,
+          "market_cap": 666062272,
+          "signal": "normal"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.83,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 75,
+          "insider_pct": 99.5,
+          "float_shares": 50988878,
+          "signal": "locked"
+        },
+        "squeeze_setup": {
+          "score": 30,
+          "short_pct_float": 0.5,
+          "days_to_cover": 2.0,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 25,
+          "position_52w": 0.583,
+          "price": 3.525,
+          "52w_low": 1.34,
+          "52w_high": 5.09,
+          "signal": "normal"
+        }
+      },
+      "confluence_count": 1,
+      "total_signals": 7,
+      "confidence": "LOW"
+    }
+  },
+  {
+    "ticker": "IMPP",
+    "final_score": 53.4,
+    "company": "Imperial Petroleum Inc",
+    "price": 4.33,
+    "sub_scores": {
+      "setup": 64.0,
+      "technical": 68.5,
+      "pre_pump": 52.4,
+      "fundamental": 82.2,
+      "catalyst": 55,
+      "sentiment": 50.0,
+      "market": 68.2,
+      "sector": 25
+    },
+    "key_indicators": {
+      "float_shares": 11773610,
+      "insider_pct": 0.29711,
+      "position_52w": 0.459,
+      "price_to_book": 0.311,
+      "rsi": 40.707963853864904,
+      "stochrsi": 67.21086835267616,
+      "volume_spike": 0.5424615490998647,
+      "revenue_growth": 0.951,
+      "short_pct_float": 0.17459999,
+      "sentiment": 0.0,
+      "adx": 29.342996266859952,
+      "mfi": 38.58366412945413,
+      "bb_squeeze": "True",
+      "consolidating": "True",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 0,
+      "atr": 0.1946,
+      "pre_pump_confluence": 2,
+      "pre_pump_confidence": "LOW",
+      "si_change_pct": -0.0,
+      "float_rotation": 0.046,
+      "supply_lock_score": 65,
+      "insider_buying_bonus": 0,
+      "insider_net_buys": 0
+    },
+    "penalty_deduction": 12,
+    "pre_pump_detail": {
+      "score": 52.4,
+      "signals": {
+        "short_interest_change": {
+          "score": 55,
+          "change_pct": -0.0,
+          "shares_short": 2954348,
+          "shares_short_prior": 2955354,
+          "signal": "neutral"
+        },
+        "float_rotation": {
+          "score": 25,
+          "rotation": 0.046,
+          "volume": 536870,
+          "float": 11773610,
+          "signal": "normal"
+        },
+        "institutional_accumulation": {
+          "score": 67,
+          "institution_pct": 31.9,
+          "market_cap": 157034672,
+          "signal": "accumulating"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.71,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 65,
+          "insider_pct": 29.7,
+          "float_shares": 11773610,
+          "signal": "normal"
+        },
+        "squeeze_setup": {
+          "score": 63,
+          "short_pct_float": 17.5,
+          "days_to_cover": 3.0,
+          "is_squeeze_setup": true,
+          "signal": "squeeze_ready"
+        },
+        "beaten_down": {
+          "score": 45,
+          "position_52w": 0.459,
+          "price": 4.335,
+          "52w_low": 2.442,
+          "52w_high": 6.57,
+          "signal": "normal"
+        }
+      },
+      "confluence_count": 2,
+      "total_signals": 7,
+      "confidence": "LOW"
+    }
+  },
+  {
+    "ticker": "SRG",
+    "final_score": 52.6,
+    "company": "Seritage Growth Properties",
+    "price": 2.69,
+    "sub_scores": {
+      "setup": 69.0,
+      "technical": 51.4,
+      "pre_pump": 52.9,
+      "fundamental": 76.8,
+      "catalyst": 55,
+      "sentiment": 50.0,
+      "market": 78.2,
+      "sector": 65
+    },
+    "key_indicators": {
+      "float_shares": 39875569,
+      "insider_pct": 0.33326998,
+      "position_52w": 0.12,
+      "price_to_book": 0.456,
+      "rsi": 49.71427902144941,
+      "stochrsi": 100.0,
+      "volume_spike": 0.7310497782158699,
+      "revenue_growth": 2.311,
+      "short_pct_float": 0.1125,
+      "sentiment": 0.0,
+      "adx": 22.529429250626258,
+      "mfi": 44.96278513167922,
+      "bb_squeeze": "False",
+      "consolidating": "False",
+      "multiday_unusual_vol": 0,
+      "squeeze_setup": false,
+      "dilution_filings": 1,
+      "atr": 0.1161,
+      "pre_pump_confluence": 2,
+      "pre_pump_confidence": "LOW",
+      "si_change_pct": -1.8,
+      "float_rotation": 0.005,
+      "supply_lock_score": 55,
+      "insider_buying_bonus": 0,
+      "insider_net_buys": 0
+    },
+    "penalty_deduction": 12,
+    "pre_pump_detail": {
+      "score": 52.9,
+      "signals": {
+        "short_interest_change": {
+          "score": 55,
+          "change_pct": -1.8,
+          "shares_short": 4785612,
+          "shares_short_prior": 4872138,
+          "signal": "neutral"
+        },
+        "float_rotation": {
+          "score": 25,
+          "rotation": 0.005,
+          "volume": 214410,
+          "float": 39875569,
+          "signal": "normal"
+        },
+        "institutional_accumulation": {
+          "score": 52,
+          "institution_pct": 45.2,
+          "market_cap": 151231568,
+          "signal": "normal"
+        },
+        "volume_acceleration": {
+          "score": 40,
+          "ratio": 0.93,
+          "multiday_unusual": 0,
+          "signal": "normal"
+        },
+        "supply_lock": {
+          "score": 55,
+          "insider_pct": 33.3,
+          "float_shares": 39875569,
+          "signal": "normal"
+        },
+        "squeeze_setup": {
+          "score": 70,
+          "short_pct_float": 11.2,
+          "days_to_cover": 23.8,
+          "is_squeeze_setup": false,
+          "signal": "normal"
+        },
+        "beaten_down": {
+          "score": 75,
+          "position_52w": 0.12,
+          "price": 2.685,
+          "52w_low": 2.43,
+          "52w_high": 4.56,
+          "signal": "near_bottom"
+        }
+      },
+      "confluence_count": 2,
+      "total_signals": 7,
+      "confidence": "LOW"
+    }
+  }
+]
