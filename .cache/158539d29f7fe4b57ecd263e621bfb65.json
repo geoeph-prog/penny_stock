@@ -1,5 +1,1 @@
-<<<<<<< Updated upstream
-{"timestamp": 1773424219.381993, "value": {"score": 25, "trend": "bearish", "spy_price": 662.13, "above_20sma": false, "above_50sma": false, "change_5d_pct": -2.4, "change_20d_pct": -2.9}}
-=======
-{"timestamp": 1773367165.7813923, "value": {"score": 35, "trend": "bearish", "spy_price": 666.06, "above_20sma": false, "above_50sma": false, "change_5d_pct": -0.9, "change_20d_pct": -2.2}}
->>>>>>> Stashed changes
+{"timestamp": 1776443869.537882, "value": {"score": 85, "trend": "bullish", "spy_price": 712.1, "above_20sma": true, "above_50sma": true, "change_5d_pct": 3.8, "change_20d_pct": 9.8}}
