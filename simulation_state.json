@@ -1,7 +1,233 @@
 {
-  "cash": 4987.4893999999995,
+  "cash": 502.65939999999904,
   "initial_capital": 5000.0,
-  "positions": [],
+  "positions": [
+    {
+      "ticker": "VVR",
+      "company": "Invesco Senior Income Trust",
+      "shares": 158,
+      "entry_price": 3.14,
+      "entry_date": "2026-04-17T12:54:33.165280",
+      "entry_score": 59.2,
+      "entry_confidence": "",
+      "pre_pump_confidence": "MEDIUM",
+      "pre_pump_confluence": 3,
+      "sub_scores": {
+        "setup": 42.8,
+        "technical": 65.3,
+        "pre_pump": 65.2,
+        "fundamental": 41.4,
+        "catalyst": 50,
+        "sentiment": 50.0,
+        "market": 74.5,
+        "sector": 50
+      },
+      "current_price": 3.145,
+      "high_since_entry": 3.15,
+      "trailing_stop_active": false,
+      "last_updated": "2026-04-17T13:10:46.701251"
+    },
+    {
+      "ticker": "AXG",
+      "company": "Solowin Holdings",
+      "shares": 142,
+      "entry_price": 3.51,
+      "entry_date": "2026-04-17T12:54:33.165325",
+      "entry_score": 57.6,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 1,
+      "sub_scores": {
+        "setup": 47.8,
+        "technical": 61.7,
+        "pre_pump": 42.9,
+        "fundamental": 70.6,
+        "catalyst": 50,
+        "sentiment": 50.0,
+        "market": 74.5,
+        "sector": 50
+      },
+      "current_price": 3.5,
+      "high_since_entry": 3.65,
+      "trailing_stop_active": false,
+      "last_updated": "2026-04-17T13:10:46.701251"
+    },
+    {
+      "ticker": "IMPP",
+      "company": "Imperial Petroleum Inc",
+      "shares": 115,
+      "entry_price": 4.32,
+      "entry_date": "2026-04-17T12:54:33.165348",
+      "entry_score": 53.4,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 2,
+      "sub_scores": {
+        "setup": 64.0,
+        "technical": 68.5,
+        "pre_pump": 52.4,
+        "fundamental": 82.2,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 68.2,
+        "sector": 25
+      },
+      "current_price": 4.33,
+      "high_since_entry": 4.44,
+      "trailing_stop_active": false,
+      "last_updated": "2026-04-17T13:10:46.701251"
+    },
+    {
+      "ticker": "SRG",
+      "company": "Seritage Growth Properties",
+      "shares": 185,
+      "entry_price": 2.69,
+      "entry_date": "2026-04-17T12:54:33.165367",
+      "entry_score": 52.6,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 2,
+      "sub_scores": {
+        "setup": 69.0,
+        "technical": 51.4,
+        "pre_pump": 52.9,
+        "fundamental": 76.8,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 78.2,
+        "sector": 65
+      },
+      "current_price": 2.69,
+      "high_since_entry": 2.75,
+      "trailing_stop_active": false,
+      "last_updated": "2026-04-17T13:10:46.701251"
+    },
+    {
+      "ticker": "TSYY",
+      "company": "GraniteShares YieldBOOST TSLA ETF",
+      "shares": 149,
+      "entry_price": 3.35,
+      "entry_date": "2026-04-17T12:54:33.165403",
+      "entry_score": 50.5,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 2,
+      "sub_scores": {
+        "setup": 40.0,
+        "technical": 51.5,
+        "pre_pump": 53.9,
+        "fundamental": 44.7,
+        "catalyst": 50,
+        "sentiment": 50.0,
+        "market": 74.5,
+        "sector": 50
+      },
+      "current_price": 3.35,
+      "high_since_entry": 3.4,
+      "trailing_stop_active": false,
+      "last_updated": "2026-04-17T13:10:46.701251"
+    },
+    {
+      "ticker": "SIGA",
+      "company": "SIGA Technologies Inc",
+      "shares": 104,
+      "entry_price": 4.79,
+      "entry_date": "2026-04-17T12:54:33.165421",
+      "entry_score": 47.4,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 1,
+      "sub_scores": {
+        "setup": 65.2,
+        "technical": 56.7,
+        "pre_pump": 51.3,
+        "fundamental": 53.8,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 75.8,
+        "sector": 55
+      },
+      "current_price": 4.78,
+      "high_since_entry": 4.79,
+      "trailing_stop_active": false,
+      "last_updated": "2026-04-17T13:10:46.701251"
+    },
+    {
+      "ticker": "GAMB",
+      "company": "Gambling.com Group Ltd",
+      "shares": 135,
+      "entry_price": 3.7,
+      "entry_date": "2026-04-17T12:54:33.165439",
+      "entry_score": 47.1,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 1,
+      "sub_scores": {
+        "setup": 65.2,
+        "technical": 48.8,
+        "pre_pump": 45.6,
+        "fundamental": 70.0,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 74.5,
+        "sector": 50
+      },
+      "current_price": 3.685,
+      "high_since_entry": 3.86,
+      "trailing_stop_active": false,
+      "last_updated": "2026-04-17T13:10:46.701251"
+    },
+    {
+      "ticker": "TYGO",
+      "company": "Tigo Energy Inc",
+      "shares": 121,
+      "entry_price": 4.11,
+      "entry_date": "2026-04-17T12:54:33.165456",
+      "entry_score": 45.4,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 1,
+      "sub_scores": {
+        "setup": 41.2,
+        "technical": 57.8,
+        "pre_pump": 45.3,
+        "fundamental": 62.1,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 82.0,
+        "sector": 80
+      },
+      "current_price": 4.07,
+      "high_since_entry": 4.19,
+      "trailing_stop_active": false,
+      "last_updated": "2026-04-17T13:10:46.701251"
+    },
+    {
+      "ticker": "DSX",
+      "company": "Diana Shipping Inc",
+      "shares": 196,
+      "entry_price": 2.57,
+      "entry_date": "2026-04-17T12:54:33.165474",
+      "entry_score": 43.4,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "pre_pump_confluence": 0,
+      "sub_scores": {
+        "setup": 41.5,
+        "technical": 65.4,
+        "pre_pump": 35.5,
+        "fundamental": 51.8,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 82.0,
+        "sector": 80
+      },
+      "current_price": 2.565,
+      "high_since_entry": 2.6,
+      "trailing_stop_active": false,
+      "last_updated": "2026-04-17T13:10:46.701251"
+    }
+  ],
   "trade_history": [
     {
       "ticker": "PSEC",
@@ -398,6 +624,141 @@
         "market": 33.0,
         "sector": 50
       }
+    },
+    {
+      "ticker": "VVR",
+      "action": "BUY",
+      "shares": 158,
+      "price": 3.14,
+      "date": "2026-04-17T12:54:33.165306",
+      "cost": 496.12,
+      "entry_score": 59.2,
+      "entry_confidence": "",
+      "description": "Pick #1, Score 59.2"
+    },
+    {
+      "ticker": "AXG",
+      "action": "BUY",
+      "shares": 142,
+      "price": 3.51,
+      "date": "2026-04-17T12:54:33.165335",
+      "cost": 498.42,
+      "entry_score": 57.6,
+      "entry_confidence": "",
+      "description": "Pick #2, Score 57.6"
+    },
+    {
+      "ticker": "IMPP",
+      "action": "BUY",
+      "shares": 115,
+      "price": 4.32,
+      "date": "2026-04-17T12:54:33.165356",
+      "cost": 496.8,
+      "entry_score": 53.4,
+      "entry_confidence": "",
+      "description": "Pick #3, Score 53.4"
+    },
+    {
+      "ticker": "SRG",
+      "action": "BUY",
+      "shares": 185,
+      "price": 2.69,
+      "date": "2026-04-17T12:54:33.165375",
+      "cost": 497.65,
+      "entry_score": 52.6,
+      "entry_confidence": "",
+      "description": "Pick #4, Score 52.6"
+    },
+    {
+      "ticker": "TZA",
+      "action": "BUY",
+      "shares": 100,
+      "price": 4.99,
+      "date": "2026-04-17T12:54:33.165394",
+      "cost": 499.0,
+      "entry_score": 51.6,
+      "entry_confidence": "",
+      "description": "Pick #5, Score 51.6"
+    },
+    {
+      "ticker": "TSYY",
+      "action": "BUY",
+      "shares": 149,
+      "price": 3.35,
+      "date": "2026-04-17T12:54:33.165411",
+      "cost": 499.15,
+      "entry_score": 50.5,
+      "entry_confidence": "",
+      "description": "Pick #6, Score 50.5"
+    },
+    {
+      "ticker": "SIGA",
+      "action": "BUY",
+      "shares": 104,
+      "price": 4.79,
+      "date": "2026-04-17T12:54:33.165429",
+      "cost": 498.16,
+      "entry_score": 47.4,
+      "entry_confidence": "",
+      "description": "Pick #7, Score 47.4"
+    },
+    {
+      "ticker": "GAMB",
+      "action": "BUY",
+      "shares": 135,
+      "price": 3.7,
+      "date": "2026-04-17T12:54:33.165447",
+      "cost": 499.5,
+      "entry_score": 47.1,
+      "entry_confidence": "",
+      "description": "Pick #8, Score 47.1"
+    },
+    {
+      "ticker": "TYGO",
+      "action": "BUY",
+      "shares": 121,
+      "price": 4.11,
+      "date": "2026-04-17T12:54:33.165464",
+      "cost": 497.31,
+      "entry_score": 45.4,
+      "entry_confidence": "",
+      "description": "Pick #9, Score 45.4"
+    },
+    {
+      "ticker": "DSX",
+      "action": "BUY",
+      "shares": 196,
+      "price": 2.57,
+      "date": "2026-04-17T12:54:33.165481",
+      "cost": 503.72,
+      "entry_score": 43.4,
+      "entry_confidence": "",
+      "description": "Pick #10, Score 43.4"
+    },
+    {
+      "ticker": "TZA",
+      "action": "SELL",
+      "shares": 100,
+      "price": 5.01,
+      "entry_price": 4.99,
+      "date": "2026-04-17T13:10:46.906020",
+      "return_pct": 0.4,
+      "trade_pnl": 2.0,
+      "sell_reason": "trailing_stop",
+      "description": "Trailing stop: peaked at +21.8%, dropped to $5.0100",
+      "entry_score": 51.6,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 40.0,
+        "technical": 52.3,
+        "pre_pump": 53.9,
+        "fundamental": 47.7,
+        "catalyst": 52,
+        "sentiment": 50.0,
+        "market": 74.5,
+        "sector": 50
+      }
     }
   ],
   "score_performance": {
@@ -407,9 +768,9 @@
       "total_return": 4.32
     },
     "pp_LOW": {
-      "trades": 9,
-      "wins": 3,
-      "total_return": -17.89
+      "trades": 10,
+      "wins": 4,
+      "total_return": -17.49
     },
     "reason_take_profit": {
       "trades": 1,
@@ -422,7 +783,7 @@
       "total_return": -4.48
     },
     "verdict_take_profit_premature_sell": {
-      "count": 2
+      "count": 3
     },
     "pp_MEDIUM": {
       "trades": 2,
@@ -448,6 +809,21 @@
       "trades": 2,
       "wins": 0,
       "total_return": -13.82
+    },
+    "score_50_60": {
+      "trades": 1,
+      "wins": 1,
+      "total_return": 0.4
+    },
+    "reason_trailing_stop": {
+      "trades": 1,
+      "wins": 1,
+      "total_return": 0.4
+    },
+    "dominant_market": {
+      "trades": 1,
+      "wins": 1,
+      "total_return": 0.4
     }
   },
   "sell_follow_ups": [
@@ -458,8 +834,8 @@
       "entry_price": 2.54,
       "return_pct": 36.22,
       "sell_reason": "take_profit",
-      "verdict": null,
-      "current_price": null
+      "verdict": "premature_sell",
+      "current_price": 3.845
     },
     {
       "ticker": "PSEC",
@@ -560,6 +936,16 @@
       "sell_reason": "max_hold",
       "verdict": null,
       "current_price": null
+    },
+    {
+      "ticker": "TZA",
+      "sell_date": "2026-04-17T13:10:46.906030",
+      "sell_price": 5.01,
+      "entry_price": 4.99,
+      "return_pct": 0.4,
+      "sell_reason": "trailing_stop",
+      "verdict": null,
+      "current_price": null
     }
   ],
   "insights": [
@@ -614,8 +1000,16 @@
     {
       "date": "2026-04-17T09:37:02.709851",
       "text": "WIN: FOSL +20.6% via max_hold (score 50, pp=LOW)"
+    },
+    {
+      "date": "2026-04-17T13:10:46.902804",
+      "text": "VRA: Sold at $3.4600 but rose to $3.8450 \u2014 sold too early (take_profit)"
+    },
+    {
+      "date": "2026-04-17T13:10:46.906053",
+      "text": "WIN: TZA +0.4% via trailing_stop (score 52, pp=LOW)"
     }
   ],
   "created": "2026-03-11T10:26:43.720680",
-  "last_updated": "2026-04-17T09:37:02.082252"
+  "last_updated": "2026-04-17T13:10:46.701251"
 }
