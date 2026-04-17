@@ -1,258 +1,7 @@
 {
-  "cash": 3.539999999999395,
+  "cash": 4987.4893999999995,
   "initial_capital": 5000.0,
-  "positions": [
-    {
-      "ticker": "PSEC",
-      "company": "Prospect Capital Corp",
-      "shares": 185,
-      "entry_price": 2.7,
-      "entry_date": "2026-03-11T10:35:47.238715",
-      "entry_score": 49.6,
-      "entry_confidence": "",
-      "pre_pump_confidence": "MEDIUM",
-      "pre_pump_confluence": 3,
-      "sub_scores": {
-        "setup": 56.5,
-        "technical": 61.9,
-        "pre_pump": 63.3,
-        "fundamental": 48.8,
-        "catalyst": 55,
-        "sentiment": 50.0,
-        "market": 45.8,
-        "sector": 50
-      },
-      "current_price": 2.6099,
-      "high_since_entry": 2.81,
-      "trailing_stop_active": false,
-      "last_updated": "2026-03-13T14:41:02.011660"
-    },
-    {
-      "ticker": "DTI",
-      "company": "Drilling Tools International Corporation",
-      "shares": 134,
-      "entry_price": 3.73,
-      "entry_date": "2026-03-11T10:35:47.239417",
-      "entry_score": 47.2,
-      "entry_confidence": "",
-      "pre_pump_confidence": "LOW",
-      "pre_pump_confluence": 2,
-      "sub_scores": {
-        "setup": 59.0,
-        "technical": 70.7,
-        "pre_pump": 54.6,
-        "fundamental": 48.4,
-        "catalyst": 55,
-        "sentiment": 50.0,
-        "market": 49.5,
-        "sector": 65
-      },
-      "current_price": 3.58,
-      "high_since_entry": 3.924,
-      "trailing_stop_active": false,
-      "last_updated": "2026-03-13T14:41:02.011660"
-    },
-    {
-      "ticker": "VYNE",
-      "company": "VYNE Therapeutics Inc",
-      "shares": 834,
-      "entry_price": 0.6,
-      "entry_date": "2026-03-11T10:35:47.239490",
-      "entry_score": 46.8,
-      "entry_confidence": "",
-      "pre_pump_confidence": "MEDIUM",
-      "pre_pump_confluence": 3,
-      "sub_scores": {
-        "setup": 51.5,
-        "technical": 69.4,
-        "pre_pump": 56.8,
-        "fundamental": 49.7,
-        "catalyst": 55,
-        "sentiment": 50.0,
-        "market": 43.2,
-        "sector": 40
-      },
-      "current_price": 0.5969,
-      "high_since_entry": 0.609,
-      "trailing_stop_active": false,
-      "last_updated": "2026-03-13T14:41:02.011660"
-    },
-    {
-      "ticker": "GAMB",
-      "company": "Gambling.com Group Ltd",
-      "shares": 120,
-      "entry_price": 4.14,
-      "entry_date": "2026-03-11T10:35:47.239543",
-      "entry_score": 46.3,
-      "entry_confidence": "",
-      "pre_pump_confidence": "LOW",
-      "pre_pump_confluence": 2,
-      "sub_scores": {
-        "setup": 74.0,
-        "technical": 57.5,
-        "pre_pump": 52.0,
-        "fundamental": 49.8,
-        "catalyst": 55,
-        "sentiment": 50.0,
-        "market": 45.8,
-        "sector": 50
-      },
-      "current_price": 4.175,
-      "high_since_entry": 4.551,
-      "trailing_stop_active": false,
-      "last_updated": "2026-03-13T14:41:02.011660"
-    },
-    {
-      "ticker": "RSKD",
-      "company": "Riskified Ltd",
-      "shares": 113,
-      "entry_price": 4.43,
-      "entry_date": "2026-03-11T10:35:47.239592",
-      "entry_score": 45.4,
-      "entry_confidence": "",
-      "pre_pump_confidence": "LOW",
-      "pre_pump_confluence": 1,
-      "sub_scores": {
-        "setup": 34.8,
-        "technical": 67.2,
-        "pre_pump": 40.8,
-        "fundamental": 47.9,
-        "catalyst": 55,
-        "sentiment": 50.0,
-        "market": 43.2,
-        "sector": 40
-      },
-      "current_price": 4.145,
-      "high_since_entry": 4.565,
-      "trailing_stop_active": false,
-      "last_updated": "2026-03-13T14:41:02.011660"
-    },
-    {
-      "ticker": "EPM",
-      "company": "Evolution Petroleum Corporation",
-      "shares": 108,
-      "entry_price": 4.61,
-      "entry_date": "2026-03-11T10:35:47.239640",
-      "entry_score": 42.0,
-      "entry_confidence": "",
-      "pre_pump_confidence": "LOW",
-      "pre_pump_confluence": 1,
-      "sub_scores": {
-        "setup": 38.5,
-        "technical": 81.8,
-        "pre_pump": 47.6,
-        "fundamental": 49.9,
-        "catalyst": 55,
-        "sentiment": 50.0,
-        "market": 49.5,
-        "sector": 65
-      },
-      "current_price": 4.722,
-      "high_since_entry": 4.86,
-      "trailing_stop_active": false,
-      "last_updated": "2026-03-13T14:41:02.011660"
-    },
-    {
-      "ticker": "FBIO",
-      "company": "Fortress Biotech Inc",
-      "shares": 156,
-      "entry_price": 3.22,
-      "entry_date": "2026-03-11T10:35:47.239686",
-      "entry_score": 41.4,
-      "entry_confidence": "",
-      "pre_pump_confidence": "LOW",
-      "pre_pump_confluence": 0,
-      "sub_scores": {
-        "setup": 47.8,
-        "technical": 73.7,
-        "pre_pump": 45.5,
-        "fundamental": 65.9,
-        "catalyst": 55,
-        "sentiment": 50.0,
-        "market": 43.2,
-        "sector": 40
-      },
-      "current_price": 3.14,
-      "high_since_entry": 3.47,
-      "trailing_stop_active": false,
-      "last_updated": "2026-03-13T14:41:02.011660"
-    },
-    {
-      "ticker": "FF",
-      "company": "Futurefuel Corp",
-      "shares": 113,
-      "entry_price": 4.42,
-      "entry_date": "2026-03-11T10:35:47.239730",
-      "entry_score": 38.7,
-      "entry_confidence": "",
-      "pre_pump_confidence": "LOW",
-      "pre_pump_confluence": 1,
-      "sub_scores": {
-        "setup": 46.5,
-        "technical": 75.1,
-        "pre_pump": 45.6,
-        "fundamental": 30.1,
-        "catalyst": 55,
-        "sentiment": 50.0,
-        "market": 45.8,
-        "sector": 50
-      },
-      "current_price": 4.225,
-      "high_since_entry": 4.64,
-      "trailing_stop_active": false,
-      "last_updated": "2026-03-13T14:41:02.011660"
-    },
-    {
-      "ticker": "HOVR",
-      "company": "New Horizon Aircraft Ltd",
-      "shares": 259,
-      "entry_price": 1.95,
-      "entry_date": "2026-03-11T10:35:47.239777",
-      "entry_score": 36.5,
-      "entry_confidence": "",
-      "pre_pump_confidence": "LOW",
-      "pre_pump_confluence": 0,
-      "sub_scores": {
-        "setup": 46.2,
-        "technical": 72.6,
-        "pre_pump": 42.0,
-        "fundamental": 47.9,
-        "catalyst": 55,
-        "sentiment": 50.0,
-        "market": 39.5,
-        "sector": 25
-      },
-      "current_price": 1.8114,
-      "high_since_entry": 2.04,
-      "trailing_stop_active": false,
-      "last_updated": "2026-03-13T14:41:02.011660"
-    },
-    {
-      "ticker": "FOSL",
-      "company": "Fossil Group Inc",
-      "shares": 143,
-      "entry_price": 4.72,
-      "entry_date": "2026-03-13T13:58:02.530445",
-      "entry_score": 49.7,
-      "entry_confidence": "",
-      "pre_pump_confidence": "LOW",
-      "pre_pump_confluence": 2,
-      "sub_scores": {
-        "setup": 32.2,
-        "technical": 86.6,
-        "pre_pump": 47.0,
-        "fundamental": 55.3,
-        "catalyst": 55,
-        "sentiment": 0.0,
-        "market": 33.0,
-        "sector": 50
-      },
-      "current_price": 4.735,
-      "high_since_entry": 4.99,
-      "trailing_stop_active": false,
-      "last_updated": "2026-03-13T14:41:02.011660"
-    }
-  ],
+  "positions": [],
   "trade_history": [
     {
       "ticker": "PSEC",
@@ -399,18 +148,268 @@
       "entry_score": 49.7,
       "entry_confidence": "",
       "description": "Pick #1, Score 49.7"
+    },
+    {
+      "ticker": "PSEC",
+      "action": "SELL",
+      "shares": 185,
+      "price": 2.845,
+      "entry_price": 2.7,
+      "date": "2026-04-17T09:37:02.709604",
+      "return_pct": 5.37,
+      "trade_pnl": 26.83,
+      "sell_reason": "max_hold",
+      "description": "Held 36d (max 10d)",
+      "entry_score": 49.6,
+      "entry_confidence": "",
+      "pre_pump_confidence": "MEDIUM",
+      "sub_scores": {
+        "setup": 56.5,
+        "technical": 61.9,
+        "pre_pump": 63.3,
+        "fundamental": 48.8,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 45.8,
+        "sector": 50
+      }
+    },
+    {
+      "ticker": "DTI",
+      "action": "SELL",
+      "shares": 134,
+      "price": 3.12,
+      "entry_price": 3.73,
+      "date": "2026-04-17T09:37:02.709654",
+      "return_pct": -16.35,
+      "trade_pnl": -81.74,
+      "sell_reason": "max_hold",
+      "description": "Held 36d (max 10d)",
+      "entry_score": 47.2,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 59.0,
+        "technical": 70.7,
+        "pre_pump": 54.6,
+        "fundamental": 48.4,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 49.5,
+        "sector": 65
+      }
+    },
+    {
+      "ticker": "VYNE",
+      "action": "SELL",
+      "shares": 834,
+      "price": 0.6181,
+      "entry_price": 0.6,
+      "date": "2026-04-17T09:37:02.709683",
+      "return_pct": 3.02,
+      "trade_pnl": 15.1,
+      "sell_reason": "max_hold",
+      "description": "Held 36d (max 10d)",
+      "entry_score": 46.8,
+      "entry_confidence": "",
+      "pre_pump_confidence": "MEDIUM",
+      "sub_scores": {
+        "setup": 51.5,
+        "technical": 69.4,
+        "pre_pump": 56.8,
+        "fundamental": 49.7,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 43.2,
+        "sector": 40
+      }
+    },
+    {
+      "ticker": "GAMB",
+      "action": "SELL",
+      "shares": 120,
+      "price": 3.71,
+      "entry_price": 4.14,
+      "date": "2026-04-17T09:37:02.709706",
+      "return_pct": -10.39,
+      "trade_pnl": -51.6,
+      "sell_reason": "max_hold",
+      "description": "Held 36d (max 10d)",
+      "entry_score": 46.3,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 74.0,
+        "technical": 57.5,
+        "pre_pump": 52.0,
+        "fundamental": 49.8,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 45.8,
+        "sector": 50
+      }
+    },
+    {
+      "ticker": "RSKD",
+      "action": "SELL",
+      "shares": 113,
+      "price": 4.5616,
+      "entry_price": 4.43,
+      "date": "2026-04-17T09:37:02.709728",
+      "return_pct": 2.97,
+      "trade_pnl": 14.87,
+      "sell_reason": "max_hold",
+      "description": "Held 36d (max 10d)",
+      "entry_score": 45.4,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 34.8,
+        "technical": 67.2,
+        "pre_pump": 40.8,
+        "fundamental": 47.9,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 43.2,
+        "sector": 40
+      }
+    },
+    {
+      "ticker": "EPM",
+      "action": "SELL",
+      "shares": 108,
+      "price": 4.0754,
+      "entry_price": 4.61,
+      "date": "2026-04-17T09:37:02.709750",
+      "return_pct": -11.6,
+      "trade_pnl": -57.74,
+      "sell_reason": "max_hold",
+      "description": "Held 36d (max 10d)",
+      "entry_score": 42.0,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 38.5,
+        "technical": 81.8,
+        "pre_pump": 47.6,
+        "fundamental": 49.9,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 49.5,
+        "sector": 65
+      }
+    },
+    {
+      "ticker": "FBIO",
+      "action": "SELL",
+      "shares": 156,
+      "price": 2.4,
+      "entry_price": 3.22,
+      "date": "2026-04-17T09:37:02.709772",
+      "return_pct": -25.47,
+      "trade_pnl": -127.92,
+      "sell_reason": "max_hold",
+      "description": "Held 36d (max 10d)",
+      "entry_score": 41.4,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 47.8,
+        "technical": 73.7,
+        "pre_pump": 45.5,
+        "fundamental": 65.9,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 43.2,
+        "sector": 40
+      }
+    },
+    {
+      "ticker": "FF",
+      "action": "SELL",
+      "shares": 113,
+      "price": 4.07,
+      "entry_price": 4.42,
+      "date": "2026-04-17T09:37:02.709795",
+      "return_pct": -7.92,
+      "trade_pnl": -39.55,
+      "sell_reason": "max_hold",
+      "description": "Held 36d (max 10d)",
+      "entry_score": 38.7,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 46.5,
+        "technical": 75.1,
+        "pre_pump": 45.6,
+        "fundamental": 30.1,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 45.8,
+        "sector": 50
+      }
+    },
+    {
+      "ticker": "HOVR",
+      "action": "SELL",
+      "shares": 259,
+      "price": 1.835,
+      "entry_price": 1.95,
+      "date": "2026-04-17T09:37:02.709816",
+      "return_pct": -5.9,
+      "trade_pnl": -29.78,
+      "sell_reason": "max_hold",
+      "description": "Held 36d (max 10d)",
+      "entry_score": 36.5,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 46.2,
+        "technical": 72.6,
+        "pre_pump": 42.0,
+        "fundamental": 47.9,
+        "catalyst": 55,
+        "sentiment": 50.0,
+        "market": 39.5,
+        "sector": 25
+      }
+    },
+    {
+      "ticker": "FOSL",
+      "action": "SELL",
+      "shares": 143,
+      "price": 5.69,
+      "entry_price": 4.72,
+      "date": "2026-04-17T09:37:02.709838",
+      "return_pct": 20.55,
+      "trade_pnl": 138.71,
+      "sell_reason": "max_hold",
+      "description": "Held 34d (max 10d)",
+      "entry_score": 49.7,
+      "entry_confidence": "",
+      "pre_pump_confidence": "LOW",
+      "sub_scores": {
+        "setup": 32.2,
+        "technical": 86.6,
+        "pre_pump": 47.0,
+        "fundamental": 55.3,
+        "catalyst": 55,
+        "sentiment": 0.0,
+        "market": 33.0,
+        "sector": 50
+      }
     }
   ],
   "score_performance": {
     "score_40_50": {
-      "trades": 1,
-      "wins": 1,
-      "total_return": 36.22
+      "trades": 9,
+      "wins": 5,
+      "total_return": 4.32
     },
     "pp_LOW": {
-      "trades": 1,
-      "wins": 1,
-      "total_return": 36.22
+      "trades": 9,
+      "wins": 3,
+      "total_return": -17.89
     },
     "reason_take_profit": {
       "trades": 1,
@@ -418,9 +417,37 @@
       "total_return": 36.22
     },
     "dominant_technical": {
+      "trades": 9,
+      "wins": 4,
+      "total_return": -4.48
+    },
+    "verdict_take_profit_premature_sell": {
+      "count": 2
+    },
+    "pp_MEDIUM": {
+      "trades": 2,
+      "wins": 2,
+      "total_return": 8.39
+    },
+    "reason_max_hold": {
+      "trades": 10,
+      "wins": 4,
+      "total_return": -45.72
+    },
+    "dominant_pre_pump": {
       "trades": 1,
       "wins": 1,
-      "total_return": 36.22
+      "total_return": 5.37
+    },
+    "dominant_setup": {
+      "trades": 1,
+      "wins": 0,
+      "total_return": -10.39
+    },
+    "score_30_40": {
+      "trades": 2,
+      "wins": 0,
+      "total_return": -13.82
     }
   },
   "sell_follow_ups": [
@@ -433,14 +460,162 @@
       "sell_reason": "take_profit",
       "verdict": null,
       "current_price": null
+    },
+    {
+      "ticker": "PSEC",
+      "sell_date": "2026-04-17T09:37:02.709613",
+      "sell_price": 2.845,
+      "entry_price": 2.7,
+      "return_pct": 5.37,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "DTI",
+      "sell_date": "2026-04-17T09:37:02.709658",
+      "sell_price": 3.12,
+      "entry_price": 3.73,
+      "return_pct": -16.35,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "VYNE",
+      "sell_date": "2026-04-17T09:37:02.709687",
+      "sell_price": 0.6181,
+      "entry_price": 0.6,
+      "return_pct": 3.02,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "GAMB",
+      "sell_date": "2026-04-17T09:37:02.709709",
+      "sell_price": 3.71,
+      "entry_price": 4.14,
+      "return_pct": -10.39,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "RSKD",
+      "sell_date": "2026-04-17T09:37:02.709731",
+      "sell_price": 4.5616,
+      "entry_price": 4.43,
+      "return_pct": 2.97,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "EPM",
+      "sell_date": "2026-04-17T09:37:02.709753",
+      "sell_price": 4.0754,
+      "entry_price": 4.61,
+      "return_pct": -11.6,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "FBIO",
+      "sell_date": "2026-04-17T09:37:02.709775",
+      "sell_price": 2.4,
+      "entry_price": 3.22,
+      "return_pct": -25.47,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "FF",
+      "sell_date": "2026-04-17T09:37:02.709799",
+      "sell_price": 4.07,
+      "entry_price": 4.42,
+      "return_pct": -7.92,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "HOVR",
+      "sell_date": "2026-04-17T09:37:02.709820",
+      "sell_price": 1.835,
+      "entry_price": 1.95,
+      "return_pct": -5.9,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
+    },
+    {
+      "ticker": "FOSL",
+      "sell_date": "2026-04-17T09:37:02.709841",
+      "sell_price": 5.69,
+      "entry_price": 4.72,
+      "return_pct": 20.55,
+      "sell_reason": "max_hold",
+      "verdict": null,
+      "current_price": null
     }
   ],
   "insights": [
     {
       "date": "2026-03-13T13:44:22.648139",
       "text": "WIN: VRA +36.2% via take_profit (score 47, pp=LOW)"
+    },
+    {
+      "date": "2026-04-17T09:37:02.525156",
+      "text": "VRA: Sold at $3.4600 but rose to $3.7800 \u2014 sold too early (take_profit)"
+    },
+    {
+      "date": "2026-04-17T09:37:02.707678",
+      "text": "VRA: Sold at $3.4600 but rose to $3.7800 \u2014 sold too early (take_profit)"
+    },
+    {
+      "date": "2026-04-17T09:37:02.709636",
+      "text": "WIN: PSEC +5.4% via max_hold (score 50, pp=MEDIUM)"
+    },
+    {
+      "date": "2026-04-17T09:37:02.709669",
+      "text": "LOSS: DTI -16.4% via max_hold (score 47, pp=LOW)"
+    },
+    {
+      "date": "2026-04-17T09:37:02.709696",
+      "text": "WIN: VYNE +3.0% via max_hold (score 47, pp=MEDIUM)"
+    },
+    {
+      "date": "2026-04-17T09:37:02.709718",
+      "text": "LOSS: GAMB -10.4% via max_hold (score 46, pp=LOW)"
+    },
+    {
+      "date": "2026-04-17T09:37:02.709741",
+      "text": "WIN: RSKD +3.0% via max_hold (score 45, pp=LOW)"
+    },
+    {
+      "date": "2026-04-17T09:37:02.709763",
+      "text": "LOSS: EPM -11.6% via max_hold (score 42, pp=LOW)"
+    },
+    {
+      "date": "2026-04-17T09:37:02.709784",
+      "text": "LOSS: FBIO -25.5% via max_hold (score 41, pp=LOW)"
+    },
+    {
+      "date": "2026-04-17T09:37:02.709808",
+      "text": "LOSS: FF -7.9% via max_hold (score 39, pp=LOW)"
+    },
+    {
+      "date": "2026-04-17T09:37:02.709829",
+      "text": "LOSS: HOVR -5.9% via max_hold (score 36, pp=LOW)"
+    },
+    {
+      "date": "2026-04-17T09:37:02.709851",
+      "text": "WIN: FOSL +20.6% via max_hold (score 50, pp=LOW)"
     }
   ],
   "created": "2026-03-11T10:26:43.720680",
-  "last_updated": "2026-03-13T14:41:02.011660"
+  "last_updated": "2026-04-17T09:37:02.082252"
 }
