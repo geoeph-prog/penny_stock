@@ -5,6 +5,24 @@ from loguru import logger
 from pennystock.config import MIN_PRICE, MAX_PRICE, MIN_VOLUME
 
 
+def _normalize_columns(df):
+    """Normalize DataFrame columns: lowercase, strip, replace spaces."""
+    df.columns = [c.lower().strip().replace(" ", "_") for c in df.columns]
+    return df
+
+
+def _to_float(val):
+    """Coerce a value to float, stripping common suffixes like %, $, commas."""
+    if isinstance(val, (int, float)):
+        return float(val)
+    if isinstance(val, str):
+        val = val.strip().replace(",", "").replace("$", "").replace("%", "")
+        if not val or val == "-":
+            return 0.0
+        return float(val)
+    return 0.0
+
+
 def get_penny_stocks(min_price=None, max_price=None, min_volume=None):
     """
     Screen Finviz for stocks in our price range ($2-$5).
@@ -33,28 +51,37 @@ def get_penny_stocks(min_price=None, max_price=None, min_volume=None):
             logger.warning("Finviz returned no results")
             return []
 
-        # Normalize column names (finvizfinance uses title case)
-        df.columns = [c.lower().replace(" ", "_") for c in df.columns]
+        _normalize_columns(df)
+        logger.debug(f"Finviz raw columns: {list(df.columns)}")
+        logger.debug(f"Finviz raw rows: {len(df)}")
 
-        # Apply exact price range filter (Finviz "Under $5" is broad)
         if "price" in df.columns:
-            df["price"] = df["price"].astype(float)
+            df["price"] = df["price"].apply(_to_float)
+            before = len(df)
             df = df[(df["price"] >= min_price) & (df["price"] <= max_price)]
+            logger.debug(f"Price filter ${min_price}-${max_price}: {before} -> {len(df)}")
+        else:
+            logger.warning(f"No 'price' column found in Finviz data (columns: {list(df.columns)})")
 
         if "volume" in df.columns:
-            df["volume"] = df["volume"].astype(float)
+            df["volume"] = df["volume"].apply(_to_float)
+            before = len(df)
             df = df[df["volume"] >= min_volume]
+            logger.debug(f"Volume filter >={min_volume:,}: {before} -> {len(df)}")
+        else:
+            logger.warning(f"No 'volume' column found in Finviz data (columns: {list(df.columns)})")
 
         stocks = []
         for _, row in df.iterrows():
+            change_raw = row.get("change", 0)
             stocks.append({
                 "ticker": row.get("ticker", ""),
                 "company": row.get("company", ""),
                 "sector": row.get("sector", ""),
                 "industry": row.get("industry", ""),
-                "price": float(row.get("price", 0)),
-                "volume": float(row.get("volume", 0)),
-                "change": float(row.get("change", "0").strip("%")) if isinstance(row.get("change"), str) else float(row.get("change", 0)),
+                "price": _to_float(row.get("price", 0)),
+                "volume": _to_float(row.get("volume", 0)),
+                "change": _to_float(change_raw),
                 "market_cap": row.get("market_cap", ""),
             })
 
@@ -101,7 +128,7 @@ def get_high_gainers(months=6, min_gain_pct=100):
             logger.warning("Finviz found no high gainers")
             return []
 
-        df.columns = [c.lower().replace(" ", "_") for c in df.columns]
+        _normalize_columns(df)
 
         tickers = df["ticker"].tolist() if "ticker" in df.columns else []
         logger.info(f"Finviz found {len(tickers)} stocks with >{min_gain_pct}% gain over {months} months")

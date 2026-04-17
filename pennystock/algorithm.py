@@ -87,7 +87,10 @@ def build_algorithm(progress_callback=None):
     _log("Step 1: Discovering stocks via Finviz ($2-$5)...")
     stocks = get_penny_stocks()
     if not stocks:
-        _log("ERROR: No stocks found. Check network connection.")
+        _log("ERROR: No stocks found from Finviz.")
+        _log("  This usually means Finviz blocked the request or returned")
+        _log("  unexpected data. Try again in a few minutes.")
+        _log("  Check pennystock.log for column/row diagnostics.")
         return None
 
     tickers = [s["ticker"] for s in stocks]

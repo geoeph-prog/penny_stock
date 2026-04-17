@@ -9,8 +9,9 @@ cd "$(dirname "$0")"
 VENV_DIR=".venv"
 PYTHON=""
 
-# ── Find a usable Python 3.9+ ──────────────────────────────────────
-for candidate in python3 python; do
+# ── Find the best available Python (prefer 3.10+ for SSL support) ──
+# Check Homebrew versioned binaries first, then generic python3.
+for candidate in python3.13 python3.12 python3.11 python3.10 python3 python; do
     if command -v "$candidate" &>/dev/null; then
         ver=$("$candidate" -c "import sys; print(sys.version_info[:2])" 2>/dev/null)
         major=$(echo "$ver" | tr -d '(),' | awk '{print $1}')
@@ -34,8 +35,9 @@ if [ -z "$PYTHON" ]; then
     exit 1
 fi
 
+PY_VER=$("$PYTHON" -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
 echo "============================================"
-echo "  Penny Stock Analyzer"
+echo "  Penny Stock Analyzer  (Python $PY_VER)"
 echo "============================================"
 echo ""
 
