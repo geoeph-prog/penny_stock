@@ -1,10 +1,10 @@
 {
   "last_scan": "2026-04-24T19:58:11.199942",
-  "last_price_check": "2026-04-24T19:50:34.865492",
+  "last_price_check": "2026-04-24T20:42:54.981998",
   "last_daily_summary": "2026-03-10T16:24:21.029011",
-  "alerts_sent": 149,
+  "alerts_sent": 150,
   "buy_alerts": 25,
-  "sell_alerts": 123,
+  "sell_alerts": 124,
   "summary_alerts": 1,
   "history": [
     {
@@ -749,6 +749,11 @@
     },
     {
       "time": "2026-04-24T19:50:36.251437",
+      "type": "SELL",
+      "detail": "VYNE, PSEC, VRA, DTI"
+    },
+    {
+      "time": "2026-04-24T20:42:56.215136",
       "type": "SELL",
       "detail": "VYNE, PSEC, VRA, DTI"
     }
